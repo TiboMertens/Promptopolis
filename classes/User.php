@@ -19,9 +19,12 @@ class User {
      */ 
     public function setUsername($username)
     {
-        $this->username = $username;
-
-        return $this;
+        if (!empty($username)) {
+            $this->username = $username;
+            return $this;
+        } else {
+            throw new Exception("Not a valid username");
+        }
     }
 
     /**
@@ -39,9 +42,12 @@ class User {
      */ 
     public function setEmail($email)
     {
-        $this->email = $email;
-
-        return $this;
+        if (!empty($email) && strpos($email, "@")) {
+            $this->email = $email;
+            return $this;
+        } else {
+            throw new Exception("Not a valid email address");
+        }
     }
 
     /**
@@ -59,8 +65,24 @@ class User {
      */ 
     public function setPassword($password)
     {
-        $this->password = $password;
+        if (!empty($password) && strlen($password) >= 10) {
+            //hash password with a factor of 12
+            $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
-        return $this;
+            $this->password = $password;
+            return $this;
+        } else {
+            throw new Exception("Password cannot be empty and must be at least 10 characters long");
+        }
+    }
+
+    public function save(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("insert into users (username, email, password) values (:username, :email, :password)");
+        $statement->bindValue(":username", $this->username);
+        $statement->bindValue(":email", $this->email);
+        $statement->bindValue(":password", $this->password);
+        $result = $statement->execute();
+        return $result;
     }
 }
