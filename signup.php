@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+<?php 
+    include_once(__DIR__ . "/bootstrap.php");
+
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,9 +12,9 @@
 <body>
     <div>
         <form>
-            <input type="text" name="email" placeholder="Email...">
-            <input type="text" name="username" placeholder="Username...">
-            <input type="password" name="password" placeholder="Password...">
+            <input type="text" name="email" placeholder="Email">
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
             <button type="submit" name="submit">Sign up</button>
         </form>
     </div>
