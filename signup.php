@@ -9,7 +9,7 @@ if (!empty($_POST)) {
         $user->setPassword($_POST['password']);
         $user->setToken(bin2hex(openssl_random_pseudo_bytes(32)));
         $user->save();
-        $user->sendEmail("tibomertens25@gmail.com", "Hello World");
+        $user->sendEmail("tibomertens25@gmail.com", "Verify your email");
     } catch (Throwable $e) {
         $error = $e->getMessage();	
     }
