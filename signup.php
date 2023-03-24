@@ -7,7 +7,9 @@ if (!empty($_POST)) {
         $user->setUsername($_POST['username']);
         $user->setEmail($_POST['email']);
         $user->setPassword($_POST['password']);
+        $user->setToken(bin2hex(openssl_random_pseudo_bytes(32)));
         $user->save();
+        $user->sendEmail("tibomertens25@gmail.com", "Hello World");
     } catch (Throwable $e) {
         $error = $e->getMessage();	
     }
