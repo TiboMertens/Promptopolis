@@ -101,7 +101,7 @@ class User
     function sendEmail($mail_to, $mail_subject){
         $token = $this->token;
 
-        $cURL_key = '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';
+        $cURL_key = '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';
         $mail_from = 'r0892926@student.thomasmore.be';
         $message = "Hi $this->username! Account created here is the activation link http://localhost/php/eindwerk/verification.php?token=$token";
     
