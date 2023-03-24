@@ -1,12 +1,14 @@
 <?php
-class User {
+class User
+{
     private string $username;
     private string $email;
     private string $password;
+    private string $token;
 
     /**
      * Get the value of username
-     */ 
+     */
     public function getUsername()
     {
         return $this->username;
@@ -16,7 +18,7 @@ class User {
      * Set the value of username
      *
      * @return  self
-     */ 
+     */
     public function setUsername($username)
     {
         if (!empty($username)) {
@@ -29,7 +31,7 @@ class User {
 
     /**
      * Get the value of email
-     */ 
+     */
     public function getEmail()
     {
         return $this->email;
@@ -39,10 +41,10 @@ class User {
      * Set the value of email
      *
      * @return  self
-     */ 
+     */
     public function setEmail($email)
     {
-        if (!empty($email) && strpos($email, "@")) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->email = $email;
             return $this;
         } else {
@@ -52,7 +54,7 @@ class User {
 
     /**
      * Get the value of password
-     */ 
+     */
     public function getPassword()
     {
         return $this->password;
@@ -62,7 +64,7 @@ class User {
      * Set the value of password
      *
      * @return  self
-     */ 
+     */
     public function setPassword($password)
     {
         if (!empty($password) && strlen($password) >= 10) {
@@ -76,13 +78,76 @@ class User {
         }
     }
 
-    public function save(){
+    function sendEmail($mail_to, $mail_subject){
+        $token = $this->token;
+        var_dump($token);
+
+        $cURL_key = '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';
+        $mail_from = 'r0892926@student.thomasmore.be';
+        $message = "Hi $this->username! Account created here is the activation link http://localhost/registration/activate.php?token=$token";
+    
+        $curl = curl_init();
+    
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.sendgrid.com/v3/mail/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "{\"personalizations\": [{\"to\": [{\"email\": \"$mail_to\"}]}],\"from\": {\"email\": \"$mail_from\"},\"subject\": \"$mail_subject\",\"content\": [{\"type\": \"text/plain\", \"value\": \"$message\"}]}",
+            CURLOPT_HTTPHEADER => array(
+                "authorization: Bearer $cURL_key",
+                "cache-control: no-cache",
+                "content-type: application/json"
+            ),
+        ));
+    
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+    
+        curl_close($curl);
+
+        header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
+        exit();
+    
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+    }
+
+    public function save()
+    {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("insert into users (username, email, password) values (:username, :email, :password)");
+        $statement = $conn->prepare("insert into users (username, email, password, token) values (:username, :email, :password, :token)");
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":email", $this->email);
         $statement->bindValue(":password", $this->password);
+        $statement->bindValue(":token", $this->token);
         $result = $statement->execute();
         return $result;
+    }
+
+    /**
+     * Get the value of token
+     */ 
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set the value of token
+     *
+     * @return  self
+     */ 
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
     }
 }
