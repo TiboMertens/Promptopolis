@@ -78,6 +78,26 @@ class User
         }
     }
 
+        /**
+     * Get the value of token
+     */ 
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set the value of token
+     *
+     * @return  self
+     */ 
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
     function sendEmail($mail_to, $mail_subject){
         $token = $this->token;
         var_dump($token);
@@ -129,25 +149,5 @@ class User
         $statement->bindValue(":token", $this->token);
         $result = $statement->execute();
         return $result;
-    }
-
-    /**
-     * Get the value of token
-     */ 
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * Set the value of token
-     *
-     * @return  self
-     */ 
-    public function setToken($token)
-    {
-        $this->token = $token;
-
-        return $this;
     }
 }
