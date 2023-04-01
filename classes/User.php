@@ -67,6 +67,7 @@ class User
      */
     public function setPassword($password)
     {
+        //check if password is not empty and at least 10 characters long
         if (!empty($password) && strlen($password) >= 10) {
             //hash password with a factor of 12
             $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
@@ -100,14 +101,21 @@ class User
 
     function sendEmail($mail_to, $mail_subject){
         $token = $this->token;
-
+        
+        //prevent XSS
         $username = htmlspecialchars($this->username);
+
+        //sendgrid API key
         $cURL_key = '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';
+
         $mail_from = 'r0892926@student.thomasmore.be';
+
+        //include token in the link so it can later be retrieved with GET
         $message = "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token";
     
         $curl = curl_init();
-    
+
+        //set cURL options
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.sendgrid.com/v3/mail/send",
             CURLOPT_RETURNTRANSFER => true,

@@ -3,12 +3,19 @@ include_once(__DIR__ . "/bootstrap.php");
 
 if (!empty($_POST)) {
     try {
+        // create a new user
         $user = new User();
         $user->setUsername($_POST['username']);
         $user->setEmail($_POST['email']);
         $user->setPassword($_POST['password']);
+
+        // generate a random token  (32 characters)
         $user->setToken(bin2hex(openssl_random_pseudo_bytes(32)));
+
+        // save the user to the database
         $user->save();
+
+        // send an email to the user
         $user->sendEmail("tibomertens25@gmail.com", "Verify your email");
     } catch (Throwable $e) {
         $error = $e->getMessage();	
@@ -42,6 +49,7 @@ if (!empty($_POST)) {
                 <input type="password" name="password" placeholder="Password" style="height:17px">
                 <p style="position: relative; bottom:17px">*a minimum of 10 characters</p>
             </div>
+            <!-- if there is an error, show it -->
             <?php if (isset($error)) : ?>
                 <div>
                     <p style="color:red"><?php echo $error ?></p>
