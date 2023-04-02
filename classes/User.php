@@ -110,10 +110,11 @@ class User
         //prevent XSS
         $username = htmlspecialchars($this->username);
 
-        //sendgrid API key
+        //get cURL key from config.ini
         $config = self::getConfig();
         $cURL_key = $config['cURL_key'];
 
+        //set email sender
         $mail_from = 'r0892926@student.thomasmore.be';
 
         //include token in the link so it can later be retrieved with GET
@@ -138,14 +139,19 @@ class User
             ),
         ));
     
+        //execute cURL
         $response = curl_exec($curl);
+
+        //check for errors
         $err = curl_error($curl);
     
+        //close cURL
         curl_close($curl);
 
+        //redirect to index.php with success message
         header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
         exit();
-    
+            
         if ($err) {
             echo "cURL Error #:" . $err;
         } else {
