@@ -1,11 +1,6 @@
 <?php
 class User
 {
-    private static function getConfig(){
-        // get the config file
-        return parse_ini_file("config/config.ini");
-    }
-
     private string $username;
     private string $email;
     private string $password;
@@ -115,12 +110,8 @@ class User
 
         $mail_from = 'r0892926@student.thomasmore.be';
 
-        //get the config file and the filename
-        $config = self::getConfig();
-        $filename = $config['filename'];
-
         //include token in the link so it can later be retrieved with GET
-        $message = "Hi $username! Please activate your email. Here is the activation link http://localhost/php/$filename/verification.php?token=$token";
+        $message = "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token";
     
         $curl = curl_init();
 
