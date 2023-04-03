@@ -119,13 +119,14 @@ class User
 
         //redirect to index.php with success message
         header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
-        exit();
         
         try {
             $response = $sendgrid->send($email);
         } catch (Exception $e) {
             echo 'Caught exception: '. $e->getMessage() ."\n";
         }
+
+        exit();
     }
 
     public function save()
