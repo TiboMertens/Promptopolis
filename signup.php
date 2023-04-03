@@ -16,7 +16,7 @@ if (!empty($_POST)) {
         $user->save();
 
         // send an email to the user
-        $user->sendEmail("tibomertens25@gmail.com", "Verify your email");
+        $user->sendEmail($user->getEmail(), "Verify your email");
     } catch (Throwable $e) {
         $error = $e->getMessage();	
     }
