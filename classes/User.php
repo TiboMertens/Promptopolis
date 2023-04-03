@@ -104,58 +104,28 @@ class User
         return $this;
     }
 
-    function sendEmail($mail_to, $mail_subject){
+    function sendEmail(){
         $token = $this->token;
         
         //prevent XSS
         $username = htmlspecialchars($this->username);
 
-        //get cURL key from config.ini
-        $config = self::getConfig();
-        $cURL_key = $config['cURL_key'];
+        // send an email to the user
+        $email = new \SendGrid\Mail\Mail(); 
+        $email->setFrom("r0892926@student.thomasmore.be", "Tibo Mertens");
+        $email->setSubject("Verifictation email");
+        $email->addTo($this->email, $this->username);
+        $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token");
+        $email->addContent(
+            "text/html", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/php/eindwerk/verification.php?token=$token"
+        );
 
-        //set email sender
-        $mail_from = 'r0892926@student.thomasmore.be';
-
-        //include token in the link so it can later be retrieved with GET
-        $message = "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token";
-    
-        $curl = curl_init();
-
-        //set cURL options
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.sendgrid.com/v3/mail/send",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "{\"personalizations\": [{\"to\": [{\"email\": \"$mail_to\"}]}],\"from\": {\"email\": \"$mail_from\"},\"subject\": \"$mail_subject\",\"content\": [{\"type\": \"text/plain\", \"value\": \"$message\"}]}",
-            CURLOPT_HTTPHEADER => array(
-                "authorization: Bearer $cURL_key",
-                "cache-control: no-cache",
-                "content-type: application/json"
-            ),
-        ));
-    
-        //execute cURL
-        $response = curl_exec($curl);
-
-        //check for errors
-        $err = curl_error($curl);
-    
-        //close cURL
-        curl_close($curl);
-
-        //redirect to index.php with success message
-        header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
-        exit();
-            
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            echo $response;
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+        
+        try {
+            $response = $sendgrid->send($email);
+        } catch (Exception $e) {
+            echo 'Caught exception: '. $e->getMessage() ."\n";
         }
     }
 
