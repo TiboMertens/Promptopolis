@@ -21,9 +21,9 @@ if (!empty($_POST)) {
 
         //send email
         $user->sendEmail();
-
     } catch (Throwable $e) {
-        $error = $e->getMessage();	        }
+        $error = $e->getMessage();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -37,32 +37,44 @@ if (!empty($_POST)) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <div>
-        <form action="" method="post">
-            <h2>Sign up</h2>
-            <div>
-                <label for="Email">Email</label>
-                <input type="text" name="email" placeholder="Email" style="height:17px">
-            </div>
-            <div>
-                <label for="Username">Username</label>
-                <input type="text" name="username" placeholder="Username" style="height:17px">
-            </div>
-            <div style="display:flex">
-                <label for="Password">Password</label>
-                <input type="password" name="password" placeholder="Password" style="height:17px">
-                <p style="position: relative; bottom:17px">*a minimum of 10 characters</p>
-            </div>
-            <!-- if there is an error, show it -->
-            <?php if (isset($error)) : ?>
-                <div>
-                    <p style="color:red"><?php echo $error ?></p>
+<body class="bg-cover" style="background-image: url('images/signup-image.jpg')">
+
+    <form action="" method="post">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="bg-[#EAEAEA] w-1/2 md:w-1/3 xl:w-1/4 mx-auto my-auto rounded">
+                <h2 class="text-center py-10 text-3xl font-bold">Sign up</h2>
+                <div class="grid justify-items-center">
+                    <div class="w-30">
+                        <div class="mb-4">
+                            <label class="block font-bold mb-0.5" for="Email">Email</label>
+                            <input class="w-30 lg:w-55 px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($error) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="email">
+                            <!-- if there is an error, show it -->
+                            <?php if (isset($error)) : ?>
+                                <p class="text-red-500 text-xs italic"><?php echo $error; ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block font-bold mb-0.5" for="Username">Username</label>
+                            <input class="w-30 lg:w-50 px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($error) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" style="height:17px">
+                            <!-- if there is an error, show it -->
+                            <?php if (isset($error)) : ?>
+                                <p class="text-red-500 text-xs italic"><?php echo $error; ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block font-bold mb-0.5" for="Password">Password <span style="font-size: 7.65px; font-style: italic;">*a minimum of 5 characters</span></label>
+                            <input class="w-30 lg:w-50 px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($error) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="password" name="password" style="height:17px">
+                            <!-- if there is an error, show it -->
+                            <?php if (isset($error)) : ?>
+                                <p class="text-red-500 text-xs italic"><?php echo $error; ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <div class="w-15"><button class="p-0 py-2 mt-2 mb-10 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded" type="submit" name="submit" style="padding-left: 4.65rem; padding-right:4.65rem">Sign up</button></div>
+                    </div>
                 </div>
-            <?php endif ?>
-            <div><button type="submit" name="submit">Sign up</button></div>
-        </form>
-    </div>
+            </div>
+        </div>
+    </form>
 </body>
 
 </html>
