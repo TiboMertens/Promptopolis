@@ -1,11 +1,6 @@
 <?php
 class User
 {
-    private static function getConfig(){
-        // get the config file
-        return parse_ini_file("config/config.ini");
-    }
-
     private string $username;
     private string $email;
     private string $password;
