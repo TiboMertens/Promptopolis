@@ -75,7 +75,7 @@ class User
             $this->password = $password;
             return $this;
         } else {
-            throw new Exception("Password cannot be empty and must be at least 10 characters long");
+            throw new Exception("Password cannot be empty and must be at least 5 characters long");
         }
     }
 
