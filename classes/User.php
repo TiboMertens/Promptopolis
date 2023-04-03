@@ -68,7 +68,7 @@ class User
     public function setPassword($password)
     {
         //check if password is not empty and at least 10 characters long
-        if (!empty($password) && strlen($password) >= 10) {
+        if (!empty($password) && strlen($password) >= 5) {
             //hash password with a factor of 12
             $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
