@@ -14,13 +14,13 @@ if (!empty($_POST)) {
         } catch (Throwable $e) {
             $usernameError = $e->getMessage();
         }
-        
+
         try {
             $user->setEmail($_POST['email']);
         } catch (Throwable $e) {
             $emailError = $e->getMessage();
         }
-        
+
         try {
             $user->setPassword($_POST['password']);
         } catch (Throwable $e) {
@@ -83,7 +83,12 @@ if (!empty($_POST)) {
                                 <p class="text-red-500 text-xs italic" style="width: 200px;"><?php echo $passwordError; ?></p>
                             <?php endif; ?>
                         </div>
-                        <div class="w-15"><button class="p-0 py-2 mt-2 mb-10 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded" type="submit" name="submit" style="padding-left: 4.65rem; padding-right:4.65rem">Sign up</button></div>
+                        <div class="flex flex-col items-center mb-8">
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2" style="padding-left: 4.65rem; padding-right: 4.65rem;">Sign up</button>
+                            <div>
+                                <a href="signup.php" class="italic underline text-xs ml-1">Already have an account?</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
