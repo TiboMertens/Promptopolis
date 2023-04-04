@@ -99,7 +99,7 @@ class User
         return $this;
     }
 
-    function sendEmail(){
+    function sendEmail($msg_plain, $msg_html){
         $token = $this->token;
         
         //prevent XSS
@@ -110,9 +110,9 @@ class User
         $email->setFrom("r0892926@student.thomasmore.be", "Tibo Mertens");
         $email->setSubject("Verifictation email");
         $email->addTo($this->email, $this->username);
-        $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token");
+        $email->addContent("text/plain", $msg_plain);
         $email->addContent(
-            "text/html", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/php/eindwerk/verification.php?token=$token"
+            "text/html", $msg_html
         );
 
         $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));

@@ -34,7 +34,7 @@ if (!empty($_POST)) {
         $user->save();
 
         //send email
-        $user->sendEmail();
+        $user->sendEmail("Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/php/eindwerk/verification.php?token=$token");
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
