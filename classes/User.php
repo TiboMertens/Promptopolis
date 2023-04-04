@@ -152,12 +152,14 @@ class User
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
     
+            //check if user exists, if not throw exception
             if (!$user) {
                 throw new Exception("Incorrect username or password.");
             }
     
             $hash = $user['password'];
     
+            //check if password is correct, if not throw exception
             if (password_verify($password, $hash)) {
                 return true;
             } else {

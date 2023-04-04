@@ -2,26 +2,26 @@
 include_once("bootstrap.php");
 
 if (!empty($_POST)) {
+    //get the username and password from the form
     $username = $_POST['username'];
     $password = $_POST['password'];
 
+    //create a new user object
     $user = new User();
-    if (!empty($_POST)) {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
 
-        $user = new User();
-        $result = $user->canLogin($username, $password);
+    //check if the user can login
+    $result = $user->canLogin($username, $password);
 
-        if ($result === true) {
-            session_start();
-            $_SESSION['loggedin'] = true;
+    //if the user can login, redirect to the index page
+    if ($result === true) {
+        session_start();
+        $_SESSION['loggedin'] = true;
 
-            header("Location: index.php");
-            return;
-        } else {
-            $error = $result;
-        }
+        header("Location: index.php");
+        return;
+    } else {
+        //if the user can't login, show the error message
+        $error = $result;
     }
 }
 ?>
@@ -70,7 +70,5 @@ if (!empty($_POST)) {
         </div>
     </form>
 </body>
-
-
 
 </html>
