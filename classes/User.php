@@ -79,9 +79,9 @@ class User
         }
     }
 
-        /**
+    /**
      * Get the value of token
-     */ 
+     */
     public function getVerifyToken()
     {
         return $this->verifyToken;
@@ -91,7 +91,7 @@ class User
      * Set the value of token
      *
      * @return  self
-     */ 
+     */
     public function setVerifyToken($verifyToken)
     {
         $this->verifyToken = $verifyToken;
@@ -99,31 +99,33 @@ class User
         return $this;
     }
 
-    public function sendVerifyEmail(){
+    public function sendVerifyEmail()
+    {
         $token = $this->verifyToken;
-        
+
         //prevent XSS
         $username = htmlspecialchars($this->username);
 
         // send an email to the user
-        $email = new \SendGrid\Mail\Mail(); 
+        $email = new \SendGrid\Mail\Mail();
         $email->setFrom("r0892926@student.thomasmore.be", "Tibo Mertens");
         $email->setSubject("Verifictation email");
         $email->addTo($this->email, $this->username);
         $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token");
         $email->addContent(
-            "text/html", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/php/eindwerk/verification.php?token=$token"
+            "text/html",
+            "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/php/eindwerk/verification.php?token=$token"
         );
 
         $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
 
         //redirect to index.php with success message
         header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
-        
+
         try {
             $response = $sendgrid->send($email);
         } catch (Exception $e) {
-            echo 'Caught exception: '. $e->getMessage() ."\n";
+            echo 'Caught exception: ' . $e->getMessage() . "\n";
         }
 
         exit();
@@ -139,5 +141,30 @@ class User
         $statement->bindValue(":token", $this->verifyToken);
         $result = $statement->execute();
         return $result;
+    }
+
+    public function canLogin($username, $password)
+    {
+        try {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("SELECT * FROM users WHERE username = :username");
+            $statement->bindValue(":username", $username);
+            $statement->execute();
+            $user = $statement->fetch(PDO::FETCH_ASSOC);
+    
+            if (!$user) {
+                throw new Exception("Incorrect username or password.");
+            }
+    
+            $hash = $user['password'];
+    
+            if (password_verify($password, $hash)) {
+                return true;
+            } else {
+                throw new Exception("Incorrect username or password.");
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
