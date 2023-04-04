@@ -1,10 +1,25 @@
 <?php
 class User
 {
+    private string $id;
     private string $username;
     private string $email;
     private string $password;
     private string $verifyToken;
+
+    
+    /**
+     * Get the value of id
+     */ 
+    public function getId($username)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT id FROM users WHERE username = :username");
+        $statement->bindValue(":username", $username);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
 
     /**
      * Get the value of username
