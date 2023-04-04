@@ -86,7 +86,7 @@ if (!empty($_POST)) {
                         <div class="flex flex-col items-center mb-8">
                             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2" style="padding-left: 4.65rem; padding-right: 4.65rem;">Sign up</button>
                             <div>
-                                <a href="signup.php" class="italic underline text-xs ml-1">Already have an account?</a>
+                                <a href="login.php" class="italic underline text-xs ml-1">Already have an account?</a>
                             </div>
                         </div>
                     </div>
