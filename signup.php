@@ -28,13 +28,13 @@ if (!empty($_POST)) {
         }
 
         // generate a random token  (32 characters)
-        $user->setToken(bin2hex(openssl_random_pseudo_bytes(32)));
+        $user->setVerifyToken(bin2hex(openssl_random_pseudo_bytes(32)));
 
         // save the user to the database
         $user->save();
 
         //send email
-        $user->sendEmail("Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/php/eindwerk/verification.php?token=$token");
+        $user->sendVerifyEmail();
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }

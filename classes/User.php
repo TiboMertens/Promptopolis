@@ -4,7 +4,7 @@ class User
     private string $username;
     private string $email;
     private string $password;
-    private string $token;
+    private string $verifyToken;
 
     /**
      * Get the value of username
@@ -82,9 +82,9 @@ class User
         /**
      * Get the value of token
      */ 
-    public function getToken()
+    public function getVerifyToken()
     {
-        return $this->token;
+        return $this->verifyToken;
     }
 
     /**
@@ -92,15 +92,15 @@ class User
      *
      * @return  self
      */ 
-    public function setToken($token)
+    public function setVerifyToken($verifyToken)
     {
-        $this->token = $token;
+        $this->verifyToken = $verifyToken;
 
         return $this;
     }
 
-    public function sendEmail($msg_plain, $msg_html){
-        $token = $this->token;
+    public function sendVerifyEmail(){
+        $token = $this->verifyToken;
         
         //prevent XSS
         $username = htmlspecialchars($this->username);
@@ -110,9 +110,9 @@ class User
         $email->setFrom("r0892926@student.thomasmore.be", "Tibo Mertens");
         $email->setSubject("Verifictation email");
         $email->addTo($this->email, $this->username);
-        $email->addContent("text/plain", $msg_plain);
+        $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token");
         $email->addContent(
-            "text/html", $msg_html
+            "text/html", "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/php/eindwerk/verification.php?token=$token"
         );
 
         $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
@@ -136,7 +136,7 @@ class User
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":email", $this->email);
         $statement->bindValue(":password", $this->password);
-        $statement->bindValue(":token", $this->token);
+        $statement->bindValue(":token", $this->verifyToken);
         $result = $statement->execute();
         return $result;
     }
