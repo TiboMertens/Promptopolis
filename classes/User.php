@@ -99,7 +99,7 @@ class User
         return $this;
     }
 
-    function sendEmail($msg_plain, $msg_html){
+    public function sendEmail($msg_plain, $msg_html){
         $token = $this->token;
         
         //prevent XSS
