@@ -1,5 +1,7 @@
 <?php
 include_once("bootstrap.php");
+
+//start the session
 session_start();
 
 ?>
@@ -60,6 +62,7 @@ session_start();
 
             <div class="mt-1 flex flex-row-reverse">
                 <div class="mt-2 mr-5 ml-2 relative bottom-[2px]">
+                    <!-- If the user is logged in, show the logout button, else show the login button -->
                     <?php if (isset($_SESSION['loggedin'])) : ?>
                         <a href="logout.php" class="text-sm underline text-white">Logout</a>
                     <?php else : ?>
