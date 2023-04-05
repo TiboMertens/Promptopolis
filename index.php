@@ -1,8 +1,9 @@
-<?php 
-    include_once("bootstrap.php");
-    session_start();
+<?php
+include_once("bootstrap.php");
+session_start();
 
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -19,16 +20,19 @@
             width: 20em;
         }
     }
+
     @media (max-width: 490px) {
         .text-base {
             width: 6em;
         }
     }
+
     @media (min-width: 900px) {
         .text-base {
             width: 30em;
         }
     }
+
     @media (min-width: 1024px) {
         .text-base {
             width: 40em;
@@ -36,7 +40,7 @@
     }
 </style>
 
-<body>
+<body class="bg-gray-400">
     <nav class="bg-gray-700">
         <div class="grid grid-cols-3 md:flex">
             <div class="pt-3 pb-2.5 ml-5 ">
@@ -56,16 +60,29 @@
 
             <div class="mt-1 flex flex-row-reverse">
                 <div class="mt-2 mr-5 ml-2 relative bottom-[2px]">
-                    <?php if(isset($_SESSION['loggedin'])): ?>
-                    <a href="logout.php" class="text-sm underline text-white">Logout</a>
-                    <?php else: ?>
-                    <a href="login.php" class="text-sm underline text-white">Login</a>
+                    <?php if (isset($_SESSION['loggedin'])) : ?>
+                        <a href="logout.php" class="text-sm underline text-white">Logout</a>
+                    <?php else : ?>
+                        <a href="login.php" class="text-sm underline text-white">Login</a>
                     <?php endif; ?>
                 </div>
                 <img src="https://api.lorem.space/image/face?w=150&h=150" alt="profile picture" class="w-10 h-10 rounded-full mt-[1px]">
             </div>
         </div>
     </nav>
+    <div class="bg-gradient-to-b from-gray-700 to-gray-400 flex flex-col justify-center items-center" style="height:500px;">
+        <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Lorem ipsum dolor, sit amet consectetur adipiscing elit!</h1>
+        <div class="flex justify-center items-center">
+            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-7 mr-5 xl:mr-10 xl:mt-10 rounded text-lg xl:text-xl xl:py-3 xl:px-10">
+                Button 1
+            </a>
+            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-7 xl:mt-10 text-lg xl:text-xl xl:py-3 xl:px-10 rounded">
+                Button 2
+            </a>
+        </div>
+    </div>
+
+    <!-- <main></main> Prompts etc -->
 </body>
 
 
