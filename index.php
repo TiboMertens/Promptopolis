@@ -85,7 +85,12 @@ session_start();
         </div>
     </div>
 
-    <!-- <main></main> Prompts etc -->
+    <main>
+        <!-- prompts die nog approved moeten worden door een mod - enkel zichtbaar voor mods - gebruik AJAX infinite scroll - feature van Tibo -->
+        <section></section>
+        <!-- nieuwe prompts worden chronologisch getoond - gebruik AJAX infinite scroll(check voorbeeld feature Tibo wanneer deze af is && check Joris zijn video's) - feature britt -->
+        <section></section>
+    </main>
 </body>
 
 
