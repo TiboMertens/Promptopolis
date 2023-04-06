@@ -26,7 +26,7 @@ function loadImages() {
       if (images.length > 0) {
         for (var i = 0; i < images.length; i++) {
           var img = document.createElement("img");
-          img.setAttribute("src", images[i].image_url);
+          img.setAttribute("src", images[i].cover_url);
           img.classList.add("flex", "w-1/4");
           document.getElementById("image-container").appendChild(img);
         }

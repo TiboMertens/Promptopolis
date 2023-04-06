@@ -5,7 +5,7 @@ class prompt
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT image_url, user_id FROM prompts WHERE is_approved = 0 LIMIT :offset, :limit");
+            $statement = $conn->prepare("SELECT cover_url, user_id FROM prompts WHERE is_approved = 0 LIMIT :offset, :limit");
             $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
             $statement->bindValue(":limit", $limit, PDO::PARAM_INT);
             $statement->execute();
@@ -21,7 +21,7 @@ class prompt
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT image_url FROM prompts WHERE is_approved = 0 LIMIT 15");
+            $statement = $conn->prepare("SELECT cover_url FROM prompts WHERE is_approved = 0 LIMIT 15");
             $statement->execute();
             $images = $statement->fetchAll(PDO::FETCH_ASSOC);
             return $images;
