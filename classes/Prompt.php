@@ -1,7 +1,7 @@
 <?php
 class prompt
 {
-    public function getAllToApproveImages($offset, $limit)
+    public static function getAllToApproveImages($offset, $limit)
     {
         try {
             $conn = Db::getInstance();
@@ -16,4 +16,6 @@ class prompt
             return [];
         }
     }
+
+
 }
