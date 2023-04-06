@@ -11,8 +11,8 @@ if (isset($_SESSION['loggedin'])) {
 
     if ($isModerator) {
         // new Moderator();
-        //get 15 images to approve
-        $imagesToApprove = Prompt::get15ToApproveImages();
+        //get 15 prompts to approve
+        $promptsToApprove = Prompt::get15ToApprovePrompts();
     }
 }
 
@@ -120,15 +120,15 @@ if (isset($_SESSION['loggedin'])) {
     <main>
         <!-- check if user is logged in -->
         <?php if (isset($_SESSION['loggedin'])) : ?>
-            <!-- check if user is an admin, if yes, show the first 15 images to approve -->
+            <!-- check if user is an admin, if yes, show the first 15 prompts to approve -->
             <?php if ($isModerator) : ?>
                 <section>
                     <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php" class="text-[12px] text-blue-600 hover:text-blue-700 hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
                     <div class="flex overflow-x-auto">
                         <div class=" flex flex-shrink-0">
-                            <?php foreach ($imagesToApprove as $imageToApprove) : ?>
-                                <a href="promptDetails.php?id=<?php echo $imageToApprove['id'] ?>">
-                                    <img src="<?php echo $imageToApprove['cover_url']; ?>" alt="prompt">
+                            <?php foreach ($promptsToApprove as $promptToApprove) : ?>
+                                <a href="promptDetails.php?id=<?php echo $promptToApprove['id'] ?>">
+                                    <img src="<?php echo $promptToApprove['cover_url']; ?>" alt="prompt">
                                 </a>
                             <?php endforeach; ?>
                             <div class="pt-20 mt-2 px-10">

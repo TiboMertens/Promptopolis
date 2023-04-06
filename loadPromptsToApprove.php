@@ -8,11 +8,11 @@ ob_start();
 $offset = $_POST['offset'];
 $limit = $_POST['limit'];
 
-// Retrieve array of images from database using the offset and limit values
-$images = Prompt::getAllToApproveImages($offset, $limit);
+// Retrieve array of prompts from database using the offset and limit values
+$Prompts = Prompt::getAllToApprovePrompts($offset, $limit);
 
-// Encode the array of images as a JSON object and send it back as the response to the AJAX request
-echo json_encode($images);
+// Encode the array of prompts as a JSON object and send it back as the response to the AJAX request
+echo json_encode($Prompts);
 
 // Flush the output buffer
 ob_end_flush();
