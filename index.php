@@ -118,7 +118,9 @@ if (isset($_SESSION['loggedin'])) {
     </div>
 
     <main>
+        <!-- check if user is logged in -->
         <?php if (isset($_SESSION['loggedin'])) : ?>
+            <!-- check if user is an admin, if yes, show the first 15 images to approve -->
             <?php if ($isModerator) : ?>
                 <section>
                     <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php" class="text-[12px] text-blue-600 hover:text-blue-700 hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
@@ -137,7 +139,7 @@ if (isset($_SESSION['loggedin'])) {
                 </section>
             <?php endif; ?>
         <?php endif; ?>
-        <!-- nieuwe prompts worden chronologisch getoond - gebruik AJAX infinite scroll(check voorbeeld feature Tibo wanneer deze af is && check Joris zijn video's) - feature britt -->
+        <!-- nieuwe prompts worden chronologisch getoond - gebruik AJAX infinite scroll(check infinite scroll van Tibo && check Joris zijn video's) - feature britt -->
         <section></section>
     </main>
 </body>

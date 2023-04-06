@@ -193,6 +193,8 @@ class User
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         $result = $result['is_admin'];
+        
+        //if result is 1, user is admin, else user is not admin
         if ($result === 1) {
             return true;
         } else {
