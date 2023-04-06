@@ -184,4 +184,19 @@ class User
             return $e->getMessage();
         }
     }
+
+    public function isModerator($id)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT is_admin FROM users WHERE id = :id");
+        $statement->bindValue(":id", intval($id));
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $result['is_admin'];
+        if ($result === 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

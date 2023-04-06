@@ -4,7 +4,15 @@ include_once("bootstrap.php");
 //start the session
 session_start();
 
-$imagesToApprove = Prompt::get15ToApproveImages();
+//check if user is an admin
+$user = new User();
+$isModerator = $user->isModerator($_SESSION['id']['id']);
+
+if ($isModerator) {
+    // new Moderator();
+    //get 15 images to approve
+    $imagesToApprove = Prompt::get15ToApproveImages();
+}
 
 ?>
 <!DOCTYPE html>
@@ -108,22 +116,23 @@ $imagesToApprove = Prompt::get15ToApproveImages();
     </div>
 
     <main>
-        <!-- prompts die nog approved moeten worden door een mod - enkel zichtbaar voor mods - gebruik AJAX infinite scroll - feature van Tibo -->
-        <section>
-            <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php" class="text-[12px] text-blue-600 hover:text-blue-700 hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
-            <div class="flex overflow-x-auto">
-                <div class=" flex flex-shrink-0">
-                    <?php foreach ($imagesToApprove as $imageToApprove) : ?>
-                        <a href="#">
-                            <img src="<?php echo $imageToApprove['image_url']; ?>" alt="prompt">
-                        </a>
-                    <?php endforeach; ?>
-                    <div class="pt-20 mt-2 px-10">
-                        <a href="showcase.php" class="text-blue-600 hover:text-blue-700 font-bold underline">View all</a>
+        <?php if ($isModerator) : ?>
+            <section>
+                <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php" class="text-[12px] text-blue-600 hover:text-blue-700 hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
+                <div class="flex overflow-x-auto">
+                    <div class=" flex flex-shrink-0">
+                        <?php foreach ($imagesToApprove as $imageToApprove) : ?>
+                            <a href="#">
+                                <img src="<?php echo $imageToApprove['image_url']; ?>" alt="prompt">
+                            </a>
+                        <?php endforeach; ?>
+                        <div class="pt-20 mt-2 px-10">
+                            <a href="showcase.php" class="text-blue-600 hover:text-blue-700 font-bold underline">View all</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        <?php endif; ?>
         <!-- nieuwe prompts worden chronologisch getoond - gebruik AJAX infinite scroll(check voorbeeld feature Tibo wanneer deze af is && check Joris zijn video's) - feature britt -->
         <section></section>
     </main>
