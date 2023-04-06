@@ -1,11 +1,11 @@
 <?php
 class User
 {
-    private string $id;
-    private string $username;
-    private string $email;
-    private string $password;
-    private string $verifyToken;
+    protected string $id;
+    protected string $username;
+    protected string $email;
+    protected string $password;
+    protected string $verifyToken;
 
     
     /**
