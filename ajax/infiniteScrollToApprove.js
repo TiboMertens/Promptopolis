@@ -27,8 +27,15 @@ function loadImages() {
         for (var i = 0; i < images.length; i++) {
           var img = document.createElement("img");
           img.setAttribute("src", images[i].cover_url);
-          img.classList.add("flex", "w-1/4");
-          document.getElementById("image-container").appendChild(img);
+          img.classList.add("object-contain", "h-full", "w-full");
+          img.setAttribute("id", "prompt");
+
+          var a = document.createElement("a");
+          a.classList.add("block", "flex", "w-1/4");
+          a.setAttribute("href", "promptDetails.php?id=" + images[i].id);
+          a.appendChild(img);
+
+          document.getElementById("image-container").appendChild(a);
         }
 
         // Update offset to keep track of number of images loaded
