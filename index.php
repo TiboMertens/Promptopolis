@@ -42,6 +42,26 @@ $imagesToApprove = Prompt::get15ToApproveImages();
             width: 40em;
         }
     }
+
+    /* Hide horizontal scrollbar for WebKit-based browsers */
+    ::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 10px;
+        width: 0;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #aaa;
+    }
 </style>
 
 <body class="bg-gray-400">
@@ -91,10 +111,10 @@ $imagesToApprove = Prompt::get15ToApproveImages();
         <!-- prompts die nog approved moeten worden door een mod - enkel zichtbaar voor mods - gebruik AJAX infinite scroll - feature van Tibo -->
         <section class="flex overflow-x-auto">
             <div class=" flex flex-shrink-0">
-                <?php foreach($imagesToApprove as $imageToApprove): ?>
-                <a href="#">
-                    <img src="<?php echo $imageToApprove['image_url']; ?>" alt="prompt">
-                </a>
+                <?php foreach ($imagesToApprove as $imageToApprove) : ?>
+                    <a href="#">
+                        <img src="<?php echo $imageToApprove['image_url']; ?>" alt="prompt">
+                    </a>
                 <?php endforeach; ?>
             </div>
         </section>
