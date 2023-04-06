@@ -1,7 +1,7 @@
 <?php
 class User
 {
-    protected string $id;
+    protected int $id;
     protected string $username;
     protected string $email;
     protected string $password;
