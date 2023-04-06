@@ -4,6 +4,8 @@ include_once("bootstrap.php");
 //start the session
 session_start();
 
+$imagesToApprove = Prompt::get15ToApproveImages();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +89,15 @@ session_start();
 
     <main>
         <!-- prompts die nog approved moeten worden door een mod - enkel zichtbaar voor mods - gebruik AJAX infinite scroll - feature van Tibo -->
-        <section></section>
+        <section class="flex overflow-x-auto">
+            <div class=" flex flex-shrink-0">
+                <?php foreach($imagesToApprove as $imageToApprove): ?>
+                <a href="#">
+                    <img src="<?php echo $imageToApprove['image_url']; ?>" alt="prompt">
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </section>
         <!-- nieuwe prompts worden chronologisch getoond - gebruik AJAX infinite scroll(check voorbeeld feature Tibo wanneer deze af is && check Joris zijn video's) - feature britt -->
         <section></section>
     </main>

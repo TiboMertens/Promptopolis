@@ -17,5 +17,17 @@ class prompt
         }
     }
 
-
+    public static function get15ToApproveImages()
+    {
+        try {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("SELECT image_url FROM prompts WHERE is_approved = 0 LIMIT 15");
+            $statement->execute();
+            $images = $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $images;
+        } catch (PDOException $e) {
+            error_log("PDO error: " . $e->getMessage());
+            return [];
+        }
+    }
 }
