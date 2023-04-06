@@ -109,15 +109,18 @@ $imagesToApprove = Prompt::get15ToApproveImages();
 
     <main>
         <!-- prompts die nog approved moeten worden door een mod - enkel zichtbaar voor mods - gebruik AJAX infinite scroll - feature van Tibo -->
-        <section class="flex overflow-x-auto">
-            <div class=" flex flex-shrink-0">
-                <?php foreach ($imagesToApprove as $imageToApprove) : ?>
-                    <a href="#">
-                        <img src="<?php echo $imageToApprove['image_url']; ?>" alt="prompt">
-                    </a>
-                <?php endforeach; ?>
-                <div class="pt-20 mt-2 px-10">
-                    <a href="showcase.php" class="text-blue-600 hover:text-blue-700 font-bold underline">View all</a>
+        <section>
+            <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php" class="text-[12px] text-blue-600 hover:text-blue-700 hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
+            <div class="flex overflow-x-auto">
+                <div class=" flex flex-shrink-0">
+                    <?php foreach ($imagesToApprove as $imageToApprove) : ?>
+                        <a href="#">
+                            <img src="<?php echo $imageToApprove['image_url']; ?>" alt="prompt">
+                        </a>
+                    <?php endforeach; ?>
+                    <div class="pt-20 mt-2 px-10">
+                        <a href="showcase.php" class="text-blue-600 hover:text-blue-700 font-bold underline">View all</a>
+                    </div>
                 </div>
             </div>
         </section>
