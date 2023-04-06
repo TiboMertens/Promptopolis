@@ -1,6 +1,30 @@
 <?php
 class prompt
 {
+    private int $id;
+
+    /**
+     * Get the value of id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */
+    public function setId($id)
+    {
+        if ($id != null && !empty($id) && is_numeric($id)) {
+            $this->id = $id;
+
+            return $this;
+        }
+    }
+
     public static function getAllToApprovePrompts($offset, $limit)
     {
         try {
@@ -29,5 +53,15 @@ class prompt
             error_log("PDO error: " . $e->getMessage());
             return [];
         }
+    }
+
+    public function getPromptDetails()
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM prompts WHERE id = :id");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
     }
 }
