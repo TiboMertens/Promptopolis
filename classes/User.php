@@ -7,10 +7,10 @@ class User
     protected string $password;
     protected string $verifyToken;
 
-    
+
     /**
      * Get the value of id
-     */ 
+     */
     public function getId($username)
     {
         $conn = Db::getInstance();
@@ -166,14 +166,14 @@ class User
             $statement->bindValue(":username", $username);
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
-    
+
             //check if user exists, if not throw exception
             if (!$user) {
                 throw new Exception("Incorrect username or password.");
             }
-    
+
             $hash = $user['password'];
-    
+
             //check if password is correct, if not throw exception
             if (password_verify($password, $hash)) {
                 return true;
@@ -193,7 +193,7 @@ class User
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         $result = $result['is_admin'];
-        
+
         //if result is 1, user is admin, else user is not admin
         if ($result === 1) {
             return true;

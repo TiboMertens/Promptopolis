@@ -16,5 +16,3 @@ echo json_encode($images);
 
 // Flush the output buffer
 ob_end_flush();
-
-
