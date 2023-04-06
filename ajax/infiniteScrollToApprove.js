@@ -5,7 +5,7 @@ var loading = false;
 function loadImages() {
   loading = true;
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "./load-images.php", true);
+  xhr.open("POST", "./loadPromptsToApprove.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.onload = function () {
     if (xhr.status === 200) {

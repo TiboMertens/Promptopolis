@@ -16,7 +16,7 @@ include_once("bootstrap.php");
     <main class="flex flex-wrap">
         <div id="image-container" class="flex flex-wrap"></div>
     </main>
-    <script src="ajax/infiniteScroll.js"></script>
+    <script src="ajax/infiniteScrollToApprove.js"></script>
 </body>
 
 </html>
