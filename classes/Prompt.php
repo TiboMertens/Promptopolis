@@ -1,7 +1,7 @@
 <?php
 class prompt
 {
-    public function getToApproveImages($offset, $limit)
+    public function getAllToApproveImages($offset, $limit)
     {
         try {
             $conn = Db::getInstance();
