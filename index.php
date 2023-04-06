@@ -116,6 +116,9 @@ $imagesToApprove = Prompt::get15ToApproveImages();
                         <img src="<?php echo $imageToApprove['image_url']; ?>" alt="prompt">
                     </a>
                 <?php endforeach; ?>
+                <div class="pt-20 mt-2 px-10">
+                    <a href="showcase.php" class="text-blue-600 hover:text-blue-700 font-bold underline">View all</a>
+                </div>
             </div>
         </section>
         <!-- nieuwe prompts worden chronologisch getoond - gebruik AJAX infinite scroll(check voorbeeld feature Tibo wanneer deze af is && check Joris zijn video's) - feature britt -->
