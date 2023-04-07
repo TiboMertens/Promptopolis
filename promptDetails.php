@@ -21,13 +21,13 @@ if (isset($_GET['id'])) {
     $price = $promptDetails['price'];
 
     //show data
-    echo htmlspecialchars($title);
-    echo htmlspecialchars($description);
-    echo htmlspecialchars($cover_url);
-    echo htmlspecialchars($image2);
-    echo htmlspecialchars($image3);
-    echo htmlspecialchars($tstamp);
-    echo htmlspecialchars($price);
+    // echo htmlspecialchars($title);
+    // echo htmlspecialchars($description);
+    // echo htmlspecialchars($cover_url);
+    // echo htmlspecialchars($image2);
+    // echo htmlspecialchars($image3);
+    // echo htmlspecialchars($tstamp);
+    // echo htmlspecialchars($price);
     
     //get author name
     $authorID = $promptDetails['user_id'];
@@ -43,7 +43,10 @@ if (isset($_GET['id'])) {
 if (isset($_GET['approve'])) {
     if ($_GET['approve'] === "true") {
         $prompt->approvePrompt();
-        
+        //if prompt is appoved, check if user can be verified
+        if ($user->checkToVerify()) {
+            $user->verify();
+        }
     }
 }
 
@@ -61,13 +64,13 @@ if (isset($_GET['approve'])) {
 </head>
 
 <body>
-    //if on approve page, show approve button
+    <!-- if on approve page, show approve button -->
     <?php if (isset($_GET['approve'])) : ?>
         <div>
             <a href="promptDetails.php?id=<?php echo $prompt_id ?>&approve=true">Approve prompt</a>
         </div>
     <?php endif ?>
-    //if error, show error
+    <!-- if error, show error -->
     <?php if (isset($error)) : ?>
         <div>
             <p><?php echo $error ?></p>

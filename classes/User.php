@@ -225,4 +225,26 @@ class User
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function checkToVerify(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :id AND is_approved = 1");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        //if result is 1, user is eligible to be verified, else user is not
+        if (count($result) >= 3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function verify() {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET is_prompt_verified = 1 WHERE id = :id");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+    }
 }
