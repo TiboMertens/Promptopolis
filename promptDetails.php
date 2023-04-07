@@ -28,9 +28,13 @@ if (isset($_GET['id'])) {
     echo htmlspecialchars($image3);
     echo htmlspecialchars($tstamp);
     echo htmlspecialchars($price);
-    //TODO: get user details
-    // $authorID = $promptDetails['user_id'];
-    // $user = new User(); 
+    
+    //get author name
+    $authorID = $promptDetails['user_id'];
+    $user = new User(); 
+    $user->setId($authorID);
+    $userDetails = $user->getUserDetails();
+    $authorName = $userDetails['username'];
 } else {
     $error = "No prompt id provided";
 }
@@ -39,6 +43,7 @@ if (isset($_GET['id'])) {
 if (isset($_GET['approve'])) {
     if ($_GET['approve'] === "true") {
         $prompt->approvePrompt();
+        
     }
 }
 

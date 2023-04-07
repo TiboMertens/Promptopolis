@@ -22,6 +22,20 @@ class User
     }
 
     /**
+     * Set the value of id
+     *
+     * @return  self
+     */
+    public function setId($id)
+    {
+        if ($id != null && !empty($id) && is_numeric($id)) {
+            $this->id = $id;
+
+            return $this;
+        }
+    }
+
+    /**
      * Get the value of username
      */
     public function getUsername()
@@ -200,5 +214,15 @@ class User
         } else {
             return false;
         }
+    }
+
+    public function getUserDetails()
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
     }
 }
