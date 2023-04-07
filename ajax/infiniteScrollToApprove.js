@@ -32,7 +32,7 @@ function loadPrompts() {
 
           var a = document.createElement("a");
           a.classList.add("block", "flex", "w-1/4");
-          a.setAttribute("href", "promptDetails.php?id=" + prompts[i].id);
+          a.setAttribute("href", "promptDetails.php?id=" + prompts[i].id + "&approve");
           a.appendChild(img);
 
           document.getElementById("image-container").appendChild(a);

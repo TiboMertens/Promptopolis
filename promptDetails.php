@@ -31,8 +31,9 @@ echo htmlspecialchars($price);
 // $authorID = $promptDetails['user_id'];
 // $user = new User(); 
 
-
-
+if ($_GET['approve'] === "true"){
+    $prompt->approvePrompt();
+}
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -44,6 +45,8 @@ echo htmlspecialchars($price);
     <title>Details</title>
 </head>
 <body>
-    
+    <div>
+        <a href="promptDetails.php?id=<?php echo $prompt_id ?>&approve=true">Approve prompt</a>
+    </div>
 </body>
 </html>
