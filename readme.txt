@@ -3,6 +3,7 @@ TODO deadline 1:
 - update profile
 - logout
 - user should only be able to login when email is confirmed
+- verified users should be able to post prompts without approval needed
 
 DONE:
 - register
@@ -10,6 +11,7 @@ DONE:
 - Login
 - list with to approve prompts for mods
 - infinite scroll prompts
+- ability to approve prompts
 
 RULES:
 - classes met hoofdletter vb. class User
