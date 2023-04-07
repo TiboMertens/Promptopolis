@@ -43,12 +43,13 @@ if (isset($_GET['id'])) {
 
 //if on aprove page and approve button is clicked, approve prompt
 if (isset($_GET['approve'])) {
+    //if user is not a moderator, redirect to index
     if (!$isModerator) {
         header("Location: index.php");
     }
     if ($_GET['approve'] === "true") {
         $prompt->approvePrompt();
-        //if prompt is appoved, check if user can be verified
+        //if prompt is appoved, check if user can be verified - if yes, verify user
         if ($user->checkToVerify()) {
             $user->verify();
         }
