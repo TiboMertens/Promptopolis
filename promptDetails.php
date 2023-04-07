@@ -3,6 +3,9 @@ include_once("bootstrap.php");
 //DO NOT FORGET XSS PROTECTION
 
 session_start();
+if (!isset($_SESSION['loggedin'])) {
+    header("Location: login.php");
+}
 //if id is set, get prompt details
 if (isset($_GET['id'])) {
     $prompt_id = $_GET['id'];
