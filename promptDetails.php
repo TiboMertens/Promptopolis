@@ -2,7 +2,7 @@
 include_once("bootstrap.php");
 //DO NOT FORGET XSS PROTECTION
 
-//get id from url
+//if id is set, get prompt details
 if (isset($_GET['id'])) {
     $prompt_id = $_GET['id'];
     $prompt = new Prompt();
@@ -35,6 +35,7 @@ if (isset($_GET['id'])) {
     $error = "No prompt id provided";
 }
 
+//if on aprove page and approve button is clicked, approve prompt
 if (isset($_GET['approve'])) {
     if ($_GET['approve'] === "true") {
         $prompt->approvePrompt();
@@ -55,11 +56,13 @@ if (isset($_GET['approve'])) {
 </head>
 
 <body>
+    //if on approve page, show approve button
     <?php if (isset($_GET['approve'])) : ?>
         <div>
             <a href="promptDetails.php?id=<?php echo $prompt_id ?>&approve=true">Approve prompt</a>
         </div>
     <?php endif ?>
+    //if error, show error
     <?php if (isset($error)) : ?>
         <div>
             <p><?php echo $error ?></p>
