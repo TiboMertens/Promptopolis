@@ -1,6 +1,6 @@
 TODO deadline 1:
 - password reset
-- update progile
+- update profile
 - logout
 - user should only be able to login when email is confirmed
 
