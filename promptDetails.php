@@ -2,6 +2,7 @@
 include_once("bootstrap.php");
 //DO NOT FORGET XSS PROTECTION
 
+session_start();
 //if id is set, get prompt details
 if (isset($_GET['id'])) {
     $prompt_id = $_GET['id'];
@@ -28,10 +29,11 @@ if (isset($_GET['id'])) {
     // echo htmlspecialchars($image3);
     // echo htmlspecialchars($tstamp);
     // echo htmlspecialchars($price);
-    
+
     //get author name
     $authorID = $promptDetails['user_id'];
-    $user = new User(); 
+    $user = new User();
+    $isModerator = $user->isModerator($_SESSION['id']['id']);
     $user->setId($authorID);
     $userDetails = $user->getUserDetails();
     $authorName = $userDetails['username'];
@@ -41,6 +43,9 @@ if (isset($_GET['id'])) {
 
 //if on aprove page and approve button is clicked, approve prompt
 if (isset($_GET['approve'])) {
+    if (!$isModerator) {
+        header("Location: index.php");
+    }
     if ($_GET['approve'] === "true") {
         $prompt->approvePrompt();
         //if prompt is appoved, check if user can be verified
