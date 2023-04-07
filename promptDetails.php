@@ -30,11 +30,13 @@ if (isset($_GET['id'])) {
     // echo htmlspecialchars($tstamp);
     // echo htmlspecialchars($price);
 
-    //get author name
+    //get author id
     $authorID = $promptDetails['user_id'];
     $user = new User();
-    $isModerator = $user->isModerator($_SESSION['id']['id']);
     $user->setId($authorID);
+    //check if user is a moderator
+    $isModerator = $user->isModerator($_SESSION['id']['id']);
+    //get author name
     $userDetails = $user->getUserDetails();
     $authorName = $userDetails['username'];
 } else {
