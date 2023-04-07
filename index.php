@@ -127,7 +127,7 @@ if (isset($_SESSION['loggedin'])) {
                     <div class="flex overflow-x-auto">
                         <div class=" flex flex-shrink-0">
                             <?php foreach ($promptsToApprove as $promptToApprove) : ?>
-                                <a href="promptDetails.php?id=<?php echo $promptToApprove['id'] ?>">
+                                <a href="promptDetails.php?id=<?php echo $promptToApprove['id'] ?>&approve">
                                     <img src="<?php echo $promptToApprove['cover_url']; ?>" alt="prompt">
                                 </a>
                             <?php endforeach; ?>
