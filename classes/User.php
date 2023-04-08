@@ -148,13 +148,12 @@ class User
 
         $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
 
-        //redirect to index.php with success message
-        header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
-
         try {
             $response = $sendgrid->send($email);
+            return true;
         } catch (Exception $e) {
             echo 'Caught exception: ' . $e->getMessage() . "\n";
+            return false;
         }
 
         exit();

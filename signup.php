@@ -34,7 +34,11 @@ if (!empty($_POST)) {
         $user->save();
 
         //send email
-        $user->sendVerifyEmail();
+        $mail = $user->sendVerifyEmail();
+        if ($mail) {
+            //redirect to index.php with success message
+            header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
+        }
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
