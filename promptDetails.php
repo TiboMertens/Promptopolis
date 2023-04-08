@@ -61,6 +61,8 @@ if (isset($_GET['approve'])) {
         if ($user->checkToVerify()) {
             $user->verify();
         }
+        //redirect to showcase
+        header("Location: showcase.php");
     }
 }
 
