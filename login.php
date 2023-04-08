@@ -34,10 +34,11 @@ if (!empty($_POST)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-cover" style="background-image: url('images/signup-image.jpg')">
+<body class="bg-cover">
     <form action="" method="post">
         <div class="absolute inset-0 flex items-center justify-center">
             <div class="bg-[#EAEAEA] w-1/2 md:w-1/3 xl:w-1/4 mx-auto my-auto rounded">

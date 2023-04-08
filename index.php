@@ -25,54 +25,10 @@ if (isset($_SESSION['loggedin'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
-<style>
-    @media (min-width: 640px) {
-        .text-base {
-            width: 20em;
-        }
-    }
-
-    @media (max-width: 490px) {
-        .text-base {
-            width: 6em;
-        }
-    }
-
-    @media (min-width: 900px) {
-        .text-base {
-            width: 30em;
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .text-base {
-            width: 40em;
-        }
-    }
-
-    /* Hide horizontal scrollbar for WebKit-based browsers */
-    ::-webkit-scrollbar {
-        height: 5px;
-        width: 5px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        border-radius: 10px;
-        width: 0;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background-color: #aaa;
-    }
-</style>
 
 <body class="bg-gray-400">
     <nav class="bg-gray-700">
@@ -84,7 +40,7 @@ if (isset($_SESSION['loggedin'])) {
             <div class="flex mt-[2px] md:flex-1 justify-center">
                 <form class="flex h-9">
                     <div class="">
-                        <input type="text" placeholder="Search.." class="text-base mt-2 p-1.5 rounded-l h-7 bg-white w-30" style="@media (min-width: 640px) {width:15em}">
+                        <input type="text" placeholder="Search.." class="text-base mt-2 p-1.5 rounded-l h-7 bg-white w-30">
                     </div>
                     <button type="submit" class="text-sm cursor-pointer rounded-r mt-2 px-2 bg-blue-600">
                         <i class="fa fa-search relative top-[0.75px]"></i>
@@ -105,7 +61,7 @@ if (isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </nav>
-    <div class="bg-gradient-to-b from-gray-700 to-gray-400 flex flex-col justify-center items-center" style="height:500px;">
+    <div class="bg-gradient-to-b from-gray-700 to-gray-400 flex flex-col justify-center items-center">
         <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Lorem ipsum dolor, sit amet consectetur adipiscing elit!</h1>
         <div class="flex justify-center items-center">
             <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-7 mr-5 xl:mr-10 xl:mt-10 rounded text-lg xl:text-xl xl:py-3 xl:px-10">
