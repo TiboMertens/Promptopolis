@@ -18,10 +18,17 @@
 - De mappen js, json & vendor hebben te maken met de installatie van sendgrid(email provider) & tailwindcss. Niets van aantrekken
 
 TODO deadline 1:
+//QUINTT 
 - password reset
-- update profile
-- logout
 - user should only be able to login when email is confirmed
+- profile design maken voor Britt
+//BRITT
+- update profile
+- profile frontend doen adhv Quintt zijn figma design
+- logout
+
+TODO deadline 2:
+//TIBO
 - verified users should be able to post prompts without approval needed
 
 DONE:
@@ -31,6 +38,7 @@ DONE:
 - list with to approve prompts for mods
 - infinite scroll prompts
 - ability to approve prompts
+- verify user after 3 approved prompts
 
 RULES:
 - classes met hoofdletter vb. class User
