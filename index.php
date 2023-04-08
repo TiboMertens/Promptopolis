@@ -4,6 +4,18 @@ include_once("bootstrap.php");
 //start the session
 session_start();
 
+if (isset($_SESSION['loggedin'])) {
+    //check if user is an admin
+    $user = new User();
+    $isModerator = $user->isModerator($_SESSION['id']['id']);
+
+    if ($isModerator) {
+        // new Moderator();
+        //get 15 prompts to approve
+        $promptsToApprove = Prompt::get15ToApprovePrompts();
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,6 +51,26 @@ session_start();
         .text-base {
             width: 40em;
         }
+    }
+
+    /* Hide horizontal scrollbar for WebKit-based browsers */
+    ::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 10px;
+        width: 0;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #aaa;
     }
 </style>
 
@@ -77,18 +109,37 @@ session_start();
         <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Lorem ipsum dolor, sit amet consectetur adipiscing elit!</h1>
         <div class="flex justify-center items-center">
             <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-7 mr-5 xl:mr-10 xl:mt-10 rounded text-lg xl:text-xl xl:py-3 xl:px-10">
-                Button 1
+                Buy a prompt
             </a>
             <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-7 xl:mt-10 text-lg xl:text-xl xl:py-3 xl:px-10 rounded">
-                Button 2
+                Sell a prompt
             </a>
         </div>
     </div>
 
     <main>
-        <!-- prompts die nog approved moeten worden door een mod - enkel zichtbaar voor mods - gebruik AJAX infinite scroll - feature van Tibo -->
-        <section></section>
-        <!-- nieuwe prompts worden chronologisch getoond - gebruik AJAX infinite scroll(check voorbeeld feature Tibo wanneer deze af is && check Joris zijn video's) - feature britt -->
+        <!-- check if user is logged in -->
+        <?php if (isset($_SESSION['loggedin'])) : ?>
+            <!-- check if user is an admin, if yes, show the first 15 prompts to approve -->
+            <?php if ($isModerator) : ?>
+                <section>
+                    <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php" class="text-[12px] text-blue-600 hover:text-blue-700 hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
+                    <div class="flex overflow-x-auto">
+                        <div class=" flex flex-shrink-0">
+                            <?php foreach ($promptsToApprove as $promptToApprove) : ?>
+                                <a href="promptDetails.php?id=<?php echo $promptToApprove['id'] ?>&approve">
+                                    <img src="<?php echo $promptToApprove['cover_url']; ?>" alt="prompt">
+                                </a>
+                            <?php endforeach; ?>
+                            <div class="pt-20 mt-2 px-10">
+                                <a href="showcase.php" class="text-blue-600 hover:text-blue-700 font-bold underline">View all</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            <?php endif; ?>
+        <?php endif; ?>
+        <!-- nieuwe prompts worden chronologisch getoond - gebruik AJAX infinite scroll(check infinite scroll van Tibo && check Joris zijn video's) - feature britt -->
         <section></section>
     </main>
 </body>

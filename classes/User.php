@@ -1,16 +1,16 @@
 <?php
 class User
 {
-    private string $id;
-    private string $username;
-    private string $email;
-    private string $password;
-    private string $verifyToken;
+    protected int $id;
+    protected string $username;
+    protected string $email;
+    protected string $password;
+    protected string $verifyToken;
 
-    
+
     /**
      * Get the value of id
-     */ 
+     */
     public function getId($username)
     {
         $conn = Db::getInstance();
@@ -19,6 +19,20 @@ class User
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */
+    public function setId($id)
+    {
+        if ($id != null && !empty($id) && is_numeric($id)) {
+            $this->id = $id;
+
+            return $this;
+        }
     }
 
     /**
@@ -134,13 +148,12 @@ class User
 
         $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
 
-        //redirect to index.php with success message
-        header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
-
         try {
             $response = $sendgrid->send($email);
+            return true;
         } catch (Exception $e) {
             echo 'Caught exception: ' . $e->getMessage() . "\n";
+            return false;
         }
 
         exit();
@@ -166,14 +179,14 @@ class User
             $statement->bindValue(":username", $username);
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
-    
+
             //check if user exists, if not throw exception
             if (!$user) {
                 throw new Exception("Incorrect username or password.");
             }
-    
+
             $hash = $user['password'];
-    
+
             //check if password is correct, if not throw exception
             if (password_verify($password, $hash)) {
                 return true;
@@ -183,5 +196,54 @@ class User
         } catch (Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function isModerator($id)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT is_admin FROM users WHERE id = :id");
+        $statement->bindValue(":id", intval($id));
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $result['is_admin'];
+
+        //if result is 1, user is admin, else user is not admin
+        if ($result === 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getUserDetails()
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function checkToVerify(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :id AND is_approved = 1");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        //if result is 1, user is eligible to be verified, else user is not
+        if (count($result) >= 3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function verify() {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET is_prompt_verified = 1 WHERE id = :id");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
     }
 }
