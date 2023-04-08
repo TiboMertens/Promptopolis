@@ -162,7 +162,7 @@ class User
     public function save()
     {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("insert into users (username, email, password, token) values (:username, :email, :password, :token)");
+        $statement = $conn->prepare("insert into users (username, email, password, verify_token) values (:username, :email, :password, :token)");
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":email", $this->email);
         $statement->bindValue(":password", $this->password);
@@ -242,7 +242,7 @@ class User
 
     public function verify() {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("UPDATE users SET is_prompt_verified = 1 WHERE id = :id");
+        $statement = $conn->prepare("UPDATE users SET is_verified = 1 WHERE id = :id");
         $statement->bindValue(":id", $this->id);
         $statement->execute();
     }

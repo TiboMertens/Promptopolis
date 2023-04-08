@@ -51,9 +51,12 @@ if (isset($_GET['approve'])) {
     //if user is not a moderator, redirect to index
     if (!$isModerator) {
         header("Location: index.php");
+    } else {
+        $moderator = new Moderator();
     }
+
     if ($_GET['approve'] === "true") {
-        $prompt->approvePrompt();
+        $moderator->approve($prompt_id);
         //if prompt is appoved, check if user can be verified - if yes, verify user
         if ($user->checkToVerify()) {
             $user->verify();

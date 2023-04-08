@@ -5,14 +5,14 @@ $token = $_GET['token'];
 
 // retrieve the user from the database using the token
 $conn = Db::getInstance();
-$statement = $conn->prepare("select * from users where token = :token");
+$statement = $conn->prepare("select * from users where verify_token = :token");
 $statement->bindValue(":token", $token);
 $statement->execute();
 $user = $statement->fetch();
 
 // if the token is valid, activate the user's account
 if ($user) {
-    $statement = $conn->prepare("update users set is_verified = 1 where id = :id");
+    $statement = $conn->prepare("update users set can_login = 1 where id = :id");
     $statement->bindValue(":id", $user['id']);
     $statement->execute();
     echo "Your account has been activated!";

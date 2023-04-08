@@ -67,9 +67,6 @@ class prompt
 
     public function approvePrompt()
     {
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("UPDATE prompts SET is_approved = 1 WHERE id = :id");
-        $statement->bindValue(":id", $this->id);
-        $statement->execute();
+        
     }
 }

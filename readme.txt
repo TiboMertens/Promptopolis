@@ -30,6 +30,8 @@ TODO deadline 1:
 TODO deadline 2:
 //TIBO
 - verified users should be able to post prompts without approval needed
+- better notifications for users on prompt approval instead of error message
+- frontend for prompt approval & list of prompts to approve
 
 DONE:
 - register
