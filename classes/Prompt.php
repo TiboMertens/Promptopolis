@@ -25,13 +25,13 @@ class prompt
         }
     }
 
-    public static function getAllToApprovePrompts($offset, $limit)
+    public static function getAllToApprovePrompts($limit, $offset)
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT cover_url, id FROM prompts WHERE is_approved = 0 LIMIT :offset, :limit");
-            $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
+            $statement = $conn->prepare("SELECT cover_url, id FROM prompts WHERE is_approved = 0 LIMIT :limit OFFSET :offset");
             $statement->bindValue(":limit", $limit, PDO::PARAM_INT);
+            $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
             $statement->execute();
             $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
             return $prompts;
@@ -39,6 +39,14 @@ class prompt
             error_log("PDO error: " . $e->getMessage());
             return [];
         }
+    }
+
+    public static function countAllToApprovePrompts(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 0");
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public static function get15ToApprovePrompts()
@@ -53,6 +61,30 @@ class prompt
             error_log("PDO error: " . $e->getMessage());
             return [];
         }
+    }
+
+    public static function getAllPrompts($limit, $offset)
+    {
+        try {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("SELECT cover_url, id FROM prompts LIMIT :limit OFFSET :offset");
+            $statement->bindValue(":limit", $limit, PDO::PARAM_INT);
+            $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
+            $statement->execute();
+            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $prompts;
+        } catch (PDOException $e) {
+            error_log("PDO error: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public static function countAllPrompts(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM prompts");
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public function getPromptDetails()
