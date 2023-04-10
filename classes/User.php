@@ -184,7 +184,7 @@ class User
     public function activate($id)
     {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("update users set can_login = 1 where id = :id");
+        $statement = $conn->prepare("UPDATE users SET can_login = 1, verify_token = NULL WHERE id = :id");
         $statement->bindValue(":id", $id);
         $statement->execute();
     }
