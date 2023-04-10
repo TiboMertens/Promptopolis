@@ -318,4 +318,41 @@ class User
         return $result;
 
     }
+    public function checkResetToken(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE reset_token = :token");
+        $statement->bindValue(":token", $this->resetToken);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        //if result is 1, token is valid, else token is not valid
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function checkTimestamp(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT tstamp FROM users WHERE reset_token = :token");
+        $statement->bindValue(":token", $this->resetToken);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $result['tstamp'];
+
+        //if result is 1, token is valid, else token is not valid
+        if (time() - $result < 86400) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function updatePassword(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET password = :password, reset_token = NULL, tstamp = NULL WHERE reset_token = :token");
+        $statement->bindValue(":password", $this->password);
+        $statement->bindValue(":token", $this->resetToken);
+        $result = $statement->execute();
+        return $result;
+    }
 }
