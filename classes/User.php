@@ -138,7 +138,7 @@ class User
         // send an email to the user
         $email = new \SendGrid\Mail\Mail();
         $email->setFrom("r0892926@student.thomasmore.be", "Prompthub");
-        $email->setSubject("Verifictation email");
+        $email->setSubject("Verification email");
         $email->addTo($this->email, $this->username);
         $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token");
         $email->addContent(
