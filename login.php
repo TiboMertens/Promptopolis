@@ -38,7 +38,7 @@ if (!empty($_POST)) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-cover">
+<body class="bg-cover" style="background-image: url('images/signup-image.jpg')">
     <form action="" method="post">
         <div class="absolute inset-0 flex items-center justify-center">
             <div class="bg-[#EAEAEA] w-1/2 md:w-1/3 xl:w-1/4 mx-auto my-auto rounded">
