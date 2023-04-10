@@ -3,8 +3,11 @@ require_once 'vendor/autoload.php';
 include_once(__DIR__ . "/classes/User.php");
 include_once(__DIR__ . "/classes/Db.php");
 
-//TODO:needs to be secured
-apache_setenv('SENDGRID_API_KEY', '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');
+$config = parse_ini_file('config/config.ini', true);
+
+$key = $config[' keys ']['SENDGRID_API_KEY'];
+
+apache_setenv('SENDGRID_API_KEY', $key);
 
 if (!empty($_POST)) {
     try {
