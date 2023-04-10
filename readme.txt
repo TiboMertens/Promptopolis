@@ -1,10 +1,14 @@
 //BRITT 
 - Ik heb al een functie getUserDetails() aangemaakt die jij ook best gebruikt voor het profiel te updaten, zo hebben we geen duplicate functies.
+- Op het profiel maak je al een profielfoto aan, deze mag nog leeg zijn. De username & bio moeten ook getoond worden op het profiel vanuit de database
+  en deze moeten kunnen worden aangepast. Gebruik het design can Quintt. Je kan de backend al doen zonder enige frontend, dat hangt af van je persoonlijke voorkeur.
 - TIP: $_SESSION & ga spieken in promptDetails.php
 
 //QUINTT
 - Bel me even wanneer je start zodat ik het email versturen gedeelte kan uitleggen dan moet je je niet doodzoeken. 
 - Ik heb forgotPassword.php al aangemaakt en gelinked voor jou - file is nog leeg
+- Design van het profiel moet bevatten: een profielfoto, username & bio. In een latere deadline moeten de prompts van dit profiel
+  ook getoond worden, hou hier rekening mee.
 
 //BRITT & QUINTT
 - Neem de code van login.php, signup.php, User.php, verification.php eens rustig door. Dit zijn mijn features van deadline-1. 
