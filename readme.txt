@@ -22,9 +22,7 @@
 - De mappen js, json & vendor hebben te maken met de installatie van sendgrid(email provider) & tailwindcss. Niets van aantrekken
 
 TODO deadline 1:
-//QUINTT 
-- password reset
-- user should only be able to login when email is confirmed
+//QUINTT
 - profile design maken voor Britt
 //BRITT
 - update profile
@@ -45,6 +43,8 @@ DONE:
 - infinite scroll prompts
 - ability to approve prompts
 - verify user after 3 approved prompts
+- password reset
+- user should only be able to login when email is confirmed
 
 RULES:
 - classes met hoofdletter vb. class User
