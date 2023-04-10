@@ -1,23 +1,24 @@
 <?php
 include_once(__DIR__ . "/bootstrap.php");
+
 // retrieve the token from the URL
-$token = $_GET['token'];
+if (isset($_GET['token'])) {
+    $token = $_GET['token'];
 
-// retrieve the user from the database using the token
-$conn = Db::getInstance();
-$statement = $conn->prepare("select * from users where verify_token = :token");
-$statement->bindValue(":token", $token);
-$statement->execute();
-$user = $statement->fetch();
+    $user = new User();
 
-// if the token is valid, activate the user's account
-if ($user) {
-    $statement = $conn->prepare("update users set can_login = 1 where id = :id");
-    $statement->bindValue(":id", $user['id']);
-    $statement->execute();
-    echo "Your account has been activated!";
+    // retrieve the user from the database using the token
+    $verify = $user->checkVerifyToken($token);
+
+    // if the token is valid, activate the user's account
+    if ($verify) {
+        $user->activate($verify['id']);
+        $result = "Account activated!";
+    } else {
+        $result = "Invalid token!";
+    }
 } else {
-    echo "Invalid activation link.";
+    $result = "Invalid token!";
 }
 ?>
 <!DOCTYPE html>
@@ -29,9 +30,14 @@ if ($user) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
     <title>Verify account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
+    <div class="flex flex-col items-center justify-center h-screen">
+        <h1 class="text-center text-[26px] font-bold"><?php echo $result ?></h1>
+        <a class="mt-4 text-blue-500 hover:text-blue-700" href="index.php">Go to homepage</a>
+    </div>
 
 </body>
 

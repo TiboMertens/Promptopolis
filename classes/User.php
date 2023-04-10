@@ -137,7 +137,7 @@ class User
 
         // send an email to the user
         $email = new \SendGrid\Mail\Mail();
-        $email->setFrom("r0892926@student.thomasmore.be", "Tibo Mertens");
+        $email->setFrom("r0892926@student.thomasmore.be", "Prompthub");
         $email->setSubject("Verifictation email");
         $email->addTo($this->email, $this->username);
         $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token");
@@ -169,6 +169,24 @@ class User
         $statement->bindValue(":token", $this->verifyToken);
         $result = $statement->execute();
         return $result;
+    }
+
+    public function checkVerifyToken($token)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("select * from users where verify_token = :token");
+        $statement->bindValue(":token", $token);
+        $statement->execute();
+        $result = $statement->fetch();
+        return $result;
+    }
+
+    public function activate($id)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("update users set can_login = 1 where id = :id");
+        $statement->bindValue(":id", $id);
+        $statement->execute();
     }
 
     public function canLogin($username, $password)
@@ -225,7 +243,8 @@ class User
         return $result;
     }
 
-    public function checkToVerify(){
+    public function checkToVerify()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :id AND is_approved = 1");
         $statement->bindValue(":id", $this->id);
@@ -240,7 +259,8 @@ class User
         }
     }
 
-    public function verify() {
+    public function verify()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET is_verified = 1 WHERE id = :id");
         $statement->bindValue(":id", $this->id);
