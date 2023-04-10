@@ -6,7 +6,7 @@ class User
     protected string $email;
     protected string $password;
     protected string $verifyToken;
-
+    protected string $resetToken;
 
     /**
      * Get the value of id
@@ -200,16 +200,20 @@ class User
 
             //check if user exists, if not throw exception
             if (!$user) {
-                throw new Exception("Incorrect username or password.");
+                throw new Exception("Incorrect username.");
             }
 
             $hash = $user['password'];
 
             //check if password is correct, if not throw exception
             if (password_verify($password, $hash)) {
-                return true;
+                if($user['can_login']==1){
+                    return true;
+                } else {
+                    throw new Exception("Please verify your email first.");
+                }
             } else {
-                throw new Exception("Incorrect username or password.");
+                throw new Exception("Incorrect password.");
             }
         } catch (Exception $e) {
             return $e->getMessage();
@@ -265,5 +269,114 @@ class User
         $statement = $conn->prepare("UPDATE users SET is_verified = 1 WHERE id = :id");
         $statement->bindValue(":id", $this->id);
         $statement->execute();
+    }
+    public function checkEmail($email)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        //if result is 1, email is already in use, else email is not in use
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function sendResetMail(){
+        $token = $this->resetToken;
+
+
+        // send an email to the user
+        $email = new \SendGrid\Mail\Mail();
+        $email->setFrom("r0892926@student.thomasmore.be", "Prompthub");
+        $email->setSubject("Reset email");
+        $email->addTo($this->email);
+        $email->addContent("text/plain", "Hi! Please reset your password. Here is the reset link http://localhost/php/eindwerk/resetPassword.php?token=$token");
+        $email->addContent(
+            "text/html",
+            "Hi! Please reset your password. <strong>Here is the reset link :</strong> http://localhost/php/eindwerk/resetPassword.php?token=$token"
+        );
+
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+
+        try {
+            $response = $sendgrid->send($email);
+            return true;
+        } catch (Exception $e) {
+            echo 'Caught exception: ' . $e->getMessage() . "\n";
+            return false;
+        }
+
+        exit();
+    }
+
+    /**
+     * Get the value of resetToken
+     */ 
+    public function getResetToken()
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * Set the value of resetToken
+     *
+     * @return  self
+     */ 
+    public function setResetToken($resetToken)
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+    public function saveResetToken(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET reset_token = :token, tstamp= :tstamp WHERE email = :email");
+        $statement->bindValue(":token", $this->resetToken);
+        $statement->bindValue(":tstamp", time());
+        $statement->bindValue(":email", $this->email);
+        $result = $statement->execute();
+        return $result;
+
+    }
+    public function checkResetToken(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE reset_token = :token");
+        $statement->bindValue(":token", $this->resetToken);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        //if result is 1, token is valid, else token is not valid
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function checkTimestamp(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT tstamp FROM users WHERE reset_token = :token");
+        $statement->bindValue(":token", $this->resetToken);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $result['tstamp'];
+
+        //if result is 1, token is valid, else token is not valid
+        if (time() - $result < 86400) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function updatePassword(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET password = :password, reset_token = NULL, tstamp = NULL WHERE reset_token = :token");
+        $statement->bindValue(":password", $this->password);
+        $statement->bindValue(":token", $this->resetToken);
+        $result = $statement->execute();
+        return $result;
     }
 }
