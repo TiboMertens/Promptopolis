@@ -5,8 +5,6 @@
 - TIP: $_SESSION & ga spieken in promptDetails.php
 
 //QUINTT
-- Bel me even wanneer je start zodat ik het email versturen gedeelte kan uitleggen dan moet je je niet doodzoeken. 
-- Ik heb forgotPassword.php al aangemaakt en gelinked voor jou - file is nog leeg
 - Design van het profiel moet bevatten: een profielfoto, username & bio. In een latere deadline moeten de prompts van dit profiel
   ook getoond worden, hou hier rekening mee.
 
