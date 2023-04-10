@@ -182,16 +182,20 @@ class User
 
             //check if user exists, if not throw exception
             if (!$user) {
-                throw new Exception("Incorrect username or password.");
+                throw new Exception("Incorrect username.");
             }
 
             $hash = $user['password'];
 
             //check if password is correct, if not throw exception
             if (password_verify($password, $hash)) {
-                return true;
+                if($user['can_login']==1){
+                    return true;
+                } else {
+                    throw new Exception("Please verify your email first.");
+                }
             } else {
-                throw new Exception("Incorrect username or password.");
+                throw new Exception("Incorrect password.");
             }
         } catch (Exception $e) {
             return $e->getMessage();
