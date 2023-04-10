@@ -162,7 +162,7 @@ class User
     public function save()
     {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("insert into users (username, email, password, verify_token) values (:username, :email, :password, :token)");
+        $statement = $conn->prepare("INSERT INTO users (username, email, password, verify_token) VALUES (:username, :email, :password, :token)");
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":email", $this->email);
         $statement->bindValue(":password", $this->password);
@@ -174,7 +174,7 @@ class User
     public function checkVerifyToken($token)
     {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("select * from users where verify_token = :token");
+        $statement = $conn->prepare("SELECT * FROM users WHERE verify_token = :token");
         $statement->bindValue(":token", $token);
         $statement->execute();
         $result = $statement->fetch();
