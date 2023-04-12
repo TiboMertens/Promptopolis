@@ -33,6 +33,7 @@ if(!empty($_POST)){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
     <title>forgot password</title>
 </head>
 <body class="bg-cover" style="background-image: url('images/signup-image.jpg')">
@@ -40,6 +41,9 @@ if(!empty($_POST)){
     
     <div class="absolute inset-0 flex items-center justify-center">
         <div class="bg-[#EAEAEA] w-1/2 md:w-1/3 xl:w-1/4 mx-auto my-auto rounded">
+            <div class="pl-5 pt-5" >
+                <a href="login.php"><i class="fa-solid fa-arrow-left fa-xl" ></i></a>
+            </div>
             <h2 class="text-center pt-10 pb-7 text-2xl md:text-3xl font-bold mx-auto">Forgot password?</h2>
             <div class="grid justify-items-center">
                 <div class="w-30">
