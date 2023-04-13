@@ -13,6 +13,7 @@ $username = $userDetails['username'];
 $bio = $userDetails['bio'];
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,5 +26,6 @@ $bio = $userDetails['bio'];
 <body>
     <p><?php echo htmlspecialchars($username); ?></p>
     <p><?php echo htmlspecialchars($bio); ?></p>
+    <a href="editProfile.php">Edit</a>
 </body>
 </html>
