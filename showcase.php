@@ -7,7 +7,7 @@ try {
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
 
     $filter = isset($_GET['filter']) ? $_GET['filter'] : null;
-    
+
     if ($filter === "toApprove") {
         $approve = "&approve";
         // fetch the prompts with the selected filter
@@ -50,7 +50,7 @@ try {
     <main class="flex flex-wrap">
         <div id="image-container" class="flex flex-wrap">
             <?php foreach ($prompts as $prompt) : ?>
-                <a href="promptDetails.php?id=<?php echo $prompt['id'] . $approve?>">
+                <a href="promptDetails.php?id=<?php echo $prompt['id'] . $approve ?>">
                     <img src="<?php echo $prompt['cover_url'] ?>" alt="Prompt">
                 </a>
             <?php endforeach; ?>
