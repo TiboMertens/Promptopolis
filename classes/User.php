@@ -193,30 +193,30 @@ class User
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT * FROM users WHERE username = :username");
-            $statement->bindValue(":username", $username);
-            $statement->execute();
-            $user = $statement->fetch(PDO::FETCH_ASSOC);
-
-            //check if user exists, if not throw exception
-            if (!$user) {
-                throw new Exception("Incorrect username.");
-            }
-
-            $hash = $user['password'];
-
-            //check if password is correct, if not throw exception
-            if (password_verify($password, $hash)) {
-                if($user['can_login']==1){
-                    return true;
-                } else {
-                    throw new Exception("Please verify your email first.");
-                }
-            } else {
-                throw new Exception("Incorrect password.");
-            }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new Exception("connection failed.");
+        }
+        $statement = $conn->prepare("SELECT * FROM users WHERE username = :username");
+        $statement->bindValue(":username", $username);
+        $statement->execute();
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+        //check if user exists, if not throw exception
+        if (!$user) {
+            throw new Exception("Incorrect username.");
+        }
+
+        $hash = $user['password'];
+
+        //check if password is correct, if not throw exception
+        if (password_verify($password, $hash)) {
+            if ($user['can_login'] == 1) {
+                return true;
+            } else {
+                throw new Exception("Please verify your email first.");
+            }
+        } else {
+            throw new Exception("Incorrect password.");
         }
     }
 
@@ -285,7 +285,8 @@ class User
             throw new Exception("Email is not in use.");
         }
     }
-    public function sendResetMail(){
+    public function sendResetMail()
+    {
         $token = $this->resetToken;
 
 
@@ -315,7 +316,7 @@ class User
 
     /**
      * Get the value of resetToken
-     */ 
+     */
     public function getResetToken()
     {
         return $this->resetToken;
@@ -325,14 +326,15 @@ class User
      * Set the value of resetToken
      *
      * @return  self
-     */ 
+     */
     public function setResetToken($resetToken)
     {
         $this->resetToken = $resetToken;
 
         return $this;
     }
-    public function saveResetToken(){
+    public function saveResetToken()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET reset_token = :token, tstamp= :tstamp WHERE email = :email");
         $statement->bindValue(":token", $this->resetToken);
@@ -340,9 +342,9 @@ class User
         $statement->bindValue(":email", $this->email);
         $result = $statement->execute();
         return $result;
-
     }
-    public function checkResetToken(){
+    public function checkResetToken()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM users WHERE reset_token = :token");
         $statement->bindValue(":token", $this->resetToken);
@@ -356,7 +358,8 @@ class User
             return false;
         }
     }
-    public function checkTimestamp(){
+    public function checkTimestamp()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT tstamp FROM users WHERE reset_token = :token");
         $statement->bindValue(":token", $this->resetToken);
@@ -371,7 +374,8 @@ class User
             return false;
         }
     }
-    public function updatePassword(){
+    public function updatePassword()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET password = :password, reset_token = NULL, tstamp = NULL WHERE reset_token = :token");
         $statement->bindValue(":password", $this->password);

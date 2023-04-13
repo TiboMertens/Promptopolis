@@ -10,19 +10,18 @@ if (!empty($_POST)) {
     $user = new User();
 
     //check if the user can login
-    $result = $user->canLogin($username, $password);
-
-    //if the user can login, redirect to the index page
     try {
-        if ($result === true) {
-            session_start();
-            $_SESSION['loggedin'] = true;
-            $_SESSION['id'] = $user->getId($username);
+        $result = $user->canLogin($username, $password);
+            //if the user can login, redirect to the index page
+    if ($result === true) {
+        session_start();
+        $_SESSION['loggedin'] = true;
+        $_SESSION['id'] = $user->getId($username);
 
-            header("Location: index.php");
-            return;
-        }
-    } catch (Throwable $e) {
+        header("Location: index.php");
+        return;
+    }
+    } catch (throwable $e) {
         $error = $e->getMessage();
     }
 }
@@ -48,12 +47,12 @@ if (!empty($_POST)) {
                     <div class="w-30">
                         <div class="mb-4">
                             <label class="block font-bold mb-0.5" for="username">Username</label>
-                            <input class="w-full lg:w-55 px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($error) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username">
+                            <input class="w-full lg:w-55 px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($error) && $error === 'Incorrect username.' ? 'border-red-500' : '' ?>" style="height: 35px; font-size:1rem;" type="text" name="username">
                         </div>
                         <div class="mb-4">
                             <label class="block font-bold mb-0.5" for="password">Password</label>
                             <div class="flex flex-col items-end">
-                                <input class="w-full lg:w-50 px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($error) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="password" name="password">
+                                <input class="w-full lg:w-50 px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($error) && ($error === 'Incorrect password.') ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="password" name="password">
                                 <a href="forgotPassword.php" class="block italic text-xs mt-1 underline">Forgot password?</a>
                             </div>
                         </div>
