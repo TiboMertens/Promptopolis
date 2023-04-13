@@ -7,6 +7,7 @@ class User
     protected string $password;
     protected string $verifyToken;
     protected string $resetToken;
+    protected string $bio;
 
     /**
      * Get the value of id
@@ -382,5 +383,35 @@ class User
         $statement->bindValue(":token", $this->resetToken);
         $result = $statement->execute();
         return $result;
+    }
+    public function updateUserDetails(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio WHERE id = :id");
+        $statement->bindValue(":username", $this->username);
+        $statement->bindValue(":bio", $this->bio);
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    /**
+     * Get the value of bio
+     */ 
+    public function getBio()
+    {
+        return $this->bio;
+    }
+
+    /**
+     * Set the value of bio
+     *
+     * @return  self
+     */ 
+    public function setBio($bio)
+    {
+        $this->bio = $bio;
+
+        return $this;
     }
 }
