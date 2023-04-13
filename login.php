@@ -13,16 +13,17 @@ if (!empty($_POST)) {
     $result = $user->canLogin($username, $password);
 
     //if the user can login, redirect to the index page
-    if ($result === true) {
-        session_start();
-        $_SESSION['loggedin'] = true;
-        $_SESSION['id'] = $user->getId($username);
+    try {
+        if ($result === true) {
+            session_start();
+            $_SESSION['loggedin'] = true;
+            $_SESSION['id'] = $user->getId($username);
 
-        header("Location: index.php");
-        return;
-    } else {
-        //if the user can't login, show the error message
-        $error = $result;
+            header("Location: index.php");
+            return;
+        }
+    } catch (Throwable $e) {
+        $error = $e->getMessage();
     }
 }
 ?>

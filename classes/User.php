@@ -216,7 +216,7 @@ class User
                 throw new Exception("Incorrect password.");
             }
         } catch (Exception $e) {
-            return $e->getMessage();
+            throw new Exception("connection failed.");
         }
     }
 
