@@ -282,7 +282,7 @@ class User
         if ($result) {
             return true;
         } else {
-            return false;
+            throw new Exception("Email is not in use.");
         }
     }
     public function sendResetMail(){
