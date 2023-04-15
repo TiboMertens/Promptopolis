@@ -57,7 +57,9 @@ if (isset($_SESSION['loggedin'])) {
                         <a href="login.php" class="text-sm underline text-white">Login</a>
                     <?php endif; ?>
                 </div>
-                <img src="https://api.lorem.space/image/face?w=150&h=150" alt="profile picture" class="w-10 h-10 rounded-full mt-[1px]">
+                <a href="profile.php">
+                    <img src="images/signup-image.jpg" alt="profile picture" class="w-10 h-10 rounded-full mt-[1px]">
+                </a>
             </div>
         </div>
     </nav>
