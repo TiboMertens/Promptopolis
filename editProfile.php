@@ -48,7 +48,7 @@ if (!empty($_POST)) {
     <nav class="bg-gray-700">
         <div class="grid grid-cols-3 md:flex">
             <div class="pt-3 pb-2.5 ml-5 ">
-                <a href="#"><img src="images/logo.svg" alt="logo" class="w-50 h-7"></a>
+                <a href="index.php"><img src="images/logo.svg" alt="logo" class="w-50 h-7"></a>
             </div>
 
             <div class="flex mt-[2px] md:flex-1 justify-center">
