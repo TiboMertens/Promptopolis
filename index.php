@@ -31,36 +31,8 @@ if (isset($_SESSION['loggedin'])) {
 </head>
 
 <body class="bg-gray-400">
-    <nav class="bg-gray-700">
-        <div class="grid grid-cols-3 md:flex">
-            <div class="pt-3 pb-2.5 ml-5 w-20">
-                <a href="#"><img src="images/newLogo.svg" alt="logo" class="w-50 h-7"></a>
-            </div>
-
-            <div class="flex mt-[2px] md:flex-1 justify-center">
-                <form class="flex h-9">
-                    <div class="">
-                        <input type="text" placeholder="Search.." class="text-base mt-2 p-1.5 rounded-l h-7 bg-white w-30">
-                    </div>
-                    <button type="submit" class="text-sm cursor-pointer rounded-r mt-2 px-2 bg-blue-600">
-                        <i class="fa fa-search relative top-[0.75px]"></i>
-                    </button>
-                </form>
-            </div>
-
-            <div class="mt-1 flex flex-row-reverse">
-                <div class="mt-2 mr-5 ml-2 relative bottom-[2px]">
-                    <!-- If the user is logged in, show the logout button, else show the login button -->
-                    <?php if (isset($_SESSION['loggedin'])) : ?>
-                        <a href="logout.php" class="text-sm underline text-white">Logout</a>
-                    <?php else : ?>
-                        <a href="login.php" class="text-sm underline text-white">Login</a>
-                    <?php endif; ?>
-                </div>
-                <img src="https://api.lorem.space/image/face?w=150&h=150" alt="profile picture" class="w-10 h-10 rounded-full mt-[1px]">
-            </div>
-        </div>
-    </nav>
+    <?php include_once("inc/nav.inc.php") ?>
+    
     <div class="bg-gradient-to-b from-gray-700 to-gray-400 flex flex-col justify-center items-center">
         <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Lorem ipsum dolor, sit amet consectetur adipiscing elit!</h1>
         <div class="flex justify-center items-center">
