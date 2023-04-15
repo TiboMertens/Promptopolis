@@ -64,7 +64,7 @@ if (!empty($_POST)) {
             </div>
 
             <div class="mt-1 flex flex-row-reverse">
-           
+
                 <div class="mt-2 mr-5 ml-2 relative bottom-[2px]">
                     <!-- If the user is logged in, show the logout button, else show the login button -->
                     <?php if (isset($_SESSION['loggedin'])) : ?>
@@ -80,29 +80,34 @@ if (!empty($_POST)) {
         </div>
     </nav>
 
-    
+
     <div class="flex justify-center items-center pt-20">
 
-    <div class="bg-slate-200 rounded-lg p-8 max-w-md">
-        <h1 class="text-2xl font-bold mb-4">Edit Your Profile</h1>
-        <form action="" method="post">
-            <div class="mb-4">
-                <label for="username" class="block">Username</label>
-                <input class="w-full px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($usernameError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
-                <?php if (isset($usernameError)) : ?>
-                    <p class="text-red-500 text-xs italic"><?php echo $usernameError; ?></p>
-                <?php endif; ?>
+        <div class="bg-slate-200 rounded-lg p-8 max-w-md">
+            <div class="flex items-center gap-5 mb-5">
+                <div >
+                    <a href="profile.php"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
+                </div>
+                <h1 class="text-2xl font-bold ">Edit Your Profile</h1>
             </div>
-            <div class="mb-4">
-                <label for="bio" class="block">Bio</label>
-                <textarea class="w-full px-3 py-2 border-2 rounded" rows="4" name="bio"><?php echo htmlspecialchars($bio); ?></textarea>
-            </div>
-            <div class="flex justify-center">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-            </div>
-        </form>
+            <form action="" method="post">
+                <div class="mb-4">
+                    <label for="username" class="block">Username</label>
+                    <input class="w-full px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($usernameError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <?php if (isset($usernameError)) : ?>
+                        <p class="text-red-500 text-xs italic"><?php echo $usernameError; ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="mb-4">
+                    <label for="bio" class="block">Bio</label>
+                    <textarea class="w-full px-3 py-2 border-2 rounded" rows="4" name="bio"><?php echo htmlspecialchars($bio); ?></textarea>
+                </div>
+                <div class="flex justify-center">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
 
 
