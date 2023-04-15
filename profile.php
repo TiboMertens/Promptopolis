@@ -25,6 +25,7 @@ $bio = $userDetails['bio'];
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="bg-[#121212]">
