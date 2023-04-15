@@ -45,29 +45,29 @@ if (!empty($_POST)) {
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php") ?>
 
     <div class="flex justify-center items-center pt-20">
-        <div class="bg-slate-200 rounded-lg p-8 max-w-md">
-            <div class="">
+        <div class="bg-[#2A2A2A] rounded-lg p-8 max-w-md">
+            <div class="text-white">
                 <a href="profile.php"><i class="fa-solid fa-arrow-left"></i></a>
             </div>
-            <h1 class="text-2xl font-bold mb-4">Edit Your Profile</h1>
+            <h1 class="text-2xl font-bold mb-4 text-white">Edit Your Profile</h1>
             <form action="" method="post">
                 <div class="mb-4">
-                    <label for="username" class="block">Username</label>
-                    <input class="w-full px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1] <?php echo isset($usernameError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <label for="username" class="block font-bold mb-0.5 text-white">Username</label>
+                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB] <?php echo isset($usernameError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
                     <?php if (isset($usernameError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $usernameError; ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
-                    <label for="bio" class="block">Bio</label>
-                    <textarea class="w-full px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1]" rows="4" name="bio"><?php echo htmlspecialchars($bio); ?></textarea>
+                    <label for="bio" class="block font-bold mb-0.5 text-white">Bio</label>
+                    <textarea class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" rows="4" name="bio"><?php echo htmlspecialchars($bio); ?></textarea>
                 </div>
                 <div class="flex justify-center">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Save</button>
+                    <button type="submit" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded" style="padding-left: 6rem; padding-right: 6rem;">Save</button>
                 </div>
             </form>
         </div>

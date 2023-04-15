@@ -27,21 +27,21 @@ $bio = $userDetails['bio'];
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="bg-gray-200">
+<body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php") ?>
 
-    <header class="bg-slate-200 md:mt-[50px]">
+    <header class="md:mt-[50px]">
         <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
             <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="images/signup-image.jpg" alt="profile picture"></div>
             <div class="mr-5 ml-5 mb-10  ">
                 <div class="flex justify-center items-center gap-4 md:mt-15 md:flex md:justify-start">
-                    <h1 class="font-bold text-[26px] lg:text-[32px] mb-2"><?php echo htmlspecialchars($username); ?></h1>
+                    <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($username); ?></h1>
                     <div class="flex justify-center items-center mb-[4px]">
-                        <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-blue-500"></i>
-                        <a class="text-blue-500 underline font-semibold rounded-lg hover:text-blue-700 flex justify-center items-center" href="editProfile.php">Edit</a>
+                        <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-[#BB86FC]"></i>
+                        <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="editProfile.php">Edit</a>
                     </div>
                 </div>
-                <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] ">
+                <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>
                 </div>
             </div>

@@ -42,7 +42,7 @@ try {
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php"); ?>
     <?php if (isset($error)) : ?>
         <div class="error">
@@ -60,7 +60,7 @@ try {
 
         <!-- pagination links -->
         <?php if ($totalPages > 1) : ?>
-            <div class="pagination">
+            <div class="pagination text-white">
                 <?php if ($page > 1) : ?>
                     <a href="?filter=<?php echo $filter ?>&page=<?php echo $page - 1 ?>">Previous</a>
                 <?php endif; ?>

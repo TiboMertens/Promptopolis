@@ -36,7 +36,7 @@ if (isset($_GET['token'])) {
 <body>
     <div class="flex flex-col items-center justify-center h-screen">
         <h1 class="text-center text-[26px] font-bold"><?php echo $result ?></h1>
-        <a class="mt-4 text-blue-500 hover:text-blue-700" href="index.php">Go to homepage</a>
+        <a class="mt-4 text-[#BB86FC] hover:text-[#A25AFB]" href="index.php">Go to homepage</a>
     </div>
 
 </body>

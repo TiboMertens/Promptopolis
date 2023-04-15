@@ -30,16 +30,16 @@ if (isset($_SESSION['loggedin'])) {
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="bg-gray-400">
+<body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php") ?>
     
-    <div class="bg-gradient-to-b from-gray-700 to-gray-400 flex flex-col justify-center items-center">
+    <div class="flex flex-col justify-center items-center h-[450px]">
         <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Lorem ipsum dolor, sit amet consectetur adipiscing elit!</h1>
         <div class="flex justify-center items-center">
-            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-7 mr-5 xl:mr-10 xl:mt-10 rounded text-lg xl:text-xl xl:py-3 xl:px-10">
+            <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-7 mr-5 xl:mr-10 xl:mt-10 rounded text-lg xl:text-xl xl:py-3 xl:px-10">
                 Buy a prompt
             </a>
-            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-7 xl:mt-10 text-lg xl:text-xl xl:py-3 xl:px-10 rounded">
+            <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-7 xl:mt-10 text-lg xl:text-xl xl:py-3 xl:px-10 rounded">
                 Sell a prompt
             </a>
         </div>
@@ -51,7 +51,7 @@ if (isset($_SESSION['loggedin'])) {
             <!-- check if user is an admin, if yes, show the first 15 prompts to approve -->
             <?php if ($isModerator) : ?>
                 <section>
-                    <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php?filter=toApprove&page=1" class="text-[12px] text-blue-600 hover:text-blue-700 hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
+                    <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php?filter=toApprove&page=1" class="text-[12px] text-[#BB86FC] hover:text-[#A25AFB] hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
                     <div class="flex overflow-x-auto">
                         <div class=" flex flex-shrink-0">
                             <?php foreach ($promptsToApprove as $promptToApprove) : ?>
@@ -60,7 +60,7 @@ if (isset($_SESSION['loggedin'])) {
                                 </a>
                             <?php endforeach; ?>
                             <div class="pt-20 mt-2 px-10">
-                                <a href="showcase.php" class="text-blue-600 hover:text-blue-700 font-bold underline">View all</a>
+                                <a href="showcase.php" class="text-[#BB86FC] hover:bg-[#A25AFB] font-bold underline">View all</a>
                             </div>
                         </div>
                     </div>

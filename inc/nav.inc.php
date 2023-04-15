@@ -1,4 +1,4 @@
-<nav class="bg-gray-700">
+<nav class="bg-[#121212]">
         <div class="grid grid-cols-3 md:flex">
             <div class="pt-3 pb-2.5 ml-5 w-20">
                 <a href="index.php"><img src="images/newLogo.svg" alt="logo" class="w-50 h-7"></a>
@@ -9,7 +9,7 @@
                     <div class="">
                         <input type="text" placeholder="Search.." class="text-base mt-2 p-1.5 rounded-l h-7 bg-white w-30">
                     </div>
-                    <button type="submit" class="text-sm cursor-pointer rounded-r mt-2 px-2 bg-blue-600">
+                    <button type="submit" class="text-sm cursor-pointer rounded-r mt-2 px-2 bg-[#BB86FC] hover:bg-[#A25AFB]">
                         <i class="fa fa-search relative top-[0.75px]"></i>
                     </button>
                 </form>
