@@ -50,6 +50,9 @@ if (!empty($_POST)) {
 
     <div class="flex justify-center items-center pt-20">
         <div class="bg-slate-200 rounded-lg p-8 max-w-md">
+            <div class="">
+                <a href="profile.php"><i class="fa-solid fa-arrow-left"></i></a>
+            </div>
             <h1 class="text-2xl font-bold mb-4">Edit Your Profile</h1>
             <form action="" method="post">
                 <div class="mb-4">
@@ -61,10 +64,10 @@ if (!empty($_POST)) {
                 </div>
                 <div class="mb-4">
                     <label for="bio" class="block">Bio</label>
-                    <textarea class="w-full px-3 py-2 border-2 rounded" rows="4" name="bio"><?php echo htmlspecialchars($bio); ?></textarea>
+                    <textarea class="w-full px-3 py-2 border-2 rounded hover:border-[#143DF1] active:border-[#143DF1]" rows="4" name="bio"><?php echo htmlspecialchars($bio); ?></textarea>
                 </div>
                 <div class="flex justify-center">
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Save</button>
                 </div>
             </form>
         </div>
