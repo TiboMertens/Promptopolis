@@ -42,6 +42,7 @@ if (!empty($_POST)) {
     <title>Edit profile</title>
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -63,10 +64,11 @@ if (!empty($_POST)) {
             </div>
 
             <div class="mt-1 flex flex-row-reverse">
+           
                 <div class="mt-2 mr-5 ml-2 relative bottom-[2px]">
                     <!-- If the user is logged in, show the logout button, else show the login button -->
                     <?php if (isset($_SESSION['loggedin'])) : ?>
-                        <a href="logout.php" class="text-sm underline text-white">Logout</a>
+                        <a href="logout.php" class="fa-solid fa-arrow-right-from-bracket text-xl "></a>
                     <?php else : ?>
                         <a href="login.php" class="text-sm underline text-white">Login</a>
                     <?php endif; ?>
@@ -80,6 +82,7 @@ if (!empty($_POST)) {
 
     
     <div class="flex justify-center items-center pt-20">
+
     <div class="bg-slate-200 rounded-lg p-8 max-w-md">
         <h1 class="text-2xl font-bold mb-4">Edit Your Profile</h1>
         <form action="" method="post">

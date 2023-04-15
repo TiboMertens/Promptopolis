@@ -23,6 +23,7 @@ $bio = $userDetails['bio'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="bg-gray-400">
@@ -47,7 +48,7 @@ $bio = $userDetails['bio'];
                 <div class="mt-2 mr-5 ml-2 relative bottom-[2px]">
                     <!-- If the user is logged in, show the logout button, else show the login button -->
                     <?php if (isset($_SESSION['loggedin'])) : ?>
-                        <a href="logout.php" class="text-sm underline text-white">Logout</a>
+                        <a href="logout.php" class="fa-solid fa-arrow-right-from-bracket text-xl "></a>
                     <?php else : ?>
                         <a href="login.php" class="text-sm underline text-white">Login</a>
                     <?php endif; ?>

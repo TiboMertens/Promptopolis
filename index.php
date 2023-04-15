@@ -52,7 +52,7 @@ if (isset($_SESSION['loggedin'])) {
                 <div class="mt-2 mr-5 ml-2 relative bottom-[2px]">
                     <!-- If the user is logged in, show the logout button, else show the login button -->
                     <?php if (isset($_SESSION['loggedin'])) : ?>
-                        <a href="logout.php" class="text-sm underline text-white">Logout</a>
+                        <a href="logout.php" class="fa-solid fa-arrow-right-from-bracket text-xl "></a>
                     <?php else : ?>
                         <a href="login.php" class="text-sm underline text-white">Login</a>
                     <?php endif; ?>
