@@ -33,7 +33,7 @@ if (isset($_SESSION['loggedin'])) {
 <body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php") ?>
     
-    <div class="flex flex-col justify-center items-center h-[450px]">
+    <div class="flex flex-col justify-center items-center h-[420px]">
         <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Lorem ipsum dolor, sit amet consectetur adipiscing elit!</h1>
         <div class="flex justify-center items-center">
             <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-7 mr-5 xl:mr-10 xl:mt-10 rounded text-lg xl:text-xl xl:py-3 xl:px-10">
@@ -51,12 +51,12 @@ if (isset($_SESSION['loggedin'])) {
             <!-- check if user is an admin, if yes, show the first 15 prompts to approve -->
             <?php if ($isModerator) : ?>
                 <section>
-                    <h1 class="font-bold text-[24px] text-white ml-2 mb-2">Need approval <a href="showcase.php?filter=toApprove&page=1" class="text-[12px] text-[#BB86FC] hover:text-[#A25AFB] hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
-                    <div class="flex overflow-x-auto">
-                        <div class=" flex flex-shrink-0">
+                    <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Need approval <a href="showcase.php?filter=toApprove&page=1" class="text-[12px] text-[#BB86FC] hover:text-[#A25AFB] hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
+                    <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 p-7 rounded-lg">
+                        <div class=" flex flex-shrink-0 gap-5">
                             <?php foreach ($promptsToApprove as $promptToApprove) : ?>
                                 <a href="promptDetails.php?id=<?php echo $promptToApprove['id'] ?>&approve">
-                                    <img src="<?php echo $promptToApprove['cover_url']; ?>" alt="prompt">
+                                    <img  src="<?php echo $promptToApprove['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                                 </a>
                             <?php endforeach; ?>
                             <div class="pt-20 mt-2 px-10">
