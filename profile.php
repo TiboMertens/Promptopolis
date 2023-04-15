@@ -27,19 +27,23 @@ $bio = $userDetails['bio'];
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="bg-gray-400">
+<body class="bg-gray-200">
     <?php include_once("inc/nav.inc.php") ?>
 
-    <header class="bg-slate-200">
-        <div class="flex flex-col items-center md:flex-row md:items-center xl:items-center">
-            <img class="w-24 h-24 mt-10 md:w-36 md:h-36 md:m-20 xl:w-48 xl:h-48 xl:m-20 rounded-full" src="images/signup-image.jpg" alt="">
+    <header class="bg-slate-200 md:mt-[50px]">
+        <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
+            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="images/signup-image.jpg" alt="profile picture"></div>
             <div class="mr-5 ml-5 mb-10  ">
-                <div class="mt-10 flex justify-center items-center gap-5 md:mt-15 xl:mt-20 md:flex md:justify-start">
-                    <h1 class="font-bold text-[36px] ml-2 mb-2 xl:text-[50px]"><?php echo htmlspecialchars($username); ?></h1>
-                    <a class="w-20 h-10 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 flex justify-center items-center" href="editProfile.php">Edit</a>
+                <div class="flex justify-center items-center gap-4 md:mt-15 md:flex md:justify-start">
+                    <h1 class="font-bold text-[26px] lg:text-[32px] mb-2"><?php echo htmlspecialchars($username); ?></h1>
+                    <div class="flex justify-center items-center mb-[4px]">
+                        <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-blue-500"></i>
+                        <a class="text-blue-500 underline font-semibold rounded-lg hover:text-blue-700 flex justify-center items-center" href="editProfile.php">Edit</a>
+                    </div>
                 </div>
-
-                <p class="w-50"><?php echo htmlspecialchars($bio); ?></p>
+                <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] ">
+                    <p><?php echo htmlspecialchars($bio); ?></p>
+                </div>
             </div>
         </div>
     </header>
