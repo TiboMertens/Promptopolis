@@ -1,23 +1,19 @@
+COLORS
+-------------------
+bg: #121212
+secondary bg: #2A2A2A
+accent: #BB86FC
+hover: #A25AFB
+text: #FFFFFF
+
+MEDEDELINGEN
+----------------
+
 **BRITT** 
-- Ik heb al een functie getUserDetails() aangemaakt die jij ook best gebruikt voor het profiel te updaten, zo hebben we geen duplicate functies.
-- Op het profiel maak je al een profielfoto aan, deze mag nog leeg zijn. De username & bio moeten ook getoond worden op het profiel vanuit de database
-  en deze moeten kunnen worden aangepast. Gebruik het design can Quintt. Je kan de backend al doen zonder enige frontend, dat hangt af van je persoonlijke voorkeur.
-- TIP: $_SESSION & ga spieken in promptDetails.php
 
 **QUINTT**
-- Design van het profiel moet bevatten: een profielfoto, username & bio. In een latere deadline moeten de prompts van dit profiel
-  ook getoond worden, hou hier rekening mee.
 
 **BRITT & QUINTT**
-- Neem de code van login.php, signup.php, User.php, verification.php eens rustig door. Dit zijn mijn features van deadline-1. 
-  Als je deze eens lees heb je misschien al een beter idee hoe je je eigen features maakt. 
-
-- Moderator.php, Prompt.php, loadPromptsToApprove.php, promptDetails.php, showcase.php & ajax folder is al voor deadline-2. Ik heb dit al gemerged omdat
-  het jullie deel van de code niet lastig valt maar het wel Britt kon helpen zoals de getUserDetails() functie die nu al klaar staat xD
-
-- Als iets niet lukt, gebruik chatGPT/php.net/google/youtube of stel een vraag op stackoverflow. Of je stuurt me even een berichtje dan help ik
-
-- De mappen js, json & vendor hebben te maken met de installatie van sendgrid(email provider) & tailwindcss. Niets van aantrekken
 
 TODO deadline 1:
 ---------------------
