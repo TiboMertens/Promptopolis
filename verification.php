@@ -33,9 +33,9 @@ if (isset($_GET['token'])) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
+<body class="bg-[#2A2A2A]">
     <div class="flex flex-col items-center justify-center h-screen">
-        <h1 class="text-center text-[26px] font-bold"><?php echo $result ?></h1>
+        <h1 class="text-center text-[26px] font-bold text-white"><?php echo $result ?></h1>
         <a class="mt-4 text-[#BB86FC] hover:text-[#A25AFB]" href="index.php">Go to homepage</a>
     </div>
 
