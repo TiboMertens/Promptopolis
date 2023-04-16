@@ -1,16 +1,21 @@
 <?php
 include_once("bootstrap.php");
-//Get id from logged in user
-$id = $_SESSION['id']['id'];
+//Check if user is logged in
+if (isset($_SESSION['loggedin'])) {
+    //Get id from logged in user
+    $id = $_SESSION['id']['id'];
 
-$user = new User();
-$user->setId($id);
-$userDetails = $user->getUserDetails();
-//get username form userdetails
-$username = $userDetails['username'];
-//get bio from userdetails
-$bio = $userDetails['bio'];
-
+    $user = new User();
+    $user->setId($id);
+    $userDetails = $user->getUserDetails();
+    //get username form userdetails
+    $username = $userDetails['username'];
+    //get bio from userdetails
+    $bio = $userDetails['bio'];
+} else {
+    //if user is not logged in, redirect to login page
+    header("Location: login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,8 +40,8 @@ $bio = $userDetails['bio'];
             <div class="mr-5 ml-5 mb-10  ">
                 <div class="flex justify-center items-center md:mt-15 md:flex md:justify-start">
                     <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($username); ?></h1>
-                    <?php if($userDetails['is_verified'] === 1): ?>
-                    <div class="ml-2 mb-1"><i class="fa-solid fa-circle-check text-[#BB86FC]" title="verified user"></i></div>
+                    <?php if ($userDetails['is_verified'] === 1) : ?>
+                        <div class="ml-2 mb-1"><i class="fa-solid fa-circle-check text-[#BB86FC]" title="verified user"></i></div>
                     <?php endif ?>
                     <div class="flex justify-center items-center mb-[4px] ml-4">
                         <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-[#BB86FC]"></i>
