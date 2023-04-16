@@ -2,7 +2,6 @@
 include_once("bootstrap.php");
 //DO NOT FORGET XSS PROTECTION
 
-session_start();
 if (!isset($_SESSION['loggedin'])) {
     header("Location: login.php");
 }

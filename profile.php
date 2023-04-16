@@ -1,7 +1,6 @@
 <?php
 include_once("bootstrap.php");
 //Get id from logged in user
-session_start();
 $id = $_SESSION['id']['id'];
 
 $user = new User();

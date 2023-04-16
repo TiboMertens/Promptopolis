@@ -1,9 +1,6 @@
 <?php
 include_once("bootstrap.php");
 
-//start the session
-session_start();
-
 if (isset($_SESSION['loggedin'])) {
     //check if user is an admin
     $user = new User();

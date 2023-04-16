@@ -14,7 +14,6 @@ if (!empty($_POST)) {
         $result = $user->canLogin($username, $password);
         //if the user can login, redirect to the index page
         if ($result === true) {
-            session_start();
             $_SESSION['loggedin'] = true;
             $_SESSION['id'] = $user->getId($username);
 
