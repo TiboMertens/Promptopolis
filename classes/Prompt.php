@@ -29,7 +29,7 @@ class prompt
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT cover_url, id FROM prompts WHERE is_approved = 0 LIMIT :limit OFFSET :offset");
+            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 0 LIMIT :limit OFFSET :offset");
             $statement->bindValue(":limit", $limit, PDO::PARAM_INT);
             $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
             $statement->execute();
@@ -67,7 +67,7 @@ class prompt
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT cover_url, id FROM prompts LIMIT :limit OFFSET :offset");
+            $statement = $conn->prepare("SELECT * FROM prompts LIMIT :limit OFFSET :offset");
             $statement->bindValue(":limit", $limit, PDO::PARAM_INT);
             $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
             $statement->execute();
