@@ -24,7 +24,6 @@ $bio = $userDetails['bio'];
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="bg-[#121212]">
@@ -34,9 +33,12 @@ $bio = $userDetails['bio'];
         <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
             <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="images/signup-image.jpg" alt="profile picture"></div>
             <div class="mr-5 ml-5 mb-10  ">
-                <div class="flex justify-center items-center gap-4 md:mt-15 md:flex md:justify-start">
+                <div class="flex justify-center items-center md:mt-15 md:flex md:justify-start">
                     <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($username); ?></h1>
-                    <div class="flex justify-center items-center mb-[4px]">
+                    <?php if($userDetails['is_verified'] === 1): ?>
+                    <div class="ml-2 mb-1"><i class="fa-solid fa-circle-check text-[#BB86FC]" title="verified user"></i></div>
+                    <?php endif ?>
+                    <div class="flex justify-center items-center mb-[4px] ml-4">
                         <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-[#BB86FC]"></i>
                         <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="editProfile.php">Edit</a>
                     </div>
