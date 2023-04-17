@@ -2,16 +2,31 @@
 include_once("bootstrap.php");
 //Check if user is logged in
 if (isset($_SESSION['loggedin'])) {
-    //Get id from logged in user
-    $id = $_SESSION['id']['id'];
+    try {
+        //Get id from the url
+        $id = isset($_GET['id']) ? $_GET['id'] : NULL;
 
-    $user = new User();
-    $user->setId($id);
-    $userDetails = $user->getUserDetails();
-    //get username form userdetails
-    $username = $userDetails['username'];
-    //get bio from userdetails
-    $bio = $userDetails['bio'];
+        //Get id from logged in user
+        $sessionid = $_SESSION['id']['id'];
+
+        //If id is not set, set it to the id of the logged in user
+        if ($id === "" || $id === null) {
+            $id = $_SESSION['id']['id'];
+        }
+
+        $user = new User();
+        $user->setId($id);
+        $userDetails = $user->getUserDetails();
+        if ($userDetails === false) {
+            throw new Exception("User not found");
+        }
+        //get username form userdetails
+        $username = $userDetails['username'];
+        //get bio from userdetails
+        $bio = $userDetails['bio'];
+    } catch (Throwable $e) {
+        $error = $e->getMessage();
+    }
 } else {
     //if user is not logged in, redirect to login page
     header("Location: login.php");
@@ -33,6 +48,12 @@ if (isset($_SESSION['loggedin'])) {
 
 <body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php") ?>
+    <?php if (isset($error)) : ?>
+        <div class="flex flex-col items-center justify-center h-screen">
+            <h1 class="text-center text-[26px] font-bold text-white"><?php echo $error ?></h1>
+            <a class="mt-4 text-[#BB86FC] hover:text-[#A25AFB]" href="index.php">Go to homepage</a>
+        </div>
+    <?php endif ?>
 
     <header class="md:mt-[50px]">
         <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
@@ -43,10 +64,13 @@ if (isset($_SESSION['loggedin'])) {
                     <?php if ($userDetails['is_verified'] === 1) : ?>
                         <div class="ml-2 mb-1"><i class="fa-solid fa-circle-check text-[#BB86FC]" title="verified user"></i></div>
                     <?php endif ?>
-                    <div class="flex justify-center items-center mb-[4px] ml-4">
-                        <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-[#BB86FC]"></i>
-                        <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="editProfile.php">Edit</a>
-                    </div>
+                    <!-- check if the logged in user is the same as the user being viewed -->
+                    <?php if (intval($id) === $sessionid) : ?>
+                        <div class="flex justify-center items-center mb-[4px] ml-4">
+                            <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-[#BB86FC]"></i>
+                            <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="editProfile.php">Edit</a>
+                        </div>
+                    <?php endif ?>
                 </div>
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>

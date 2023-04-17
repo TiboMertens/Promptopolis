@@ -15,16 +15,16 @@
             </form>
         </div>
 
-        <div class="mt-1 flex flex-row-reverse">
-            <div class="mt-2 mr-5 ml-2 relative bottom-[2px]">
+        <div class="mt-1">
+            <div class="mt-2 mr-5 ml-2 relative bottom-[2px] flex flex-row-reverse">
                 <!-- If the user is logged in, show the logout button, else show the login button -->
                 <?php if (isset($_SESSION['loggedin'])) : ?>
                     <a href="logout.php" class="fa-solid fa-arrow-right-from-bracket text-xl text-white"></a>
+                    <div class=""> <a href="profile.php?id=<?php echo $_SESSION['id']['id'] ?>"><img src="images/signup-image.jpg" alt="profile picture" class="w-9 h-9 rounded-full mr-[20px] border-[1px] border-white relative bottom-1"></a></div>
                 <?php else : ?>
                     <a href="login.php" class="text-sm underline text-white">Login</a>
                 <?php endif; ?>
             </div>
-            <div class=""> <a href="profile.php"><img src="images/signup-image.jpg" alt="profile picture" class="w-9 h-9 rounded-full mt-[2px] mr-[10px] border-[1px] border-white"></a></div>
         </div>
     </div>
 </nav>

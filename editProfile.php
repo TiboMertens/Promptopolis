@@ -51,7 +51,7 @@ if (!empty($_POST)) {
     <div class="flex justify-center items-center pt-20">
         <div class="bg-[#2A2A2A] rounded-lg p-8 max-w-md">
             <div class="text-white">
-                <a href="profile.php"><i class="fa-solid fa-arrow-left"></i></a>
+                <a href="profile.php?id=<?php echo $id ?>"><i class="fa-solid fa-arrow-left"></i></a>
             </div>
             <h1 class="text-2xl font-bold mb-4 text-white">Edit Your Profile</h1>
             <form action="" method="post">
