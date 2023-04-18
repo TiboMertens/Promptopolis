@@ -29,6 +29,9 @@ if (isset($_SESSION['loggedin'])) {
         $username = $userDetails['username'];
         //get bio from userdetails
         $bio = $userDetails['bio'];
+
+        //get user's prompts
+        $prompts = Prompt::getPromptsByUser($id);
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
@@ -83,6 +86,19 @@ if (isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </header>
+    <section class="mt-10">
+        <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Prompts</h1>
+        <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
+            <div class=" flex flex-shrink-0 gap-5">
+                <?php foreach ($prompts as $prompt) : ?>
+                    <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>&approve">
+                        <img src="<?php echo $prompt['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                        <h2 class="text-white font-bold text-[18px] mt-2"><?php echo $prompt['title'] ?></h2>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
 
 </body>
 
