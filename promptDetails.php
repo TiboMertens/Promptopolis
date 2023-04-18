@@ -19,7 +19,6 @@ if (isset($_GET['id'])) {
     $description = $promptDetails['description'];
     $cover_url = $promptDetails['cover_url'];
     $image2 = $promptDetails['image_url2'];
-    $image3 = $promptDetails['image_url3'];
     $tstamp = $promptDetails['tstamp'];
     $price = $promptDetails['price'];
 

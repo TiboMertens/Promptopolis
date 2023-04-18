@@ -11,6 +11,7 @@ if (isset($_SESSION['loggedin'])) {
         //get 15 prompts to approve
         $promptsToApprove = Prompt::get15ToApprovePrompts();
     }
+    //::newPrompts
 }
 
 ?>
