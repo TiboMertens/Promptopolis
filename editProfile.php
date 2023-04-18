@@ -1,34 +1,39 @@
 <?php
 include_once("bootstrap.php");
-//Get id from logged in user
-$id = $_SESSION['id']['id'];
 
-$user = new User();
-$user->setId($id);
-$userDetails = $user->getUserDetails();
-//get username form userdetails
-$username = $userDetails['username'];
-//get bio from userdetails
-$bio = $userDetails['bio'];
+//check if user is logged in, else redirect to login page
+if (isset($_SESSION['loggedin'])) {
+    //Get id from logged in user
+    $id = $_SESSION['id']['id'];
 
-
-//check if button save is clicked
-if (!empty($_POST)) {
-    //get data from form
-    $newUsername = $_POST['username'];
-    $newBio = $_POST['bio'];
-    //set data to user
-    try {
-        $user->setUsername($newUsername);
-        $user->setBio($newBio);
-        //update user details
-        $user->updateUserDetails();
-        //redirect to profile
-        header("Location: profile.php");
-    } catch (Throwable $e) {
-        $usernameError = $e->getMessage();
+    $user = new User();
+    $user->setId($id);
+    $userDetails = $user->getUserDetails();
+    //get username form userdetails
+    $username = $userDetails['username'];
+    //get bio from userdetails
+    $bio = $userDetails['bio'];
+    //check if button save is clicked
+    if (!empty($_POST)) {
+        //get data from form
+        $newUsername = $_POST['username'];
+        $newBio = $_POST['bio'];
+        //set data to user
+        try {
+            $user->setUsername($newUsername);
+            $user->setBio($newBio);
+            //update user details
+            $user->updateUserDetails();
+            //redirect to profile
+            header("Location: profile.php");
+        } catch (Throwable $e) {
+            $usernameError = $e->getMessage();
+        }
     }
+} else {
+    header('Location: login.php');
 }
+
 
 ?>
 <!DOCTYPE html>
