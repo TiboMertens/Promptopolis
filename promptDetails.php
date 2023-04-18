@@ -75,6 +75,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
     <title><?php echo $title ?> - Details</title>
 </head>
 
