@@ -5,68 +5,64 @@ include_once("bootstrap.php");
 if (!isset($_SESSION['loggedin'])) {
     header("Location: login.php");
 }
-//if id is set, get prompt details
-if (isset($_GET['id'])) {
-    $prompt_id = $_GET['id'];
-    $prompt = new Prompt();
-    $prompt->setId($prompt_id);
+try {
+    //if id is set and not NULL, get prompt details
+    if (isset($_GET['id']) && !empty($_GET['id'] )) {
+        $prompt_id = $_GET['id'];
+        $prompt = new Prompt();
+        $prompt->setId($prompt_id);
 
-    //get prompt details
-    $promptDetails = $prompt->getPromptDetails();
+        //get prompt details
+        $promptDetails = $prompt->getPromptDetails();
 
-    //get data
-    $title = $promptDetails['title'];
-    $description = $promptDetails['description'];
-    $cover_url = $promptDetails['cover_url'];
-    $image2 = $promptDetails['image_url2'];
-    $tstamp = $promptDetails['tstamp'];
-    $price = $promptDetails['price'];
-    $tag1 = $promptDetails['tag1'];
-    $tag2 = $promptDetails['tag2'];
-    $tag3 = $promptDetails['tag3'];
-    $model = $promptDetails['model'];
+        //get data
+        $title = $promptDetails['title'];
+        $description = $promptDetails['description'];
+        $cover_url = $promptDetails['cover_url'];
+        $image2 = $promptDetails['image_url2'];
+        $tstamp = $promptDetails['tstamp'];
+        $price = $promptDetails['price'];
+        $tag1 = $promptDetails['tag1'];
+        $tag2 = $promptDetails['tag2'];
+        $tag3 = $promptDetails['tag3'];
+        $model = $promptDetails['model'];
 
-    //show data
-    // echo htmlspecialchars($title);
-    // echo htmlspecialchars($description);
-    // echo htmlspecialchars($cover_url);
-    // echo htmlspecialchars($image2);
-    // echo htmlspecialchars($image3);
-    // echo htmlspecialchars($tstamp);
-    // echo htmlspecialchars($price);
-
-    //get author id
-    $authorID = $promptDetails['user_id'];
-    $user = new User();
-    $user->setId($authorID);
-    //check if user is a moderator
-    $isModerator = $user->isModerator($_SESSION['id']['id']);
-    //get author name
-    $userDetails = $user->getUserDetails();
-    $authorName = $userDetails['username'];
-} else {
-    $error = "No prompt id provided";
-}
-
-//if on aprove page and approve button is clicked, approve prompt
-if (isset($_GET['approve'])) {
-    //if user is not a moderator, redirect to index
-    if (!$isModerator) {
-        header("Location: index.php");
+        //get author id
+        $authorID = $promptDetails['user_id'];
+        $user = new User();
+        $user->setId($authorID);
+        //check if user is a moderator
+        $isModerator = $user->isModerator($_SESSION['id']['id']);
+        //get author name
+        $userDetails = $user->getUserDetails();
+        $authorName = $userDetails['username'];
     } else {
-        $moderator = new Moderator();
+        throw new exception('No id provided');
     }
 
-    if ($_GET['approve'] === "true") {
-        $moderator->approve($prompt_id);
-        //if prompt is appoved, check if user can be verified - if yes, verify user
-        if ($user->checkToVerify()) {
-            $user->verify();
+    //if on aprove page and approve button is clicked, approve prompt
+    if (isset($_GET['approve'])) {
+        //if user is not a moderator, redirect to index
+        if (!$isModerator) {
+            header("Location: index.php");
+        } else {
+            $moderator = new Moderator();
         }
-        //redirect to showcase
-        header("Location: showcase.php");
+
+        if ($_GET['approve'] === "true") {
+            $moderator->approve($prompt_id);
+            //if prompt is appoved, check if user can be verified - if yes, verify user
+            if ($user->checkToVerify()) {
+                $user->verify();
+            }
+            //redirect to showcase
+            header("Location: showcase.php");
+        }
     }
+} catch (Throwable $e) {
+    $error = $e->getMessage();
 }
+
 
 
 ?>
@@ -84,7 +80,13 @@ if (isset($_GET['approve'])) {
 
 <body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php"); ?>
-    <!-- if on approve page, show approve button -->
+        <!-- if error, show error -->
+        <?php if (isset($error)) : ?>
+        <div class="flex flex-col items-center justify-center h-screen">
+            <h1 class="text-center text-[26px] font-bold text-white"><?php echo $error ?></h1>
+            <a class="mt-4 text-[#BB86FC] hover:text-[#A25AFB]" href="index.php">Go to homepage</a>
+        </div>
+    <?php else: ?>
     <main class="ml-auto mr-auto max-w-[500px] md:flex md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]">
         <div class="m-5 md:mt-[60px] lg:mt-5">
             <div class=""><img src="<?php echo htmlspecialchars($cover_url); ?>" alt="prompt cover" class="rounded-md xl:w-[1100px]"></div>
@@ -114,6 +116,7 @@ if (isset($_GET['approve'])) {
                     <p><?php echo htmlspecialchars($description); ?></p>
                 </div>
                 <div class="flex mb-3 items-center">
+                    <!-- if on approve page, show approve button -->
                     <?php if (isset($_GET['approve'])) : ?>
                         <a href="promptDetails.php?id=<?php echo $prompt_id ?>&approve=true" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Approve prompt</a>
                     <?php else : ?>
@@ -126,12 +129,6 @@ if (isset($_GET['approve'])) {
         </div>
         <div class="flex justify-center ml-3 md:mt-[60px] lg:mt-5 lg:items-center xl:items-start"><img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class="rounded-md h-[300px] w-[500px] md:h-[450px] md:w-[700px] ld:h-[550px]"></div>
     </main>
-
-    <!-- if error, show error -->
-    <?php if (isset($error)) : ?>
-        <div>
-            <p><?php echo $error ?></p>
-        </div>
     <?php endif ?>
 </body>
 
