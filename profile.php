@@ -4,7 +4,12 @@ include_once("bootstrap.php");
 if (isset($_SESSION['loggedin'])) {
     try {
         //Get id from the url
-        $id = isset($_GET['id']) ? $_GET['id'] : NULL;
+        // $id = isset($_GET['id']) ? filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT) : NULL;
+        if (isset($_GET['id'])) {
+            $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
+        } else {
+            $id = NULL;
+        }
 
         //Get id from logged in user
         $sessionid = $_SESSION['id']['id'];
