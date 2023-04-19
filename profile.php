@@ -73,7 +73,7 @@ if (isset($_SESSION['loggedin'])) {
                         <div class="ml-2 mb-1"><i class="fa-solid fa-circle-check text-[#BB86FC]" title="verified user"></i></div>
                     <?php endif ?>
                     <!-- check if the logged in user is the same as the user being viewed -->
-                    <?php if (intval($id) === $sessionid) : ?>
+                    <?php if ($id === $sessionid) : ?>
                         <div class="flex justify-center items-center mb-[4px] ml-4">
                             <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-[#BB86FC]"></i>
                             <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="editProfile.php">Edit</a>
