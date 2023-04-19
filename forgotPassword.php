@@ -7,8 +7,6 @@ $config = parse_ini_file('config/config.ini', true);
 
 $key = $config[' keys ']['SENDGRID_API_KEY'];
 
-apache_setenv('SENDGRID_API_KEY', $key);
-
 if (!empty($_POST)) {
     $email = $_POST['email'];
     $user = new User();
@@ -18,7 +16,7 @@ if (!empty($_POST)) {
             $user->setEmail($email);
             $user->setResetToken(bin2hex(openssl_random_pseudo_bytes(32)));
             $user->saveResetToken();
-            $user->sendResetMail();
+            $user->sendResetMail($key);
         }
     } catch (Throwable $e) {
         $emailError = $e->getMessage();

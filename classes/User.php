@@ -129,7 +129,7 @@ class User
         return $this;
     }
 
-    public function sendVerifyEmail()
+    public function sendVerifyEmail($key)
     {
         $token = $this->verifyToken;
 
@@ -147,7 +147,7 @@ class User
             "Hi $username! Please activate your email. <strong>Here is the activation link:</strong> http://localhost/php/eindwerk/verification.php?token=$token"
         );
 
-        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+        $sendgrid = new \SendGrid($key);
 
         try {
             $response = $sendgrid->send($email);
@@ -286,7 +286,7 @@ class User
             throw new Exception("Email is not in use.");
         }
     }
-    public function sendResetMail()
+    public function sendResetMail($key)
     {
         $token = $this->resetToken;
 
@@ -302,7 +302,7 @@ class User
             "Hi! Please reset your password. <strong>Here is the reset link :</strong> http://localhost/php/eindwerk/resetPassword.php?token=$token"
         );
 
-        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+        $sendgrid = new \SendGrid($key);
 
         try {
             $response = $sendgrid->send($email);

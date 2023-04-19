@@ -7,8 +7,6 @@ $config = parse_ini_file('config/config.ini', true);
 
 $key = $config[' keys ']['SENDGRID_API_KEY'];
 
-apache_setenv('SENDGRID_API_KEY', $key);
-
 if (!empty($_POST)) {
     try {
         // create a new user
@@ -38,7 +36,7 @@ if (!empty($_POST)) {
         $user->save();
 
         //send email
-        $mail = $user->sendVerifyEmail();
+        $mail = $user->sendVerifyEmail($key);
         if ($mail) {
             //redirect to index.php with success message
             header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
