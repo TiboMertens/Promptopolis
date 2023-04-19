@@ -231,7 +231,7 @@ class User
         $result = $result['is_admin'];
 
         //if result is 1, user is admin, else user is not admin
-        if ($result === 1) {
+        if ($result == 1) {
             return true;
         } else {
             return false;

@@ -6,7 +6,7 @@ if (isset($_SESSION['loggedin'])) {
     $user = new User();
     $isModerator = $user->isModerator($_SESSION['id']['id']);
 
-    if ($isModerator) {
+    if ($isModerator == true) {
         // new Moderator();
         //get 15 prompts to approve
         $promptsToApprove = Prompt::get15ToApprovePrompts();
