@@ -19,11 +19,7 @@ try {
         $filterApprove = 'all';
     } else if (!User::isModerator($_SESSION['id']['id'])) {
         $filterApprove = 'all';
-    }
-
-    var_dump($filterApprove, $filterDate, $filterPrice, $filterModel);
-    
-
+    }    
 
     $limit = 15; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
@@ -50,7 +46,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>showcase</title>
     <link rel="stylesheet" href="css/styles.css">
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
     <script src="js/showcase.js" defer></script>
 </head>
@@ -71,7 +67,7 @@ try {
             <p class="text-white">Current filter:
                 <?php if (isset($_SESSION['loggedin'])) : ?>
                     <?php if (User::isModerator($_SESSION['id']['id'])) : ?>
-                        <a id="approve" href="showcase.php?<?php echo "filterApprove=All" . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterApprove ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+                        <a id="approve" href="showcase.php?<?php echo "filterApprove=all" . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterApprove ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
                     <?php endif; ?>
                 <?php endif; ?>
                 <a id="date" href="showcase.php?<?php echo "filterApprove=" . $filterDate . "&filterDate=All" . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterDate ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
@@ -86,7 +82,6 @@ try {
                         <label for="filterApprove" class="text-white relative bottom-[2px] ml-[10px]">Status: &nbsp;</label>
                         <select name="filterApprove" class="filter-select rounded-md">
                             <option value="all">All</option>
-                            <option value="approved">Approved</option>
                             <option value="not_approved">Not approved</option>
                         </select>
                     <?php endif; ?>

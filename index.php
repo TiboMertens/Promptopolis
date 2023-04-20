@@ -49,7 +49,7 @@ if (isset($_SESSION['loggedin'])) {
             <!-- check if user is an admin, if yes, show the first 15 prompts to approve -->
             <?php if ($isModerator) : ?>
                 <section>
-                    <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Need approval <a href="showcase.php?filterApprove=approve&filterDate=all&filterPrice=all&filterModel=all&page=1" class="text-[12px] text-[#BB86FC] hover:text-[#A25AFB] hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
+                    <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Need approval <a href="showcase.php?filterApprove=not_approved&filterDate=all&filterPrice=all&filterModel=all&page=1" class="text-[12px] text-[#BB86FC] hover:text-[#A25AFB] hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
                     <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
                         <div class=" flex flex-shrink-0 gap-5">
                             <?php foreach ($promptsToApprove as $promptToApprove) : ?>
@@ -59,7 +59,7 @@ if (isset($_SESSION['loggedin'])) {
                                 </a>
                             <?php endforeach; ?>
                             <div class="pt-20 mt-2 px-10">
-                                <a href="showcase.php?filterApprove=approve&filterDate=all&filterPrice=all&filterModel=all&page=1" class="text-[#BB86FC] hover:bg-[#A25AFB] font-bold underline">View all</a>
+                                <a href="showcase.php?filterApprove=not_approved&filterDate=all&filterPrice=all&filterModel=all&page=1" class="text-[#BB86FC] hover:bg-[#A25AFB] font-bold underline">View all</a>
                             </div>
                         </div>
                     </div>

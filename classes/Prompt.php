@@ -32,7 +32,7 @@ class prompt
             $sql = "SELECT * FROM prompts WHERE 1=1";
     
             switch ($filterApprove) {
-                case "approved":
+                case "all":
                     $sql .= " AND is_approved = 1";
                     break;
                 case "not_approved":
