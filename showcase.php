@@ -1,32 +1,35 @@
 <?php
 try {
     include_once("bootstrap.php");
-
-    $limit = 15; // number of prompts to display per page
+    $filters = ['filterApprove', 'filterDate', 'filterPrice', 'filterModel'];
+    
+    // This loop iterates over an array of the four filter variables, and for each one,
+    // it checks if the corresponding $_GET parameter is set. If it is, it sets the variable with a dynamic variable variable
+    // ($$filter) to the value of the parameter. If it's not set, it sets the variable to the default value of 'all'.
+    foreach ($filters as $filter) {
+        if (!empty($_GET[$filter])) {
+            //$$ is a dynamic variable, it will create a variable with the name of the value of $filter
+            $$filter = $_GET[$filter];
+        } else {
+            $$filter = 'all';
+        }
+    }
+    
+    
+    $limit = 5; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
-
-    $filter = isset($_GET['filter']) ? $_GET['filter'] : "All";
-
-    if ($filter === "toApprove") {
-        $approve = "&approve";
-        // fetch the prompts with the selected filter
-        $prompts = Prompt::getAllToApprovePrompts($limit, $offset);
-
-        // count the total number of prompts with the selected filter
-        $totalPrompts = count(Prompt::countAllToApprovePrompts());
-    } else {
-        // fetch all
-        $approve = "";
-        $prompts = Prompt::getAllPrompts($limit, $offset);
-
-        // count all
-        $totalPrompts = count(Prompt::countAllPrompts());
-    }
+    
+    // get the prompts with the selected filter, limited to the current page
+    $prompts = Prompt::filter($filterApprove,  $filterDate, $filterPrice, $filterModel, $limit, $offset);
+    
+    // count the total number of prompts with the selected filter
+    $totalPrompts = count(Prompt::getAll($filterApprove, $filterDate, $filterPrice, $filterModel));
+    
     // calculate the total number of pages
     $totalPages = ceil($totalPrompts / $limit);
-} catch (\Throwable $th) {
-    $error = $th->getMessage();
+} catch (Throwable $e) {
+    $error = $e->getMessage();
 }
 ?>
 <!DOCTYPE html>
@@ -44,6 +47,48 @@ try {
 
 <body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php"); ?>
+    <div>
+        <form id="filter-form" method="get">
+            <select name="filterApprove" class="filter-select">
+                <option value="all">All</option>
+                <option value="approved">Approved</option>
+                <option value="not_approved">Not approved</option>
+            </select>
+            <select name="filterDate" class="filter-select">
+                <option value="all">All</option>
+                <option value="new">New</option>
+                <option value="old">Old</option>
+            </select>
+            <select name="filterPrice" class="filter-select">
+                <option value="all">All</option>
+                <option value="cheap">Price(lowest)</option>
+                <option value="expensive">Price(highest)</option>
+            </select>
+            <select name="filterModel" class="filter-select">
+                <option value="all">All</option>
+                <option value="Midjourney">Midjourney</option>
+                <option value="Dall-E">Dall-E</option>
+            </select>
+        </form>
+
+        <script>
+            const filterSelects = document.querySelectorAll('.filter-select');
+
+            // Check if there's a selected filter in localStorage for each select element
+            filterSelects.forEach(select => {
+                const storedFilter = localStorage.getItem(`selectedFilter_${select.name}`);
+                if (storedFilter) {
+                    select.value = storedFilter;
+                }
+
+                // Add an event listener to each select element
+                select.addEventListener('change', () => {
+                    localStorage.setItem(`selectedFilter_${select.name}`, select.value);
+                    document.getElementById('filter-form').submit();
+                });
+            });
+        </script>
+    </div>
     <?php if (isset($error)) : ?>
         <div class="error">
             <p><?php echo $error ?></p>
@@ -67,17 +112,17 @@ try {
 
         <!-- pagination links -->
         <?php if ($totalPages > 1) : ?>
-            <div class="pagination text-white">
+            <div class="pagination">
                 <?php if ($page > 1) : ?>
-                    <a href="?filter=<?php echo $filter ?>&page=<?php echo $page - 1 ?>">Previous</a>
+                    <a href="?filterApprove=<?php echo $filterApprove . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>&page=<?php echo $page - 1 ?>">Previous</a>
                 <?php endif; ?>
 
                 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                    <a href="?filter=<?php echo $filter ?>&page=<?php echo $i ?>" <?php if ($i === $page) echo 'class="active"'; ?>><?php echo $i ?></a>
+                    <a href="?filterApprove=<?php echo $filterApprove . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>&page=<?php echo $i ?>" <?php if ($i === $page) echo 'class="active"'; ?>><?php echo $i ?></a>
                 <?php endfor; ?>
 
                 <?php if ($page < $totalPages) : ?>
-                    <a href="?filter=<?php echo $filter ?>&page=<?php echo $page + 1 ?>">Next</a>
+                    <a href="?filterApprove=<?php echo $filterApprove . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>&page=<?php echo $page + 1 ?>">Next</a>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
