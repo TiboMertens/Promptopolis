@@ -15,11 +15,21 @@ try {
         }
     }
 
-    if (!isset($_SESSION['loggedin'])) {
+    if (!isset($_SESSION['loggedin']) || !User::isModerator($_SESSION['id']['id']) || $filterApprove != 'not_approved') {
         $filterApprove = 'all';
-    } else if (!User::isModerator($_SESSION['id']['id'])) {
-        $filterApprove = 'all';
-    }    
+    }
+
+    if ($filterDate != 'all' || $filterDate != 'new' || $filterDate != 'old') {
+        $filterDate = 'all';
+    }
+
+    if ($filterPrice != 'all' || $filterPrice != 'low' || $filterPrice != 'high') {
+        $filterPrice = 'all';
+    }
+
+    if ($filterModel != 'all' || $filterModel != 'Midjourney' || $filterModel != 'Dall-E') {
+        $filterModel = 'all';
+    }
 
     if ($filterApprove == 'not_approved') {
         $approve = "&approve";
