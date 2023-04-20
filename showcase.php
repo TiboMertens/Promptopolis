@@ -21,6 +21,12 @@ try {
         $filterApprove = 'all';
     }    
 
+    if ($filterApprove == 'not_approved') {
+        $approve = "&approve";
+    } else {
+        $approve = "";
+    }
+
     $limit = 15; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
