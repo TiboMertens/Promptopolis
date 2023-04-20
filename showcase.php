@@ -16,7 +16,7 @@ try {
     }
     
     
-    $limit = 5; // number of prompts to display per page
+    $limit = 15; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
     
@@ -61,8 +61,8 @@ try {
             </select>
             <select name="filterPrice" class="filter-select">
                 <option value="all">All</option>
-                <option value="cheap">Price(lowest)</option>
-                <option value="expensive">Price(highest)</option>
+                <option value="low">Price(lowest)</option>
+                <option value="high">Price(highest)</option>
             </select>
             <select name="filterModel" class="filter-select">
                 <option value="all">All</option>
