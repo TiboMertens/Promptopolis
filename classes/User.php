@@ -231,7 +231,7 @@ class User
         $result = $result['is_admin'];
 
         //if result is 1, user is admin, else user is not admin
-        if ($result == 1) {
+        if ($result === 1) {
             return true;
         } else {
             return false;
@@ -413,5 +413,14 @@ class User
         $this->bio = $bio;
 
         return $this;
+    }
+
+    public function deleteAccount(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("DELETE FROM users WHERE id = :id");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
     }
 }
