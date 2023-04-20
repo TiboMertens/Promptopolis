@@ -34,6 +34,23 @@ if (isset($_SESSION['loggedin'])) {
     header('Location: login.php');
 }
 
+if (isset($_POST['delete'])) {
+    try {
+        // create a new User object and set its id to the current user's id
+        $user = new User();
+        $user->setId($id);
+
+        // delete the user's account and redirect to the login page
+        $user->deleteAccount();
+        session_destroy();
+        
+        header('Location: login.php');
+        exit();
+    } catch (Throwable $e) {
+        $deleteError = $e->getMessage();
+    }
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -73,6 +90,9 @@ if (isset($_SESSION['loggedin'])) {
                 </div>
                 <div class="flex justify-center">
                     <button type="submit" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded" style="padding-left: 6rem; padding-right: 6rem;">Save</button>
+                </div>
+                <div class="flex justify-center">
+                        <button name= "delete" class="text-red-500 mt-5" href="#">Delete account</button>
                 </div>
             </form>
         </div>
