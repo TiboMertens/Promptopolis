@@ -2,7 +2,7 @@
 try {
     include_once("bootstrap.php");
     $filters = ['filterApprove', 'filterDate', 'filterPrice', 'filterModel'];
-    
+
     // This loop iterates over an array of the four filter variables, and for each one,
     // it checks if the corresponding $_GET parameter is set. If it is, it sets the variable with a dynamic variable variable
     // ($$filter) to the value of the parameter. If it's not set, it sets the variable to the default value of 'all'.
@@ -14,18 +14,18 @@ try {
             $$filter = 'all';
         }
     }
-    
-    
+
+
     $limit = 15; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
-    
+
     // get the prompts with the selected filter, limited to the current page
     $prompts = Prompt::filter($filterApprove,  $filterDate, $filterPrice, $filterModel, $limit, $offset);
-    
+
     // count the total number of prompts with the selected filter
     $totalPrompts = count(Prompt::getAll($filterApprove, $filterDate, $filterPrice, $filterModel));
-    
+
     // calculate the total number of pages
     $totalPages = ceil($totalPrompts / $limit);
 } catch (Throwable $e) {
@@ -43,6 +43,7 @@ try {
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
+    <script src="js/showcase.js" defer></script>
 </head>
 
 <body class="bg-[#121212]">
@@ -70,24 +71,6 @@ try {
                 <option value="Dall-E">Dall-E</option>
             </select>
         </form>
-
-        <script>
-            const filterSelects = document.querySelectorAll('.filter-select');
-
-            // Check if there's a selected filter in localStorage for each select element
-            filterSelects.forEach(select => {
-                const storedFilter = localStorage.getItem(`selectedFilter_${select.name}`);
-                if (storedFilter) {
-                    select.value = storedFilter;
-                }
-
-                // Add an event listener to each select element
-                select.addEventListener('change', () => {
-                    localStorage.setItem(`selectedFilter_${select.name}`, select.value);
-                    document.getElementById('filter-form').submit();
-                });
-            });
-        </script>
     </div>
     <?php if (isset($error)) : ?>
         <div class="error">
@@ -98,7 +81,12 @@ try {
         <h1 class="text-white text-[24px] font-extrabold lg:text-[36px]">Prompt showcase</h1>
     </div>
     <div class="ml-6">
-        <p class="text-white">Current filter: <a href="showcase.php?filter=All"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filter ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a></p>
+        <p class="text-white">Current filter: 
+            <a id="approve" href="showcase.php?<?php echo "filterApprove=All" . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterApprove ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+            <a id="date" href="showcase.php?<?php echo "filterApprove=". $filterDate . "&filterDate=All" . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterDate ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+            <a id="price" href="showcase.php?<?php echo "filterApprove=". $filterDate . "&filterDate=" . $filterDate . "&filterPrice=All" . "&filterModel=" . $filterModel?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterPrice ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+            <a id="model" href="showcase.php?<?php echo "filterApprove=". $filterDate . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=All"?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterModel ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+        </p>
     </div>
     <main class="flex flex-wrap bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg justify-center">
         <div id="image-container" class="flex flex-wrap gap-5 justify-center">
@@ -112,7 +100,7 @@ try {
 
         <!-- pagination links -->
         <?php if ($totalPages > 1) : ?>
-            <div class="pagination">
+            <div class="pagination text-white">
                 <?php if ($page > 1) : ?>
                     <a href="?filterApprove=<?php echo $filterApprove . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>&page=<?php echo $page - 1 ?>">Previous</a>
                 <?php endif; ?>
