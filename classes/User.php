@@ -221,7 +221,7 @@ class User
         }
     }
 
-    public function isModerator($id)
+    public static function isModerator($id)
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT is_admin FROM users WHERE id = :id");

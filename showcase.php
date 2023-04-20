@@ -15,6 +15,15 @@ try {
         }
     }
 
+    if (!isset($_SESSION['loggedin'])) {
+        $filterApprove = 'all';
+    } else if (!User::isModerator($_SESSION['id']['id'])) {
+        $filterApprove = 'all';
+    }
+
+    var_dump($filterApprove, $filterDate, $filterPrice, $filterModel);
+    
+
 
     $limit = 15; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
@@ -41,53 +50,68 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>showcase</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
     <script src="js/showcase.js" defer></script>
 </head>
 
 <body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php"); ?>
-    <div>
-        <form id="filter-form" method="get">
-            <select name="filterApprove" class="filter-select">
-                <option value="all">All</option>
-                <option value="approved">Approved</option>
-                <option value="not_approved">Not approved</option>
-            </select>
-            <select name="filterDate" class="filter-select">
-                <option value="all">All</option>
-                <option value="new">New</option>
-                <option value="old">Old</option>
-            </select>
-            <select name="filterPrice" class="filter-select">
-                <option value="all">All</option>
-                <option value="low">Price(lowest)</option>
-                <option value="high">Price(highest)</option>
-            </select>
-            <select name="filterModel" class="filter-select">
-                <option value="all">All</option>
-                <option value="Midjourney">Midjourney</option>
-                <option value="Dall-E">Dall-E</option>
-            </select>
-        </form>
-    </div>
     <?php if (isset($error)) : ?>
         <div class="error">
             <p><?php echo $error ?></p>
         </div>
     <?php endif; ?>
+
     <div class="flex justify-center py-5 lg:py-15">
         <h1 class="text-white text-[24px] font-extrabold lg:text-[36px]">Prompt showcase</h1>
     </div>
-    <div class="ml-6">
-        <p class="text-white">Current filter: 
-            <a id="approve" href="showcase.php?<?php echo "filterApprove=All" . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterApprove ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
-            <a id="date" href="showcase.php?<?php echo "filterApprove=". $filterDate . "&filterDate=All" . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterDate ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
-            <a id="price" href="showcase.php?<?php echo "filterApprove=". $filterDate . "&filterDate=" . $filterDate . "&filterPrice=All" . "&filterModel=" . $filterModel?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterPrice ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
-            <a id="model" href="showcase.php?<?php echo "filterApprove=". $filterDate . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=All"?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterModel ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
-        </p>
-    </div>
+    <section class="flex justify-between mr-6">
+        <div class="ml-6 flex justify-start">
+            <p class="text-white">Current filter:
+                <?php if (isset($_SESSION['loggedin'])) : ?>
+                    <?php if (User::isModerator($_SESSION['id']['id'])) : ?>
+                        <a id="approve" href="showcase.php?<?php echo "filterApprove=All" . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterApprove ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <a id="date" href="showcase.php?<?php echo "filterApprove=" . $filterDate . "&filterDate=All" . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterDate ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+                <a id="price" href="showcase.php?<?php echo "filterApprove=" . $filterDate . "&filterDate=" . $filterDate . "&filterPrice=All" . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterPrice ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+                <a id="model" href="showcase.php?<?php echo "filterApprove=" . $filterDate . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=All" ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterModel ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
+            </p>
+        </div>
+        <div class="flex justify-end">
+            <form id="filter-form" method="get">
+                <?php if (isset($_SESSION['loggedin'])) : ?>
+                    <?php if (User::isModerator($_SESSION['id']['id'])) : ?>
+                        <label for="filterApprove" class="text-white relative bottom-[2px] ml-[10px]">Status: &nbsp;</label>
+                        <select name="filterApprove" class="filter-select rounded-md">
+                            <option value="all">All</option>
+                            <option value="approved">Approved</option>
+                            <option value="not_approved">Not approved</option>
+                        </select>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <label for="filterDate" class="text-white relative bottom-[2px] ml-[10px]">New/old: &nbsp;</label>
+                <select name="filterDate" class="filter-select rounded-md">
+                    <option value="all">All</option>
+                    <option value="new">New</option>
+                    <option value="old">Old</option>
+                </select>
+                <label for="filterPrice" class="text-white relative bottom-[2px] ml-[10px]">Price: &nbsp;</label>
+                <select name="filterPrice" class="filter-select rounded-md">
+                    <option value="all">All</option>
+                    <option value="low">Price(lowest)</option>
+                    <option value="high">Price(highest)</option>
+                </select>
+                <label for="filterModel" class="text-white relative bottom-[2px] ml-[10px]">Model: &nbsp;</label>
+                <select name="filterModel" class="filter-select rounded-md">
+                    <option value="all">All</option>
+                    <option value="Midjourney">Midjourney</option>
+                    <option value="Dall-E">Dall-E</option>
+                </select>
+            </form>
+        </div>
+    </section>
     <main class="flex flex-wrap bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg justify-center">
         <div id="image-container" class="flex flex-wrap gap-5 justify-center">
             <?php foreach ($prompts as $prompt) : ?>
