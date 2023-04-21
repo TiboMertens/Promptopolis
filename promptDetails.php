@@ -20,9 +20,9 @@ try {
         $image2 = $promptDetails['image_url2'];
         $tstamp = $promptDetails['tstamp'];
         $price = $promptDetails['price'];
-        $tag1 = $promptDetails['tag1'];
-        $tag2 = $promptDetails['tag2'];
-        $tag3 = $promptDetails['tag3'];
+        $tag1 = $promptDetails['tag_names'][0];
+        $tag2 = $promptDetails['tag_names'][1];
+        $tag3 = $promptDetails['tag_names'][2];
         $model = $promptDetails['model'];
 
         //get author id

@@ -179,10 +179,13 @@ class prompt
     public function getPromptDetails()
     {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT * FROM prompts WHERE id = :id");
+        // Get the prompt details and the tag names
+        $statement = $conn->prepare("SELECT p.*, GROUP_CONCAT(t.name SEPARATOR ', ') as tag_names FROM prompts p JOIN prompt_tags pt ON p.id = pt.prompt_id JOIN tags t ON pt.tag_id = t.id WHERE p.id = :id");
         $statement->bindValue(":id", $this->id);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
+        // Convert the string of tag names to an array
+        $result['tag_names'] = explode(', ', $result['tag_names']);
         return $result;
     }
 
