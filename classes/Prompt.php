@@ -106,4 +106,40 @@ class prompt
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public static function getNewPrompts()
+    {
+        try {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 1 ORDER BY tstamp DESC LIMIT 15 ");
+            $statement->execute();
+            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $prompts;
+        } catch (PDOException $e) {
+            error_log("PDO error: " . $e->getMessage());
+            return [];
+        }
+    }
+    public static function getAllNewPrompts($limit, $offset)
+    {
+        try {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 1 ORDER BY tstamp DESC LIMIT :limit OFFSET :offset");
+            $statement->bindValue(":limit", $limit, PDO::PARAM_INT);
+            $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
+            $statement->execute();
+            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $prompts;
+        } catch (PDOException $e) {
+            error_log("PDO error: " . $e->getMessage());
+            return [];
+        }
+    }
+    public static function countAllNewPrompts(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 1 ORDER BY tstamp DESC");
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
