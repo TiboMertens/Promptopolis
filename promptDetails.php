@@ -2,9 +2,7 @@
 include_once("bootstrap.php");
 //DO NOT FORGET XSS PROTECTION
 
-if (!isset($_SESSION['loggedin'])) {
-    header("Location: login.php");
-}
+
 try {
     //if id is set and not NULL, get prompt details
     if (isset($_GET['id']) && !empty($_GET['id'])) {
@@ -31,8 +29,11 @@ try {
         $authorID = $promptDetails['user_id'];
         $user = new User();
         $user->setId($authorID);
-        //check if user is a moderator
+        if(isset($_SESSION["loggedin"])){
+           //check if user is a moderator
         $isModerator = $user->isModerator($_SESSION['id']['id']);
+        }
+       
         //get author name
         $userDetails = $user->getUserDetails();
         $authorName = $userDetails['username'];
