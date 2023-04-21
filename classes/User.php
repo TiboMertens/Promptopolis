@@ -386,10 +386,11 @@ class User
     }
     public function updateUserDetails(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio WHERE id = :id");
+        $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, profile_picture_url= :profile_picture_url WHERE id = :id");
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":bio", $this->bio);
         $statement->bindValue(":id", $this->id);
+        $statement->bindValue(":profile_picture_url", $this->profile_picture_url);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
@@ -450,11 +451,5 @@ class User
     return $this;
   }
 
-  public function saveProfilePicture(){
-    $conn = Db::getInstance();
-    $statement = $conn->prepare("UPDATE users SET profile_picture_url = :profile_picture_url WHERE id = :id");
-    $statement->bindValue(":id", $this->id);
-    $statement->bindValue(":profile_picture_url", $this->getProfile_picture_url());
-    $statement->execute();
-  }
+  
 }
