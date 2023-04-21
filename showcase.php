@@ -47,12 +47,12 @@ try {
     // count the total number of prompts with the selected filter
     $totalPrompts = count(Prompt::getAll($filterApprove, $filterDate, $filterPrice, $filterModel));
 
+    $amount = count($prompts);
+
     // calculate the total number of pages
     $totalPages = ceil($totalPrompts / $limit);
-
 } catch (Throwable $e) {
     $error = $e->getMessage();
-
 }
 ?>
 <!DOCTYPE html>
@@ -127,6 +127,9 @@ try {
     </section>
     <main class="flex flex-wrap bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg justify-center">
         <div id="image-container" class="flex flex-wrap gap-5 justify-center">
+            <?php if ($amount <= 0) : ?>
+                <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">No prompts found</p>
+            <?php endif ?>
             <?php foreach ($prompts as $prompt) : ?>
                 <a href="promptDetails.php?id=<?php echo $prompt['id'] . $approve ?>">
                     <img src="<?php echo $prompt['cover_url'] ?>" alt="Prompt" class="w-[170px] h-[100px] sm:w-[220px] sm:h-[120px] lg:w-[270px] lg:h-[150px] object-cover object-center rounded-lg">

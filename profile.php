@@ -36,6 +36,7 @@ if (isset($_SESSION['loggedin'])) {
 
         //get user's prompts
         $prompts = Prompt::getPromptsByUser($id);
+        $amount = count($prompts);
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
@@ -92,8 +93,11 @@ if (isset($_SESSION['loggedin'])) {
     </header>
     <section class="mt-10">
         <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Prompts</h1>
-        <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
-            <div class=" flex flex-shrink-0 gap-5">
+        <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg <?php echo $amount <= 0 ? 'justify-center items-center' : '' ?>">
+            <div class="flex flex-shrink-0 gap-5">
+                <?php if ($amount <= 0) : ?>
+                        <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">User has no prompts</p>
+                <?php endif ?>
                 <?php foreach ($prompts as $prompt) : ?>
                     <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>&approve">
                         <img src="<?php echo $prompt['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
