@@ -20,8 +20,12 @@ if (isset($_SESSION['loggedin'])) {
         }
 
         $user = new User();
-        $user->setId($id);
-        $userDetails = $user->getUserDetails();
+        if ($id != 0) {
+            $user->setId($id);
+            $userDetails = $user->getUserDetails();
+        } else {
+            throw new Exception("User not found");
+        }
         if ($userDetails === false) {
             throw new Exception("User not found");
         }
