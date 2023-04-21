@@ -15,16 +15,22 @@ try {
 
         // count the total number of prompts with the selected filter
         $totalPrompts = count(Prompt::countAllToApprovePrompts());
+    } else if($filter === "new"){
+       $approve = "";
+       $prompts = Prompt::getAllNewPrompts($limit, $offset);
+        $totalPrompts = count(Prompt::countAllNewPrompts());
     } else {
-        // fetch all
-        $approve = "";
-        $prompts = Prompt::getAllPrompts($limit, $offset);
-
-        // count all
-        $totalPrompts = count(Prompt::countAllPrompts());
+          // fetch all
+          $approve = "";
+          $prompts = Prompt::getAllPrompts($limit, $offset);
+  
+          // count all
+          $totalPrompts = count(Prompt::countAllPrompts());
     }
     // calculate the total number of pages
     $totalPages = ceil($totalPrompts / $limit);
+
+
 } catch (\Throwable $th) {
     $error = $th->getMessage();
 }
