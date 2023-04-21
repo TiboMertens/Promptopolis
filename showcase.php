@@ -19,15 +19,15 @@ try {
         $filterApprove = 'all';
     }
 
-    if ($filterDate != 'all' || $filterDate != 'new' || $filterDate != 'old') {
+    if ($filterDate != 'all' && $filterDate != 'new' && $filterDate != 'old') {
         $filterDate = 'all';
     }
 
-    if ($filterPrice != 'all' || $filterPrice != 'low' || $filterPrice != 'high') {
+    if ($filterPrice != 'all' && $filterPrice != 'low' && $filterPrice != 'high') {
         $filterPrice = 'all';
     }
 
-    if ($filterModel != 'all' || $filterModel != 'Midjourney' || $filterModel != 'Dall-E') {
+    if ($filterModel != 'all' && $filterModel != 'Midjourney' && $filterModel != 'Dall-E') {
         $filterModel = 'all';
     }
 
