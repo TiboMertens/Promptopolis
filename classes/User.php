@@ -423,4 +423,38 @@ class User
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+
+
+
+
+
+    private string $profile_picture_url;
+
+    /**
+   * Get the value of profile_picture_url
+   */ 
+  public function getProfile_picture_url()
+  {
+    return $this->profile_picture_url;
+  }
+
+  /**
+   * Set the value of profile_picture_url
+   *
+   * @return  self
+   */ 
+  public function setProfile_picture_url($profile_picture_url)
+  {
+    $this->profile_picture_url = $profile_picture_url;
+
+    return $this;
+  }
+
+  public function saveProfilePicture(){
+    $conn = Db::getInstance();
+    $statement = $conn->prepare("UPDATE users SET profile_picture_url = :profile_picture_url WHERE id = :id");
+    $statement->bindValue(":id", $this->id);
+    $statement->bindValue(":profile_picture_url", $this->getProfile_picture_url());
+    $statement->execute();
+  }
 }

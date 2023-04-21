@@ -14,17 +14,78 @@ if (isset($_SESSION['loggedin'])) {
     $username = $userDetails['username'];
     //get bio from userdetails
     $bio = $userDetails['bio'];
+    //get profile picture from userdetails
+    $profilePicture = $userDetails['profile_picture_url'];
+
+    if (!empty($_POST)) {
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+        
+        // Check if image file is a actual image or fake image
+        if(isset($_POST["submit"])) {
+          $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+          if($check !== false) {
+            echo "File is an image - " . $check["mime"] . ".";
+            $uploadOk = 1;
+          } else {
+            echo "File is not an image.";
+            $uploadOk = 0;
+          }
+        }
+        
+        // Check if file already exists
+        if (file_exists($target_file)) {
+          echo "Sorry, file already exists.";
+          $uploadOk = 0;
+        }
+        
+        // Check file size
+        if ($_FILES["fileToUpload"]["size"] > 500000) {
+          echo "Sorry, your file is too large.";
+          $uploadOk = 0;
+        }
+        
+        // Allow certain file formats
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif" ) {
+          echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+          $uploadOk = 0;
+        }
+        
+        // Check if $uploadOk is set to 0 by an error
+        if ($uploadOk == 0) {
+          echo "Sorry, your file was not uploaded.";
+        // if everything is ok, try to upload file
+        } else {
+          if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
+            //var_dump the file that was uploaded
+            
+            $user->setProfile_picture_url($target_file);
+            $user->saveProfilePicture();
+            $profilePicture = $target_file;
+          } else {
+            echo "Sorry, there was an error uploading your file.";
+          }
+        }
+    }
+    
     //check if button save is clicked
-    var_dump($_POST);
+    
     if (isset($_POST["edit"])) {
 
         //get data from form
+        
         $newUsername = $_POST['username'];
         $newBio = $_POST['bio'];
+        
         //set data to user
         try {
             $user->setUsername($newUsername);
             $user->setBio($newBio);
+            
             //update user details
             $user->updateUserDetails();
             //redirect to profile
@@ -32,6 +93,7 @@ if (isset($_SESSION['loggedin'])) {
         } catch (Throwable $e) {
             $usernameError = $e->getMessage();
         }  
+
     }
     if (isset($_POST['delete'])) {
         try {        
@@ -71,13 +133,28 @@ if (isset($_SESSION['loggedin'])) {
 <body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php") ?>
 
-    <div class="flex justify-center items-center pt-20">
+    
+
+
+    <div class="flex justify-center items-center pt-10 mb-5">
         <div class="bg-[#2A2A2A] rounded-lg p-8 max-w-md">
             <div class="text-white">
                 <a href="profile.php?id=<?php echo $id ?>"><i class="fa-solid fa-arrow-left"></i></a>
             </div>
             <h1 class="text-2xl font-bold mb-4 text-white">Edit Your Profile</h1>
             <form action="" method="post">
+
+            <div class="mb-4 text-white">
+                <form action="editProfile.php" method="post" enctype="multipart/form-data">
+                    
+                    <div class="mb-8 mt-5 "><img class="w-[100px] h-[100px] rounded-full" src="<?php echo htmlspecialchars($profilePicture) ?>" alt="ProfilePicture"></div>
+                    <p class="block font-bold mb-0.5 text-white">Selecteer foto om te uploaden:</p>
+                    <input type="file" name="fileToUpload" id="fileToUpload">
+                    <input type="submit" value="Upload Image" name="submit" class="mt-5 bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded" style="padding-left: 9rem; padding-right: 9rem;">
+                </form>
+            </div>
+
+
                 <div class="mb-4">
                     <label for="username" class="block font-bold mb-0.5 text-white">Username</label>
                     <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB] <?php echo isset($usernameError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
