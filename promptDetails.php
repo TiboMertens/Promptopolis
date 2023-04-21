@@ -21,8 +21,12 @@ try {
         $tstamp = $promptDetails['tstamp'];
         $price = $promptDetails['price'];
         $tag1 = $promptDetails['tag_names'][0];
-        $tag2 = $promptDetails['tag_names'][1];
-        $tag3 = $promptDetails['tag_names'][2];
+        if (isset($promptDetails['tag_names'][1])) {
+            $tag2 = $promptDetails['tag_names'][1];
+        }
+        if (isset($promptDetails['tag_names'][2])) {
+            $tag3 = $promptDetails['tag_names'][2];
+        }
         $model = $promptDetails['model'];
 
         //get author id
@@ -115,8 +119,12 @@ try {
                             <div class="flex flex-1 gap-4 justify-end mr-5 md:mr-0">
                                 <p>Tags: </p>
                                 <p><?php echo htmlspecialchars($tag1); ?></p>
+                                <?php if(isset($tag2)): ?>
                                 <p><?php echo htmlspecialchars($tag2); ?></p>
+                                <?php endif ?>
+                                <?php if(isset($tag3)): ?>
                                 <p><?php echo htmlspecialchars($tag3); ?></p>
+                                <?php endif ?>
                             </div>
                         </div>
                         <div class="mr-5 mb-5">
