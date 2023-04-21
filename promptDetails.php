@@ -36,7 +36,12 @@ try {
 
         //get author name
         $userDetails = $user->getUserDetails();
-        $authorName = $userDetails['username'];
+        if ($userDetails == false) {
+            $authorName = "deleted user";
+            $authorID = "";
+        } else {
+            $authorName = $userDetails['username'];
+        }
     } else {
         throw new exception('No id provided');
     }
@@ -103,6 +108,9 @@ try {
                                 <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo $authorID ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
                             </div>
                         </div>
+                        <div class="flex-1 justify-end mr-5 md:mr-0">
+                            <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo $authorID  ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
+                         </div>
                         <div class="flex justify-between mb-3">
                             <div class="flex-1">
                                 <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
@@ -113,7 +121,6 @@ try {
                                 <p><?php echo htmlspecialchars($tag2); ?></p>
                                 <p><?php echo htmlspecialchars($tag3); ?></p>
                             </div>
-                        </div>
                         <div class="mr-5 mb-5">
                             <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                             <p><?php echo htmlspecialchars($description); ?></p>
