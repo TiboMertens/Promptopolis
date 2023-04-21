@@ -49,8 +49,10 @@ try {
 
     // calculate the total number of pages
     $totalPages = ceil($totalPrompts / $limit);
+
 } catch (Throwable $e) {
     $error = $e->getMessage();
+
 }
 ?>
 <!DOCTYPE html>

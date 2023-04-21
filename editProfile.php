@@ -3,6 +3,7 @@ include_once("bootstrap.php");
 
 //check if user is logged in, else redirect to login page
 if (isset($_SESSION['loggedin'])) {
+    
     //Get id from logged in user
     $id = $_SESSION['id']['id'];
 
@@ -14,7 +15,9 @@ if (isset($_SESSION['loggedin'])) {
     //get bio from userdetails
     $bio = $userDetails['bio'];
     //check if button save is clicked
-    if (!empty($_POST)) {
+    var_dump($_POST);
+    if (isset($_POST["edit"])) {
+
         //get data from form
         $newUsername = $_POST['username'];
         $newBio = $_POST['bio'];
@@ -28,28 +31,25 @@ if (isset($_SESSION['loggedin'])) {
             header("Location: profile.php");
         } catch (Throwable $e) {
             $usernameError = $e->getMessage();
+        }  
+    }
+    if (isset($_POST['delete'])) {
+        try {        
+    
+            // delete the user's account and redirect to the login page
+            $user->deleteAccount();
+            session_destroy();
+            
+            header('Location: login.php');
+        } catch (Throwable $e) {
+            $deleteError = $e->getMessage();
         }
     }
 } else {
     header('Location: login.php');
 }
 
-if (isset($_POST['delete'])) {
-    try {
-        // create a new User object and set its id to the current user's id
-        $user = new User();
-        $user->setId($id);
 
-        // delete the user's account and redirect to the login page
-        $user->deleteAccount();
-        session_destroy();
-        
-        header('Location: login.php');
-        exit();
-    } catch (Throwable $e) {
-        $deleteError = $e->getMessage();
-    }
-}
 
 
 ?>
@@ -65,6 +65,7 @@ if (isset($_POST['delete'])) {
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body class="bg-[#121212]">
@@ -89,7 +90,7 @@ if (isset($_POST['delete'])) {
                     <textarea class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" rows="4" name="bio"><?php echo htmlspecialchars($bio); ?></textarea>
                 </div>
                 <div class="flex justify-center">
-                    <button type="submit" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded" style="padding-left: 6rem; padding-right: 6rem;">Save</button>
+                    <button name = "edit" type="submit" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded" style="padding-left: 6rem; padding-right: 6rem;">Save</button>
                 </div>
                 <div class="flex justify-center">
                         <button name= "delete" class="text-red-500 mt-5" href="#">Delete account</button>
