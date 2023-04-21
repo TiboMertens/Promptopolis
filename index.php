@@ -4,6 +4,9 @@ include_once("bootstrap.php");
 if (isset($_SESSION['loggedin'])) {
     //check if user is an admin
     $user = new User();
+    $user->setId($_SESSION['id']['id']);
+    $userDetails = $user->getUserDetails();
+    $profilePicture = $userDetails['profile_picture_url'];
     $isModerator = $user->isModerator($_SESSION['id']['id']);
 
     if ($isModerator == true) {

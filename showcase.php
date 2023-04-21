@@ -1,7 +1,12 @@
 <?php
 try {
     include_once("bootstrap.php");
-
+    if(isset($_SESSION["loggedin"])){
+        $user= new User();
+        $user->setId($_SESSION['id']['id']);
+        $userDetails = $user->getUserDetails();
+        $profilePicture = $userDetails['profile_picture_url'];
+    }
     $limit = 15; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT

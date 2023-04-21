@@ -4,6 +4,14 @@ include_once("bootstrap.php");
 
 if (!isset($_SESSION['loggedin'])) {
     header("Location: login.php");
+
+}else{
+    
+    $user= new User();
+    $user->setId($_SESSION['id']['id']);
+    $userDetails = $user->getUserDetails();
+    $profilePicture = $userDetails['profile_picture_url'];
+    
 }
 try {
     //if id is set and not NULL, get prompt details
@@ -29,7 +37,6 @@ try {
 
         //get author id
         $authorID = $promptDetails['user_id'];
-        $user = new User();
         $user->setId($authorID);
         //check if user is a moderator
         $isModerator = $user->isModerator($_SESSION['id']['id']);
@@ -124,7 +131,7 @@ try {
                             </form>
                         <?php else : ?>
                             <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</a>
-                            <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo "€" . htmlspecialchars($price); ?></p>
+                            <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price)." credit(s)"; ?></p>
                         <?php endif ?>
                     </div>
 
