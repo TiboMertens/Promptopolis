@@ -3,6 +3,7 @@ include_once("bootstrap.php");
 
 //check if user is logged in, else redirect to login page
 if (isset($_SESSION['loggedin'])) {
+    
     //Get id from logged in user
     $id = $_SESSION['id']['id'];
 
@@ -15,6 +16,7 @@ if (isset($_SESSION['loggedin'])) {
     $bio = $userDetails['bio'];
     //check if button save is clicked
     if (!empty($_POST)) {
+
         //get data from form
         $newUsername = $_POST['username'];
         $newBio = $_POST['bio'];
@@ -29,27 +31,24 @@ if (isset($_SESSION['loggedin'])) {
         } catch (Throwable $e) {
             $usernameError = $e->getMessage();
         }
+        if (isset($_POST['delete'])) {
+            try {        
+        
+                // delete the user's account and redirect to the login page
+                $user->deleteAccount();
+                session_destroy();
+                
+                header('Location: login.php');
+            } catch (Throwable $e) {
+                $deleteError = $e->getMessage();
+            }
+        }
     }
 } else {
     header('Location: login.php');
 }
 
-if (isset($_POST['delete'])) {
-    try {
-        // create a new User object and set its id to the current user's id
-        $user = new User();
-        $user->setId($id);
 
-        // delete the user's account and redirect to the login page
-        $user->deleteAccount();
-        session_destroy();
-        
-        header('Location: login.php');
-        exit();
-    } catch (Throwable $e) {
-        $deleteError = $e->getMessage();
-    }
-}
 
 
 ?>
