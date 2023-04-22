@@ -22,7 +22,7 @@ if (isset($_SESSION['loggedin'])) {
         $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
+        $profilePicture = $target_file;
         // Check if image file is a actual image or fake image
        
         if (isset($_POST["submit"])) {
@@ -42,7 +42,7 @@ if (isset($_SESSION['loggedin'])) {
                 // Check file size, if file is larger than 1MB give error
                 if ($_FILES["fileToUpload"]["size"] < 1000000) {
                     
-                    $uploadOk = 0;
+                    $uploadOk = 1;
                 }else{
                     throw new Exception("File is too large.");
                 }
@@ -66,6 +66,7 @@ if (isset($_SESSION['loggedin'])) {
                         //var_dump the file that was uploaded
     
                         $user->setProfile_picture_url($target_file);
+                        
                     } else {
                         throw new Exception("Sorry, there was an error uploading your file.");
                     }
@@ -86,7 +87,7 @@ if (isset($_SESSION['loggedin'])) {
 
                 //update user details
                 $user->updateUserDetails();
-                $profilePicture = $target_file;
+                
                 //redirect to profile
                 header("Location: profile.php");
             } catch (Throwable $e) {
@@ -124,6 +125,7 @@ if (isset($_SESSION['loggedin'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit profile</title>
     <link rel="stylesheet" href="css/styles.css">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
@@ -176,7 +178,7 @@ if (isset($_SESSION['loggedin'])) {
     </div>
 
 
-
+    
 </body>
 
 </html>
