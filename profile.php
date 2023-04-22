@@ -89,11 +89,12 @@ if (isset($_SESSION['loggedin'])) {
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>
                 </div>
-                <!-- a button that redirects to the change password page -->
-                <div class="flex  items-center mt-[20px] mb-[4px] ">
-                    <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="changePassword.php">Change Password</a>
-
-                </div>
+                <?php if ($id == $sessionid) : ?>
+                    <!-- a button that redirects to the change password page -->
+                    <div class="flex  items-center mt-[20px] mb-[4px] ">
+                        <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="changePassword.php">Change Password</a>
+                    </div>
+                <?php endif ?>
             </div>
     </header>
     <section class="mt-10">
@@ -101,7 +102,7 @@ if (isset($_SESSION['loggedin'])) {
         <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg <?php echo $amount <= 0 ? 'justify-center items-center' : '' ?>">
             <div class="flex flex-shrink-0 gap-5">
                 <?php if ($amount <= 0) : ?>
-                        <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">User has no prompts</p>
+                    <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">User has no prompts</p>
                 <?php endif ?>
                 <?php foreach ($prompts as $prompt) : ?>
                     <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>&approve">
