@@ -167,7 +167,7 @@ if (isset($_SESSION["loggedin"])) {
                     <label class="block font-bold mb-0.5 text-white" for="tag1">tag 1</label>
                     <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" type="text" name="tag1" id="tag1">
                     <div id="tag-container"></div>
-                    <button class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded mt-3" name="tag" id="add-tag-btn">Add Tag</button>
+                    <button class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded mt-3" name="tag" id="add-tag-btn">Add another Tag</button>
                     <?php if (isset($tagsError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $tagsError; ?></p>
                     <?php endif; ?>
