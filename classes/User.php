@@ -386,10 +386,11 @@ class User
     }
     public function updateUserDetails(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio WHERE id = :id");
+        $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, profile_picture_url= :profile_picture_url WHERE id = :id");
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":bio", $this->bio);
         $statement->bindValue(":id", $this->id);
+        $statement->bindValue(":profile_picture_url", $this->profile_picture_url);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
@@ -423,6 +424,29 @@ class User
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    private string $profile_picture_url;
+
+    /**
+   * Get the value of profile_picture_url
+   */ 
+  public function getProfile_picture_url()
+  {
+    return $this->profile_picture_url;
+  }
+
+  /**
+   * Set the value of profile_picture_url
+   *
+   * @return  self
+   */ 
+  public function setProfile_picture_url($profile_picture_url)
+  {
+    $this->profile_picture_url = $profile_picture_url;
+
+    return $this;
+  }
+
     public function canChangePassword($password){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");

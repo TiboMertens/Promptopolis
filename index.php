@@ -4,6 +4,9 @@ include_once("bootstrap.php");
 if (isset($_SESSION['loggedin'])) {
     //check if user is an admin
     $user = new User();
+    $user->setId($_SESSION['id']['id']);
+    $userDetails = $user->getUserDetails();
+    $profilePicture = $userDetails['profile_picture_url'];
     $isModerator = $user->isModerator($_SESSION['id']['id']);
 
     if ($isModerator == true) {
@@ -38,7 +41,7 @@ if (isset($_SESSION['loggedin'])) {
             <a href="showcase.php?filter=All" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-7 mr-5 xl:mr-10 xl:mt-10 rounded text-lg xl:text-xl xl:py-3 xl:px-10">
                 Buy a prompt
             </a>
-            <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-7 xl:mt-10 text-lg xl:text-xl xl:py-3 xl:px-10 rounded">
+            <a href="uploadPrompt.php" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-7 xl:mt-10 text-lg xl:text-xl xl:py-3 xl:px-10 rounded">
                 Sell a prompt
             </a>
         </div>
