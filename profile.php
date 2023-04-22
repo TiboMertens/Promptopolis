@@ -83,8 +83,12 @@ if (isset($_SESSION['loggedin'])) {
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>
                 </div>
+                <!-- a button that redirects to the change password page -->
+                <div class="flex  items-center mt-[20px] mb-[4px] ">
+                    <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="changePassword.php">Change Password</a>
+
+                </div>
             </div>
-        </div>
     </header>
     <section class="mt-10">
         <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Prompts</h1>
