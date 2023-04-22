@@ -135,15 +135,15 @@ class prompt
                 $tagIds[] = $conn->lastInsertId();
             }
         
-            $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id) VALUES (:title, :description, :price, :model, :tstamp, :user_id)");
+            $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2)");
             $statement->bindValue(":title", $this->title);
             $statement->bindValue(":description", $this->description);
             $statement->bindValue(":price", $this->price);
             $statement->bindValue(":model", $this->model);
             $statement->bindValue(":tstamp", date('Y-m-d'));
             $statement->bindValue(":user_id", $this->user_id);            
-            // $statement->bindValue(":mainImage", $this->mainImage);
-            // $statement->bindValue(":overviewImage", $this->overviewImage);
+            $statement->bindValue(":cover_url", $this->mainImage);
+            $statement->bindValue(":image_url2", $this->overviewImage);
     
              
 
