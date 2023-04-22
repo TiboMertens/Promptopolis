@@ -8,7 +8,6 @@ if (isset($_SESSION["loggedin"])) {
     $profilePicture = $userDetails['profile_picture_url'];
 
     if (!empty($_FILES["mainImage"]["tmp_name"])) {
-
         $target_dir = "uploads/";
         $target_file = $target_dir . basename($_FILES["mainImage"]["name"]);
         $uploadOk = 1;
@@ -21,6 +20,21 @@ if (isset($_SESSION["loggedin"])) {
         $uploadOk = 1;
         $imageFileType_overview = strtolower(pathinfo($target_file_overview, PATHINFO_EXTENSION));
     }
+
+    if (!empty($_FILES["image3"]["tmp_name"])) {
+        $target_dir = "uploads/";
+        $target_file_image3 = $target_dir . basename($_FILES["image3"]["name"]);
+        $uploadOk = 1;
+        $imageFileType_image3 = strtolower(pathinfo($target_file_image3, PATHINFO_EXTENSION));
+    }
+
+    if (!empty($_FILES["image4"]["tmp_name"])) {
+        $target_dir = "uploads/";
+        $target_file_image4 = $target_dir . basename($_FILES["image4"]["name"]);
+        $uploadOk = 1;
+        $imageFileType_image4 = strtolower(pathinfo($target_file_image4, PATHINFO_EXTENSION));
+    }
+
 
     if (!empty($_POST["submit"])) {
         try {
@@ -79,6 +93,28 @@ if (isset($_SESSION["loggedin"])) {
                 $exceptionCaught = true;
             }
 
+            try {
+                if (!isset($imageFileType_image3)) {
+                    throw new exception("Please upload an image");
+                } else {
+                    $prompt->setImage3($imageFileType_image3, $target_file_image3);
+                }
+            } catch (Exception $e) {
+                $image3Error = $e->getMessage();
+                $exceptionCaught = true;
+            }
+
+            try {
+                if (!isset($imageFileType_image4)) {
+                    throw new exception("Please upload an image");
+                } else {
+                    $prompt->setImage4($imageFileType_image4, $target_file_image4);
+                }
+            } catch (Exception $e) {
+                $image4Error = $e->getMessage();
+                $exceptionCaught = true;
+            }
+
             $tags = array();
             if (!empty($_POST['tag1'])) {
                 $tags[] = $_POST['tag1'];
@@ -116,7 +152,6 @@ if (isset($_SESSION["loggedin"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="js/tagInput.js" defer></script>
-    <!-- <script src="js/previewImage.js" defer></script> -->
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
@@ -189,7 +224,7 @@ if (isset($_SESSION["loggedin"])) {
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
-                    <label class="block font-bold mb-0.5 text-white" for="overviewImage">Overview image</label>
+                    <label class="block font-bold mb-0.5 text-white" for="overviewImage">Upload 3 images</label>
                     <div class="mb-8 mt-5 "><img class="w-[100px] h-[100px] " src="https://placehold.co/100?text=example&font=roboto" alt="overview image" id="previewOverview"></div>
                     <input class="block w-full text-white
                         file:py-2 file:px-3
@@ -200,6 +235,32 @@ if (isset($_SESSION["loggedin"])) {
                         file:active:border-[#A25AFB]" type="file" name="overviewImage" id="overviewImage" onchange="previewFileOverview()">
                     <?php if (isset($overviewImageError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $overviewImageError; ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="mb-4">
+                    <div class="mb-8 mt-5 "><img class="w-[100px] h-[100px] " src="https://placehold.co/100?text=example&font=roboto" alt="overview image" id="preview3"></div>
+                    <input class="block w-full text-white
+                        file:py-2 file:px-3
+                        file:rounded file:border-[3px]
+                        file:bg-[#BB86FC] file:text-white
+                        hover:file:bg-[#A25AFB]
+                        file:border-[#A25AFB]
+                        file:active:border-[#A25AFB]" type="file" name="image3" id="image3" onchange="previewFile3()">
+                    <?php if (isset($image3Error)) : ?>
+                        <p class="text-red-500 text-xs italic"><?php echo $image3Error; ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="mb-4">
+                    <div class="mb-8 mt-5 "><img class="w-[100px] h-[100px] " src="https://placehold.co/100?text=example&font=roboto" alt="overview image" id="preview4"></div>
+                    <input class="block w-full text-white
+                        file:py-2 file:px-3
+                        file:rounded file:border-[3px]
+                        file:bg-[#BB86FC] file:text-white
+                        hover:file:bg-[#A25AFB]
+                        file:border-[#A25AFB]
+                        file:active:border-[#A25AFB]" type="file" name="image4" id="image4" onchange="previewFile4()">
+                    <?php if (isset($image4Error)) : ?>
+                        <p class="text-red-500 text-xs italic"><?php echo $image4Error; ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="flex justify-center">

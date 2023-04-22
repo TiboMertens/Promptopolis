@@ -53,3 +53,35 @@ function previewFileOverview() {
     preview.src = "<?php echo $overviewImage ?>";
   }
 }
+
+function previewFile3() {
+  var preview = document.getElementById('preview3');
+  var file = document.getElementById('image3').files[0];
+  var reader = new FileReader();
+
+  reader.onloadend = function() {
+    preview.src = reader.result;
+  }
+
+  if (file) {
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = "<?php echo $image3 ?>";
+  }
+}
+
+function previewFile4() {
+  var preview = document.getElementById('preview4');
+  var file = document.getElementById('image4').files[0];
+  var reader = new FileReader();
+
+  reader.onloadend = function() {
+    preview.src = reader.result;
+  }
+
+  if (file) {
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = "<?php echo $image4 ?>";
+  }
+}

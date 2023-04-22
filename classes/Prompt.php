@@ -10,6 +10,8 @@ class prompt
     protected array $tags;
     protected string $mainImage;
     protected string $overviewImage;
+    protected string $image3;
+    protected string $image4;
     protected int $user_id;
 
     /**
@@ -227,7 +229,7 @@ class prompt
             $tagIds[] = $conn->lastInsertId();
         }
 
-        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2)");
+        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2, image_url3, image_url4) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4)");
         $statement->bindValue(":title", $this->title);
         $statement->bindValue(":description", $this->description);
         $statement->bindValue(":price", $this->price);
@@ -236,9 +238,8 @@ class prompt
         $statement->bindValue(":user_id", $this->user_id);
         $statement->bindValue(":cover_url", $this->mainImage);
         $statement->bindValue(":image_url2", $this->overviewImage);
-
-
-
+        $statement->bindValue(":image_url3", $this->image3);
+        $statement->bindValue(":image_url4", $this->image4);
         $statement->execute();
 
         // Get ID of the prompt that was just inserted
@@ -514,6 +515,96 @@ class prompt
         } catch (PDOException $e) {
             error_log("PDO error: " . $e->getMessage());
             return [];
+        }
+    }
+
+    /**
+     * Get the value of image3
+     */ 
+    public function getImage3()
+    {
+        return $this->image3;
+    }
+
+    /**
+     * Set the value of image3
+     *
+     * @return  self
+     */ 
+    public function setImage3($imageFileType, $target_file_overview)
+    {
+        // Validate overview image file
+        if (!empty($_FILES["image3"]["name"])) {
+            try {
+                $check = getimagesize($_FILES["image3"]["tmp_name"]);
+                if ($check === false) {
+                    throw new Exception("File is not an image.");
+                }
+
+                if ($_FILES["image3"]["size"] > 1000000) {
+                    throw new Exception("File is too large.");
+                }
+
+                if (
+                    $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                    && $imageFileType != "gif"
+                ) {
+                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                }
+
+                if (move_uploaded_file($_FILES["image3"]["tmp_name"], $target_file_overview)) {
+                    $this->image3 = $target_file_overview;
+                } else {
+                    throw new Exception("Sorry, there was an error uploading your file.");
+                }
+            } catch (Exception $e) {
+                $overviewImageError = $e->getMessage();
+            }
+        }
+    }
+
+    /**
+     * Get the value of image4
+     */ 
+    public function getImage4()
+    {
+        return $this->image4;
+    }
+
+    /**
+     * Set the value of image4
+     *
+     * @return  self
+     */ 
+    public function setImage4($imageFileType, $target_file_overview)
+    {
+        // Validate overview image file
+        if (!empty($_FILES["image4"]["name"])) {
+            try {
+                $check = getimagesize($_FILES["image4"]["tmp_name"]);
+                if ($check === false) {
+                    throw new Exception("File is not an image.");
+                }
+
+                if ($_FILES["image4"]["size"] > 1000000) {
+                    throw new Exception("File is too large.");
+                }
+
+                if (
+                    $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                    && $imageFileType != "gif"
+                ) {
+                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                }
+
+                if (move_uploaded_file($_FILES["image4"]["tmp_name"], $target_file_overview)) {
+                    $this->image4 = $target_file_overview;
+                } else {
+                    throw new Exception("Sorry, there was an error uploading your file.");
+                }
+            } catch (Exception $e) {
+                $overviewImageError = $e->getMessage();
+            }
         }
     }
 }
