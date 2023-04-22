@@ -16,7 +16,7 @@ if (isset($_SESSION['loggedin'])) {
     $bio = $userDetails['bio'];
     //get profile picture from userdetails
     $profilePicture = $userDetails['profile_picture_url'];
-    
+
     if (!empty($_POST)) {
         $target_dir = "uploads/";
         $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
@@ -24,74 +24,78 @@ if (isset($_SESSION['loggedin'])) {
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $profilePicture = $target_file;
         // Check if image file is a actual image or fake image
-       
+
         if (isset($_POST["submit"])) {
-            
-            if (!empty($_FILES["fileToUpload"]["name"])) {
-                $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                if ($check !== false) {
-                    echo "File is an image - " . $check["mime"] . ".";
-                    $uploadOk = 1;
-                } else {
-                    echo "File is not an image.";
-                    $uploadOk = 0;
-                }
-    
-                
-    
-                // Check file size, if file is larger than 1MB give error
-                if ($_FILES["fileToUpload"]["size"] < 1000000) {
-                    
-                    $uploadOk = 1;
-                }else{
-                    throw new Exception("File is too large.");
-                }
-    
-                // Allow certain file formats
-                if (
-                    $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-                    && $imageFileType != "gif"
-                ) {
-                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
-                    $uploadOk = 0;
-                }
-    
-                // Check if $uploadOk is set to 0 by an error
-                if ($uploadOk == 0) {
-                    throw new Exception("Sorry, your file was not uploaded.");
-                    // if everything is ok, try to upload file
-                } else {
-                    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-                        
-                        //var_dump the file that was uploaded
-    
-                        $user->setProfile_picture_url($target_file);
-                        
-                    } else {
-                        throw new Exception("Sorry, there was an error uploading your file.");
-                    }
-                }
-            } else {
-                $user->setProfile_picture_url($profilePicture);
-            }
-            
-            //get data from form
-
-            $newUsername = $_POST['username'];
-            $newBio = $_POST['bio'];
-
-            //set data to user
             try {
-                $user->setUsername($newUsername);
-                $user->setBio($newBio);
+                if (!empty($_FILES["fileToUpload"]["name"])) {
+                    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
 
-                //update user details
-                $user->updateUserDetails();
-                
-                //redirect to profile
-                header("Location: profile.php");
+                    if ($check !== false) {
+                        $uploadOk = 1;
+                    } else {
+                        throw new Exception("File is not an image.");
+                        $uploadOk = 0;
+                    }
+
+
+
+                    // Check file size, if file is larger than 1MB give error
+                    if ($_FILES["fileToUpload"]["size"] < 1000000) {
+
+                        $uploadOk = 1;
+                    } else {
+                        throw new Exception("File is too large.");
+                    }
+
+                    // Allow certain file formats
+                    if (
+                        $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                        && $imageFileType != "gif"
+                    ) {
+                        throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                        $uploadOk = 0;
+                    }
+
+                    // Check if $uploadOk is set to 0 by an error
+                    if ($uploadOk == 0) {
+                        throw new Exception("Sorry, your file was not uploaded.");
+                        // if everything is ok, try to upload file
+                    } else {
+                        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+
+                            //var_dump the file that was uploaded
+
+                            $user->setProfile_picture_url($target_file);
+                        } else {
+                            throw new Exception("Sorry, there was an error uploading your file.");
+                        }
+                    }
+                } else {
+                    $user->setProfile_picture_url($profilePicture);
+                }
+
+
+
+                //get data from form
+
+                $newUsername = $_POST['username'];
+                $newBio = $_POST['bio'];
+
+                //set data to user
+                try {
+                    $user->setUsername($newUsername);
+                    $user->setBio($newBio);
+
+                    //update user details
+                    $user->updateUserDetails();
+
+                    //redirect to profile
+                    header("Location: profile.php");
+                } catch (Throwable $e) {
+                    $usernameError = $e->getMessage();
+                }
             } catch (Throwable $e) {
-                $usernameError = $e->getMessage();
+                $profilePictureError = $e->getMessage();
             }
         }
     }
@@ -125,7 +129,7 @@ if (isset($_SESSION['loggedin'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit profile</title>
     <link rel="stylesheet" href="css/styles.css">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
@@ -152,7 +156,9 @@ if (isset($_SESSION['loggedin'])) {
                     <div class="mb-8 mt-5 "><img class="w-[100px] h-[100px] rounded-full" src="<?php echo htmlspecialchars($profilePicture) ?>" alt="ProfilePicture"></div>
                     <p class="block font-bold mb-0.5 text-white">Selecteer foto om te uploaden:</p>
                     <input type="file" name="fileToUpload" id="fileToUpload">
-
+                    <?php if (isset($profilePictureError)) : ?>
+                        <p class="text-red-500 text-xs italic"><?php echo $profilePictureError ?></p>
+                    <?php endif; ?>
                 </div>
 
 
@@ -178,7 +184,7 @@ if (isset($_SESSION['loggedin'])) {
     </div>
 
 
-    
+
 </body>
 
 </html>
