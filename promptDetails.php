@@ -21,6 +21,9 @@ try {
 
         //get prompt details
         $promptDetails = $prompt->getPromptDetails();
+        if ($promptDetails['id'] == null || $promptDetails == false || $promptDetails == null || $promptDetails == "" || $promptDetails == 0) {
+            throw new Exception("Prompt not found");
+        }
 
         //get data
         $title = $promptDetails['title'];
@@ -57,7 +60,7 @@ try {
             $authorName = $userDetails['username'];
         }
     } else {
-        throw new exception('No id provided');
+        throw new exception('No correct id provided');
     }
 
     //if on aprove page and approve button is clicked, approve prompt
