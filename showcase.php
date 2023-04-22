@@ -1,8 +1,8 @@
 <?php
 try {
     include_once("bootstrap.php");
-    if(isset($_SESSION["loggedin"])){
-        $user= new User();
+    if (isset($_SESSION["loggedin"])) {
+        $user = new User();
         $user->setId($_SESSION['id']['id']);
         $userDetails = $user->getUserDetails();
         $profilePicture = $userDetails['profile_picture_url'];

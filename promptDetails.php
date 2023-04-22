@@ -4,14 +4,12 @@ include_once("bootstrap.php");
 
 if (!isset($_SESSION['loggedin'])) {
     header("Location: login.php");
+} else {
 
-}else{
-    
-    $user= new User();
+    $user = new User();
     $user->setId($_SESSION['id']['id']);
     $userDetails = $user->getUserDetails();
     $profilePicture = $userDetails['profile_picture_url'];
-    
 }
 
 try {
@@ -129,11 +127,11 @@ try {
                             <div class="flex flex-1 gap-4 justify-end mr-5 md:mr-0">
                                 <p>Tags: </p>
                                 <p><?php echo htmlspecialchars($tag1); ?></p>
-                                <?php if(isset($tag2)): ?>
-                                <p><?php echo htmlspecialchars($tag2); ?></p>
+                                <?php if (isset($tag2)) : ?>
+                                    <p><?php echo htmlspecialchars($tag2); ?></p>
                                 <?php endif ?>
-                                <?php if(isset($tag3)): ?>
-                                <p><?php echo htmlspecialchars($tag3); ?></p>
+                                <?php if (isset($tag3)) : ?>
+                                    <p><?php echo htmlspecialchars($tag3); ?></p>
                                 <?php endif ?>
                             </div>
                         </div>
@@ -141,7 +139,7 @@ try {
                             <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                             <p><?php echo htmlspecialchars($description); ?></p>
                         </div>
-                        
+
                         <?php
                         if ($_SESSION["loggedin"]) {
                             // Als de gebruiker is ingelogd, verwijder de overlay-klasse

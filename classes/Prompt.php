@@ -39,7 +39,7 @@ class prompt
         try {
             $conn = Db::getInstance();
             $sql = "SELECT * FROM prompts WHERE 1=1";
-    
+
             switch ($filterApprove) {
                 case "all":
                     $sql .= " AND is_approved = 1";
@@ -48,7 +48,7 @@ class prompt
                     $sql .= " AND is_approved = 0";
                     break;
             }
-            
+
             switch ($filterModel) {
                 case "Midjourney":
                     $sql .= " AND model = 'Midjourney'";
@@ -57,7 +57,7 @@ class prompt
                     $sql .= " AND model = 'Dall-E'";
                     break;
             }
-    
+
             switch ($filterDate) {
                 case "new":
                     $sql .= " ORDER BY tstamp DESC";
@@ -66,7 +66,7 @@ class prompt
                     $sql .= " ORDER BY tstamp ASC";
                     break;
             }
-    
+
             switch ($filterPrice) {
                 case "high":
                     $sql .= " ORDER BY price DESC";
@@ -75,23 +75,23 @@ class prompt
                     $sql .= " ORDER BY price ASC";
                     break;
             }
-    
+
             if ($filterDate == "new" && $filterPrice == "low") {
                 // Select the newest prompts with the lowest price
                 $sql = "SELECT * FROM (" . $sql . ") AS new_prompts_low_price ORDER BY price ASC, tstamp DESC";
             } else if ($filterDate == "old" && $filterPrice == "high") {
                 // Select the oldest prompts with the highest price
                 $sql = "SELECT * FROM (" . $sql . ") AS old_prompts_high_price ORDER BY price DESC, tstamp ASC";
-            } else if($filterDate == "new" && $filterPrice == "high") {
+            } else if ($filterDate == "new" && $filterPrice == "high") {
                 // Select the newest prompts with the highest price
                 $sql = "SELECT * FROM (" . $sql . ") AS new_prompts_high_price ORDER BY price DESC, tstamp DESC";
-            } else if($filterDate == "old" && $filterPrice == "low") {
+            } else if ($filterDate == "old" && $filterPrice == "low") {
                 // Select the oldest prompts with the lowest price
                 $sql = "SELECT * FROM (" . $sql . ") AS old_prompts_low_price ORDER BY price ASC, tstamp ASC";
             }
-    
+
             $sql .= " LIMIT $limit OFFSET $offset";
-    
+
             $statement = $conn->prepare($sql);
             $statement->execute();
             $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -101,7 +101,7 @@ class prompt
             return [];
         }
     }
-    
+
 
 
     public static function getAll($filterApprove, $filterDate, $filterPrice, $filterModel)
@@ -118,7 +118,7 @@ class prompt
                     $sql .= " AND is_approved = 0";
                     break;
             }
-            
+
             switch ($filterModel) {
                 case "Midjourney":
                     $sql .= " AND model = 'Midjourney'";
@@ -127,7 +127,7 @@ class prompt
                     $sql .= " AND model = 'Dall-E'";
                     break;
             }
-    
+
             switch ($filterDate) {
                 case "new":
                     $sql .= " ORDER BY tstamp DESC";
@@ -136,7 +136,7 @@ class prompt
                     $sql .= " ORDER BY tstamp ASC";
                     break;
             }
-    
+
             switch ($filterPrice) {
                 case "high":
                     $sql .= " ORDER BY price DESC";
@@ -145,17 +145,17 @@ class prompt
                     $sql .= " ORDER BY price ASC";
                     break;
             }
-    
+
             if ($filterDate == "new" && $filterPrice == "low") {
                 // Select the newest prompts with the lowest price
                 $sql = "SELECT * FROM (" . $sql . ") AS new_prompts_low_price ORDER BY price ASC, tstamp DESC";
             } else if ($filterDate == "old" && $filterPrice == "high") {
                 // Select the oldest prompts with the highest price
                 $sql = "SELECT * FROM (" . $sql . ") AS old_prompts_high_price ORDER BY price DESC, tstamp ASC";
-            } else if($filterDate == "new" && $filterPrice == "high") {
+            } else if ($filterDate == "new" && $filterPrice == "high") {
                 // Select the newest prompts with the highest price
                 $sql = "SELECT * FROM (" . $sql . ") AS new_prompts_high_price ORDER BY price DESC, tstamp DESC";
-            } else if($filterDate == "old" && $filterPrice == "low") {
+            } else if ($filterDate == "old" && $filterPrice == "low") {
                 // Select the oldest prompts with the lowest price
                 $sql = "SELECT * FROM (" . $sql . ") AS old_prompts_low_price ORDER BY price ASC, tstamp ASC";
             }
@@ -207,55 +207,55 @@ class prompt
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    
-    public function savePrompt(){
+
+    public function savePrompt()
+    {
         //insert data into database
 
-        
+
         $conn = Db::getInstance();
-       
-            // Insert tags into tags table
-            
-            $tags= $this->tags;
-            $tagIds = array();
-            $conn = Db::getInstance();
-            foreach ($tags as $tag) {
-                $statement = $conn->prepare("INSERT INTO tags (name) VALUES (:name)");
-                $statement->bindValue(":name", $tag);
-                $statement->execute();
-                $tagIds[] = $conn->lastInsertId();
-            }
-        
-            $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2)");
-            $statement->bindValue(":title", $this->title);
-            $statement->bindValue(":description", $this->description);
-            $statement->bindValue(":price", $this->price);
-            $statement->bindValue(":model", $this->model);
-            $statement->bindValue(":tstamp", date('Y-m-d'));
-            $statement->bindValue(":user_id", $this->user_id);            
-            $statement->bindValue(":cover_url", $this->mainImage);
-            $statement->bindValue(":image_url2", $this->overviewImage);
-    
-             
 
+        // Insert tags into tags table
+
+        $tags = $this->tags;
+        $tagIds = array();
+        $conn = Db::getInstance();
+        foreach ($tags as $tag) {
+            $statement = $conn->prepare("INSERT INTO tags (name) VALUES (:name)");
+            $statement->bindValue(":name", $tag);
             $statement->execute();
+            $tagIds[] = $conn->lastInsertId();
+        }
 
-            // Get ID of the prompt that was just inserted
-            $promptId = $conn->lastInsertId();
+        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2)");
+        $statement->bindValue(":title", $this->title);
+        $statement->bindValue(":description", $this->description);
+        $statement->bindValue(":price", $this->price);
+        $statement->bindValue(":model", $this->model);
+        $statement->bindValue(":tstamp", date('Y-m-d'));
+        $statement->bindValue(":user_id", $this->user_id);
+        $statement->bindValue(":cover_url", $this->mainImage);
+        $statement->bindValue(":image_url2", $this->overviewImage);
 
-            // Insert prompt ID and tag ID pairs into prompt_tags table for each tag
-            
-            foreach ($tagIds as $tagId) {
-                $statement = $conn->prepare("INSERT INTO prompt_tags (prompt_id, tag_id) VALUES (:prompt_id, :tag_id)");
-                $statement->bindValue(":prompt_id", $promptId);
-                $statement->bindValue(":tag_id", $tagId);
-                $statement->execute();
-            }
-            
+
+
+        $statement->execute();
+
+        // Get ID of the prompt that was just inserted
+        $promptId = $conn->lastInsertId();
+
+        // Insert prompt ID and tag ID pairs into prompt_tags table for each tag
+
+        foreach ($tagIds as $tagId) {
+            $statement = $conn->prepare("INSERT INTO prompt_tags (prompt_id, tag_id) VALUES (:prompt_id, :tag_id)");
+            $statement->bindValue(":prompt_id", $promptId);
+            $statement->bindValue(":tag_id", $tagId);
+            $statement->execute();
+        }
     }
     /**
      * Get the value of title
-     */ 
+     */
     public function getTitle()
     {
         return $this->title;
@@ -265,21 +265,20 @@ class prompt
      * Set the value of title
      *
      * @return  self
-     */ 
+     */
     public function setTitle($title)
     {
-        if(!empty($title)){
+        if (!empty($title)) {
             $this->title = $title;
             return $this;
-        }else{
+        } else {
             throw new Exception("Title cannot be empty");
         }
-        
     }
 
     /**
      * Get the value of description
-     */ 
+     */
     public function getDescription()
     {
         return $this->description;
@@ -289,21 +288,20 @@ class prompt
      * Set the value of description
      *
      * @return  self
-     */ 
+     */
     public function setDescription($description)
     {
-        if(!empty($description)){
+        if (!empty($description)) {
             $this->description = $description;
             return $this;
-        }else{
+        } else {
             throw new Exception("Description cannot be empty");
         }
-       
     }
 
     /**
      * Get the value of price
-     */ 
+     */
     public function getPrice()
     {
         return $this->price;
@@ -313,21 +311,20 @@ class prompt
      * Set the value of price
      *
      * @return  self
-     */ 
+     */
     public function setPrice($price)
     {
-        if(!empty($price) && is_numeric($price)){
+        if (!empty($price) && is_numeric($price)) {
             $this->price = $price;
             return $this;
-        }else{
+        } else {
             throw new Exception("Price must be a number");
         }
-        
     }
 
     /**
      * Get the value of model
-     */ 
+     */
     public function getModel()
     {
         return $this->model;
@@ -337,22 +334,22 @@ class prompt
      * Set the value of model
      *
      * @return  self
-     */ 
+     */
     public function setModel($model)
     {
-        if(!empty($model)){
+        if (!empty($model)) {
             $this->model = $model;
             return $this;
-        }else{
+        } else {
             throw new Exception("Model cannot be empty");
         }
     }
 
-    
+
 
     /**
      * Get the value of mainImage
-     */ 
+     */
     public function getMainImage()
     {
         return $this->mainImage;
@@ -362,7 +359,7 @@ class prompt
      * Set the value of mainImage
      *
      * @return  self
-     */ 
+     */
     public function setMainImage($imageFileType, $target_file)
     {
         if (!empty($_FILES["mainImage"]["name"])) {
@@ -415,7 +412,7 @@ class prompt
 
     /**
      * Get the value of overviewImage
-     */ 
+     */
     public function getOverviewImage()
     {
         return $this->overviewImage;
@@ -425,7 +422,7 @@ class prompt
      * Set the value of overviewImage
      *
      * @return  self
-     */ 
+     */
     public function setOverviewImage($imageFileType, $target_file_overview)
     {
         // Validate overview image file
@@ -460,7 +457,7 @@ class prompt
 
     /**
      * Get the value of user_id
-     */ 
+     */
     public function getUser_id()
     {
         return $this->user_id;
@@ -470,23 +467,22 @@ class prompt
      * Set the value of user_id
      *
      * @return  self
-     */ 
+     */
     public function setUser_id($user_id)
     {
-        if(!empty($user_id) && is_numeric($user_id)){
+        if (!empty($user_id) && is_numeric($user_id)) {
             $this->user_id = $user_id;
             return $this;
-        }else{
+        } else {
             throw new Exception("User id must be a number");
         }
-        
     }
 
-    
+
 
     /**
      * Get the value of tags
-     */ 
+     */
     public function getTags()
     {
         return $this->tags;
@@ -496,15 +492,16 @@ class prompt
      * Set the value of tags
      *
      * @return  self
-     */ 
+     */
     public function setTags($tags)
     {
-        if(!empty($tags)){
+        if (!empty($tags)) {
             $this->tags = $tags;
             return $this;
-        }else{
+        } else {
             throw new Exception("Tags cannot be empty");
-}
+        }
+    }
 
     public static function getNewPrompts()
     {

@@ -2,35 +2,27 @@
 include_once("bootstrap.php");
 
 if (!empty($_POST)) {
-  try {
-     //get the id and password from the form
-     $id = $_SESSION['id']['id'];
-     $password = $_POST['password'];
-     $newPassword = $_POST['newPassword'];
-     //create a new user object
-     $user = new User();
-     $user->setId($id);
-     $result=$user->canChangePassword($password);
-     
-    if($result){
-         $user->setPassword($newPassword);
-         $user->changePassword();
-         session_destroy();
-         header("Location: login.php");
-       
-     }else{
-        throw new Exception("Incorrect old password.");
-     }
-  } catch (Throwable $e) {
-    $error = $e->getMessage();
-  }
+    try {
+        //get the id and password from the form
+        $id = $_SESSION['id']['id'];
+        $password = $_POST['password'];
+        $newPassword = $_POST['newPassword'];
+        //create a new user object
+        $user = new User();
+        $user->setId($id);
+        $result = $user->canChangePassword($password);
 
-
-   
-
-   
-
-    
+        if ($result) {
+            $user->setPassword($newPassword);
+            $user->changePassword();
+            session_destroy();
+            header("Location: login.php");
+        } else {
+            throw new Exception("Incorrect old password.");
+        }
+    } catch (Throwable $e) {
+        $error = $e->getMessage();
+    }
 }
 ?>
 <!DOCTYPE html>

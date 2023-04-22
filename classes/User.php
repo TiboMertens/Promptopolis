@@ -384,7 +384,8 @@ class User
         $result = $statement->execute();
         return $result;
     }
-    public function updateUserDetails(){
+    public function updateUserDetails()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, profile_picture_url= :profile_picture_url WHERE id = :id");
         $statement->bindValue(":username", $this->username);
@@ -398,7 +399,7 @@ class User
 
     /**
      * Get the value of bio
-     */ 
+     */
     public function getBio()
     {
         return $this->bio;
@@ -408,7 +409,7 @@ class User
      * Set the value of bio
      *
      * @return  self
-     */ 
+     */
     public function setBio($bio)
     {
         $this->bio = $bio;
@@ -416,7 +417,8 @@ class User
         return $this;
     }
 
-    public function deleteAccount(){
+    public function deleteAccount()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("DELETE FROM users WHERE id = :id");
         $statement->bindValue(":id", $this->id);
@@ -428,26 +430,27 @@ class User
     private string $profile_picture_url;
 
     /**
-   * Get the value of profile_picture_url
-   */ 
-  public function getProfile_picture_url()
-  {
-    return $this->profile_picture_url;
-  }
+     * Get the value of profile_picture_url
+     */
+    public function getProfile_picture_url()
+    {
+        return $this->profile_picture_url;
+    }
 
-  /**
-   * Set the value of profile_picture_url
-   *
-   * @return  self
-   */ 
-  public function setProfile_picture_url($profile_picture_url)
-  {
-    $this->profile_picture_url = $profile_picture_url;
+    /**
+     * Set the value of profile_picture_url
+     *
+     * @return  self
+     */
+    public function setProfile_picture_url($profile_picture_url)
+    {
+        $this->profile_picture_url = $profile_picture_url;
 
-    return $this;
-  }
+        return $this;
+    }
 
-    public function canChangePassword($password){
+    public function canChangePassword($password)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");
         $statement->bindValue(":id", $this->id);
@@ -461,7 +464,8 @@ class User
             return false;
         }
     }
-    public function changePassword(){
+    public function changePassword()
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET password = :password WHERE id = :id");
         $statement->bindValue(":password", $this->password);

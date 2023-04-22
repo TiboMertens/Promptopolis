@@ -1,14 +1,12 @@
 <?php
 include_once("bootstrap.php");
 
-
 if (isset($_SESSION["loggedin"])) {
-
-    $user= new User();
+    $user = new User();
     $user->setId($_SESSION['id']['id']);
     $userDetails = $user->getUserDetails();
     $profilePicture = $userDetails['profile_picture_url'];
-    
+
     if (!empty($_FILES["mainImage"]["tmp_name"])) {
 
         $target_dir = "uploads/";
@@ -16,6 +14,7 @@ if (isset($_SESSION["loggedin"])) {
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
     }
+
     if (!empty($_FILES["overviewImage"]["tmp_name"])) {
         $target_dir = "uploads/";
         $target_file_overview = $target_dir . basename($_FILES["overviewImage"]["name"]);
@@ -26,7 +25,6 @@ if (isset($_SESSION["loggedin"])) {
     if (!empty($_POST["submit"])) {
         try {
             $prompt = new Prompt();
-
             $prompt->setUser_id($_SESSION["id"]["id"]);
 
             $exceptionCaught = false;
@@ -37,24 +35,28 @@ if (isset($_SESSION["loggedin"])) {
                 $titleError = $e->getMessage();
                 $exceptionCaught = true;
             }
+
             try {
                 $prompt->setDescription($_POST["description"]);
             } catch (Exception $e) {
                 $descriptionError = $e->getMessage();
                 $exceptionCaught = true;
             }
+
             try {
                 $prompt->setPrice($_POST["price"]);
             } catch (Exception $e) {
                 $priceError = $e->getMessage();
                 $exceptionCaught = true;
             }
+
             try {
                 $prompt->setModel($_POST["model"]);
             } catch (Exception $e) {
                 $modelError = $e->getMessage();
                 $exceptionCaught = true;
             }
+
             try {
                 if (!isset($imageFileType)) {
                     throw new exception("Please upload an image");
@@ -65,6 +67,7 @@ if (isset($_SESSION["loggedin"])) {
                 $mainImageError = $e->getMessage();
                 $exceptionCaught = true;
             }
+
             try {
                 if (!isset($imageFileType_overview)) {
                     throw new exception("Please upload an image");
@@ -104,9 +107,6 @@ if (isset($_SESSION["loggedin"])) {
 } else {
     header("Location: login.php");
 }
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,21 +134,21 @@ if (isset($_SESSION["loggedin"])) {
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="mb-4 ">
                     <label class="block font-bold mb-0.5 text-white" for="title">Title</label>
-                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]"style="height: 35px; font-size:1rem;"  type="text" name="title" id="title">
+                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="text" name="title" id="title">
                     <?php if (isset($titleError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $titleError; ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
                     <label class="block font-bold mb-0.5 text-white" for="description">Description</label>
-                    <textarea class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" name="description" id="description"  rows="4"></textarea>
+                    <textarea class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" name="description" id="description" rows="4"></textarea>
                     <?php if (isset($descriptionError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $descriptionError; ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
                     <label class="block font-bold mb-0.5 text-white" for="price">Price</label>
-                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]"style="height: 35px; font-size:1rem;" type="text" name="price" id="price">
+                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="text" name="price" id="price">
                     <?php if (isset($priceError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $priceError; ?></p>
                     <?php endif; ?>
@@ -167,24 +167,23 @@ if (isset($_SESSION["loggedin"])) {
                     <label class="block font-bold mb-0.5 text-white" for="tag1">tag 1</label>
                     <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" type="text" name="tag1" id="tag1">
                     <div id="tag-container"></div>
-                    <button class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded mt-3" name="tag" id="add-tag-btn" >Add Tag</button>
+                    <button class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded mt-3" name="tag" id="add-tag-btn">Add Tag</button>
                     <?php if (isset($tagsError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $tagsError; ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
                     <label class="block font-bold mb-0.5 text-white" for="mainImage">Main image</label>
-                    
-                        <div class="mb-8 mt-5 "><img class="w-[100px] h-[100px]" id="preview" src="https://placehold.co/100?text=example&font=roboto" alt="cover image"></div>
-                    
+
+                    <div class="mb-8 mt-5 "><img class="w-[100px] h-[100px]" id="preview" src="https://placehold.co/100?text=example&font=roboto" alt="cover image"></div>
+
                     <input class="block w-full text-white
                         file:py-2 file:px-3
                         file:rounded file:border-[3px]
                         file:bg-[#BB86FC] file:text-white
                         hover:file:bg-[#A25AFB]
                         file:border-[#A25AFB]
-                        file:active:border-[#A25AFB]"
-                        type="file" name="mainImage" id="mainImage" onchange="previewFile()">
+                        file:active:border-[#A25AFB]" type="file" name="mainImage" id="mainImage" onchange="previewFile()">
                     <?php if (isset($mainImageError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $mainImageError; ?></p>
                     <?php endif; ?>
@@ -198,8 +197,7 @@ if (isset($_SESSION["loggedin"])) {
                         file:bg-[#BB86FC] file:text-white
                         hover:file:bg-[#A25AFB]
                         file:border-[#A25AFB]
-                        file:active:border-[#A25AFB]" 
-                        type="file" name="overviewImage" id="overviewImage" onchange="previewFileOverview()">
+                        file:active:border-[#A25AFB]" type="file" name="overviewImage" id="overviewImage" onchange="previewFileOverview()">
                     <?php if (isset($overviewImageError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $overviewImageError; ?></p>
                     <?php endif; ?>
