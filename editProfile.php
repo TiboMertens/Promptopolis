@@ -40,7 +40,7 @@ if (isset($_SESSION['loggedin'])) {
                 
     
                 // Check file size, if file is larger than 1MB give error
-                if ($_FILES["fileToUpload"]["size"] > 1000000) {
+                if ($_FILES["fileToUpload"]["size"] < 1000000) {
                     
                     $uploadOk = 0;
                 }else{
