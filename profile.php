@@ -33,6 +33,7 @@ if (isset($_SESSION['loggedin'])) {
         $username = $userDetails['username'];
         //get bio from userdetails
         $bio = $userDetails['bio'];
+        $profilePicture = $userDetails['profile_picture_url'];
 
         //get user's prompts
         $prompts = Prompt::getPromptsByUser($id);
@@ -70,7 +71,7 @@ if (isset($_SESSION['loggedin'])) {
 
     <header class="md:mt-[50px]">
         <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
-            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="images/signup-image.jpg" alt="profile picture"></div>
+            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="<?php echo $profilePicture; ?>" alt="profile picture"></div>
             <div class="mr-5 ml-5 mb-10  ">
                 <div class="flex justify-center items-center md:mt-15 md:flex md:justify-start">
                     <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($username); ?></h1>

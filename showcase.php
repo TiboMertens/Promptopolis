@@ -1,6 +1,13 @@
 <?php
 try {
     include_once("bootstrap.php");
+    if(isset($_SESSION["loggedin"])){
+        $user= new User();
+        $user->setId($_SESSION['id']['id']);
+        $userDetails = $user->getUserDetails();
+        $profilePicture = $userDetails['profile_picture_url'];
+    }
+
     $filters = ['filterApprove', 'filterDate', 'filterPrice', 'filterModel'];
 
     // This loop iterates over an array of the four filter variables, and for each one,
