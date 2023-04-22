@@ -27,6 +27,8 @@ try {
         $description = $promptDetails['description'];
         $cover_url = $promptDetails['cover_url'];
         $image2 = $promptDetails['image_url2'];
+        $image3 = $promptDetails['image_url3'];
+        $image4 = $promptDetails['image_url4'];
         $tstamp = $promptDetails['tstamp'];
         $price = $promptDetails['price'];
         $tag1 = $promptDetails['tag_names'][0];
@@ -108,7 +110,7 @@ try {
     <?php else : ?>
         <main class="ml-auto mr-auto max-w-[500px] md:flex md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]">
             <div class="m-5 md:mt-[60px] lg:mt-5">
-                <div class=""><img src="<?php echo htmlspecialchars($cover_url); ?>" alt="prompt cover" class="rounded-md xl:w-[1100px]"></div>
+                <div class=""><img src="<?php echo htmlspecialchars($cover_url); ?>" alt="prompt cover" class="rounded-md max-h-[600px] xl:max-h-[500px] xl:w-[700px]"></div>
                 <div class="text-[#cccccc] text-[14px] lg:text-[16px]">
                     <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
                     <div class="relative">
@@ -139,43 +141,46 @@ try {
                             <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                             <p><?php echo htmlspecialchars($description); ?></p>
                         </div>
-
-                        <?php
-                        if (!$_SESSION["loggedin"]) {
-                            // Als de gebruiker is ingelogd, verwijder de overlay-klasse
-                            // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
-                            echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
-                        }
-                        ?>
-                        <?php if (isset($_SESSION["loggedin"])) : ?>
-                            <div class="flex mb-3 items-center">
-                                <?php if (isset($_GET['approve'])) : ?>
-                                    <form action="" method="post">
-                                        <button type=submit name=approve class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Approve prompt</a>
-                                    </form>
-                                <?php else : ?>
-                                    <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</a>
-                                    <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price) . "credit(s)"; ?></p>
-                                <?php endif ?>
-                            </div>
-                        <?php endif ?>
                     </div>
+                    <?php
+                    if (!$_SESSION["loggedin"]) {
+                        // Als de gebruiker is ingelogd, verwijder de overlay-klasse
+                        // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
+                        echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
+                    }
+                    ?>
+                    <?php if (isset($_SESSION["loggedin"])) : ?>
+                        <div class="flex mb-3 items-center">
+                            <?php if (isset($_GET['approve'])) : ?>
+                                <form action="" method="post">
+                                    <button type=submit name=approve class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Approve prompt</a>
+                                </form>
+                            <?php else : ?>
+                                <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</a>
+                                <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price) . "credit(s)"; ?></p>
+                            <?php endif ?>
+                        </div>
+                    <?php endif ?>
                 </div>
+            </div>
+            <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6">
+                <div class="relative">
+                    <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
+                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px]">
+                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px]">
+                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px]">
 
-                <div class="flex justify-center ml-3 md:mt-[60px] lg:mt-5 lg:items-center xl:items-start">
-                    <div class="relative">
-                        <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px]  md:h-[450px] md:w-[700px] ld:h-[550px] ">
-                        <?php
-                        if ($_SESSION["loggedin"]) {
-                            // Als de gebruiker is ingelogd, verwijder de overlay-klasse
-                            echo '<div class="absolute inset-0"></div>';
-                        } else {
-                            // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
-                            echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
-                        }
-                        ?>
-                    </div>
+                    <?php
+                    if ($_SESSION["loggedin"]) {
+                        // Als de gebruiker is ingelogd, verwijder de overlay-klasse
+                        echo '<div class="absolute inset-0"></div>';
+                    } else {
+                        // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
+                        echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
+                    }
+                    ?>
                 </div>
+            </div>
 
         </main>
     <?php endif ?>
