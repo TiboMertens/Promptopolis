@@ -221,7 +221,7 @@ class User
         }
     }
 
-    public function isModerator($id)
+    public static function isModerator($id)
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT is_admin FROM users WHERE id = :id");
@@ -425,10 +425,6 @@ class User
         return $result;
     }
 
-
-
-
-
     private string $profile_picture_url;
 
     /**
@@ -451,5 +447,27 @@ class User
     return $this;
   }
 
-  
+    public function canChangePassword($password){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        //check if filled in password is the same as the one in the database
+        if (password_verify($password, $result['password'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function changePassword(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET password = :password WHERE id = :id");
+        $statement->bindValue(":password", $this->password);
+        $statement->bindValue(":id", $this->id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

@@ -20,8 +20,12 @@ if (isset($_SESSION['loggedin'])) {
         }
 
         $user = new User();
-        $user->setId($id);
-        $userDetails = $user->getUserDetails();
+        if ($id != 0) {
+            $user->setId($id);
+            $userDetails = $user->getUserDetails();
+        } else {
+            throw new Exception("User not found");
+        }
         if ($userDetails === false) {
             throw new Exception("User not found");
         }
@@ -33,6 +37,7 @@ if (isset($_SESSION['loggedin'])) {
 
         //get user's prompts
         $prompts = Prompt::getPromptsByUser($id);
+        $amount = count($prompts);
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
@@ -84,13 +89,20 @@ if (isset($_SESSION['loggedin'])) {
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>
                 </div>
+                <!-- a button that redirects to the change password page -->
+                <div class="flex  items-center mt-[20px] mb-[4px] ">
+                    <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="changePassword.php">Change Password</a>
+
+                </div>
             </div>
-        </div>
     </header>
     <section class="mt-10">
         <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Prompts</h1>
-        <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
-            <div class=" flex flex-shrink-0 gap-5">
+        <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg <?php echo $amount <= 0 ? 'justify-center items-center' : '' ?>">
+            <div class="flex flex-shrink-0 gap-5">
+                <?php if ($amount <= 0) : ?>
+                        <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">User has no prompts</p>
+                <?php endif ?>
                 <?php foreach ($prompts as $prompt) : ?>
                     <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>&approve">
                         <img src="<?php echo $prompt['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
