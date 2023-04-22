@@ -272,13 +272,53 @@ class prompt
      *
      * @return  self
      */ 
-    public function setMainImage($mainImage)
+    public function setMainImage($imageFileType, $target_file)
     {
-        if(!empty($mainImage)){
-            $this->mainImage = $mainImage;
-            return $this;
-        }else{
-            throw new Exception("Main image cannot be empty");
+        if (!empty($_FILES["mainImage"]["name"])) {
+            try {
+                $check = getimagesize($_FILES["mainImage"]["tmp_name"]);
+                if ($check !== false) {
+
+                    $uploadOk = 1;
+                } else {
+                    throw new Exception("File is not an image.");
+                    $uploadOk = 0;
+                }
+                // Check file size, if file is larger than 1MB give error
+
+                if ($_FILES["mainImage"]["size"] < 1000000) {
+
+                    $uploadOk = 1;
+                } else {
+                    throw new Exception("File is too large.");
+                }
+
+                // Allow certain file formats
+                if (
+                    $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                    && $imageFileType != "gif"
+                ) {
+                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                    $uploadOk = 0;
+                }
+
+                // Check if $uploadOk is set to 0 by an error
+                if ($uploadOk == 0) {
+                    throw new Exception("Sorry, your file was not uploaded.");
+                    // if everything is ok, try to upload file
+                } else {
+                    if (move_uploaded_file($_FILES["mainImage"]["tmp_name"], $target_file)) {
+
+                        //var_dump the file that was uploaded
+                        $this->mainImage = $target_file;
+                        // $user->setProfile_picture_url($target_file);
+                    } else {
+                        throw new Exception("Sorry, there was an error uploading your file.");
+                    }
+                }
+            } catch (Exception $e) {
+                $mainImageError = $e->getMessage();
+            }
         }
     }
 
@@ -295,13 +335,35 @@ class prompt
      *
      * @return  self
      */ 
-    public function setOverviewImage($overviewImage)
+    public function setOverviewImage($imageFileType, $target_file_overview)
     {
-        if(!empty($overviewImage)){
-            $this->overviewImage = $overviewImage;
-            return $this;
-        }else{
-            throw new Exception("Overview image cannot be empty");
+        // Validate overview image file
+        if (!empty($_FILES["overviewImage"]["name"])) {
+            try {
+                $check = getimagesize($_FILES["overviewImage"]["tmp_name"]);
+                if ($check === false) {
+                    throw new Exception("File is not an image.");
+                }
+
+                if ($_FILES["overviewImage"]["size"] > 1000000) {
+                    throw new Exception("File is too large.");
+                }
+
+                if (
+                    $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                    && $imageFileType != "gif"
+                ) {
+                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                }
+
+                if (move_uploaded_file($_FILES["overviewImage"]["tmp_name"], $target_file_overview)) {
+                    $this->overviewImage = $target_file_overview;
+                } else {
+                    throw new Exception("Sorry, there was an error uploading your file.");
+                }
+            } catch (Exception $e) {
+                $overviewImageError = $e->getMessage();
+            }
         }
     }
 
