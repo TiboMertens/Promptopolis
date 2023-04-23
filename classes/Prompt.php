@@ -212,23 +212,29 @@ class prompt
 
     public function savePrompt()
     {
-        //insert data into database
-
-
         $conn = Db::getInstance();
-
-        // Insert tags into tags table
-
+    
+        // Insert or retrieve tag IDs for each tag
         $tags = $this->tags;
         $tagIds = array();
-        $conn = Db::getInstance();
         foreach ($tags as $tag) {
-            $statement = $conn->prepare("INSERT INTO tags (name) VALUES (:name)");
+            $statement = $conn->prepare("SELECT id FROM tags WHERE name = :name");
             $statement->bindValue(":name", $tag);
             $statement->execute();
-            $tagIds[] = $conn->lastInsertId();
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                // Tag already exists, use its ID
+                $tagIds[] = $row['id'];
+            } else {
+                // Tag doesn't exist, insert it and get its new ID
+                $statement = $conn->prepare("INSERT INTO tags (name) VALUES (:name)");
+                $statement->bindValue(":name", $tag);
+                $statement->execute();
+                $tagIds[] = $conn->lastInsertId();
+            }
         }
-
+    
+        // Insert prompt into prompts table
         $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2, image_url3, image_url4) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4)");
         $statement->bindValue(":title", $this->title);
         $statement->bindValue(":description", $this->description);
@@ -241,12 +247,11 @@ class prompt
         $statement->bindValue(":image_url3", $this->image3);
         $statement->bindValue(":image_url4", $this->image4);
         $statement->execute();
-
+    
         // Get ID of the prompt that was just inserted
         $promptId = $conn->lastInsertId();
-
+    
         // Insert prompt ID and tag ID pairs into prompt_tags table for each tag
-
         foreach ($tagIds as $tagId) {
             $statement = $conn->prepare("INSERT INTO prompt_tags (prompt_id, tag_id) VALUES (:prompt_id, :tag_id)");
             $statement->bindValue(":prompt_id", $promptId);
@@ -254,6 +259,7 @@ class prompt
             $statement->execute();
         }
     }
+    
     /**
      * Get the value of title
      */
