@@ -49,6 +49,9 @@ try {
         if (isset($_SESSION["loggedin"])) {
             //check if user is a moderator
             $isModerator = $user->isModerator($_SESSION['id']['id']);
+            if ($promptDetails['is_approved'] == 0 && !$isModerator) {
+                header("Location: index.php");
+            }
         }
 
         //get author name
