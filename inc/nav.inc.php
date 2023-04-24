@@ -1,4 +1,4 @@
-<nav class="bg-[#121212] ">
+<nav class="fixed top-0 left-0 z-50 w-full bg-[#121212]">
     <div class="grid grid-cols-3 md:flex pt-3">
         <div class="pt-3 pb-2.5 ml-5 w-20">
             <a href="index.php"><img src="images/newLogo.svg" alt="logo" class="w-50 h-7"></a>
