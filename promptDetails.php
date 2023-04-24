@@ -2,11 +2,9 @@
 include_once("bootstrap.php");
 //DO NOT FORGET XSS PROTECTION
 
-if (!isset($_SESSION['loggedin'])) {
-    header("Location: login.php");
-} else {
+$user = new User();
 
-    $user = new User();
+if (isset($_SESSION['loggedin'])) {
     $user->setId($_SESSION['id']['id']);
     $userDetails = $user->getUserDetails();
     $profilePicture = $userDetails['profile_picture_url'];
