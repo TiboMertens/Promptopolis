@@ -113,7 +113,7 @@ try {
         </div>
     <?php else : ?>
         <main class="ml-auto mr-auto max-w-[500px] md:flex md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]">
-            <div class="m-5 md:mt-[60px] lg:mt-5">
+            <div class="m-5 md:mt-[60px] lg:mt-5 pt-[70px]">
                 <div class=""><img src="<?php echo htmlspecialchars($cover_url); ?>" alt="prompt cover" class="rounded-md max-h-[600px] xl:max-h-[500px] xl:w-[700px]"></div>
                 <div class="text-[#cccccc] text-[14px] lg:text-[16px]">
                     <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
@@ -169,7 +169,7 @@ try {
                     <?php endif ?>
                 </div>
             </div>
-            <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6">
+            <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
                 <div class="relative">
                     <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
                     <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px]">
