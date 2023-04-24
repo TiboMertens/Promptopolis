@@ -147,7 +147,7 @@ try {
                         </div>
                     </div>
                     <?php
-                    if (!$_SESSION["loggedin"]) {
+                    if (isset($_SESSION["loggedin"])) {
                         // Als de gebruiker is ingelogd, verwijder de overlay-klasse
                         // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
                         echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
@@ -175,7 +175,7 @@ try {
                     <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px]">
 
                     <?php
-                    if ($_SESSION["loggedin"]) {
+                    if (isset($_SESSION["loggedin"])) {
                         // Als de gebruiker is ingelogd, verwijder de overlay-klasse
                         echo '<div class="absolute inset-0"></div>';
                     } else {
