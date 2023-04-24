@@ -105,7 +105,7 @@ if (isset($_SESSION['loggedin'])) {
                     <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">User has no prompts</p>
                 <?php endif ?>
                 <?php foreach ($prompts as $prompt) : ?>
-                    <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>&approve">
+                    <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>">
                         <img src="<?php echo $prompt['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                         <h2 class="text-white font-bold text-[18px] mt-2"><?php echo $prompt['title'] ?></h2>
                     </a>
