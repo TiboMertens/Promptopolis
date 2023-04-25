@@ -35,14 +35,8 @@ if (!empty($_POST)) {
 
         //$user->signup ---> daarin functie save & mail aanroepen.
         // save the user to the database
-        $user->save();
-
-        //send email
-        $mail = $user->sendVerifyEmail($key);
-        if ($mail) {
-            //redirect to index.php with success message
-            header("Location:index.php?success=" . urlencode("Activation Email Sent!"));
-        }
+        $user->signup($key);
+            
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }

@@ -476,4 +476,10 @@ class User
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function signup($key){
+        $this->save();
+        $this->sendVerifyEmail($key);
+        header("Location:index.php");
+    }
 }
