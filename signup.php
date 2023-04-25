@@ -32,6 +32,8 @@ if (!empty($_POST)) {
         // generate a random token  (32 characters)
         $user->setVerifyToken(bin2hex(openssl_random_pseudo_bytes(32)));
 
+
+        //$user->signup ---> daarin functie save & mail aanroepen.
         // save the user to the database
         $user->save();
 

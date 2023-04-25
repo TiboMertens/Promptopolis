@@ -40,6 +40,10 @@ class prompt
     public static function filter($filterApprove, $filterDate, $filterPrice, $filterModel, $limit, $offset)
     {
         try {
+            // getallowedmodels functie
+            // of get all of custom
+            // sql injectie voor deze filter
+
             $conn = Db::getInstance();
             $sql = "SELECT * FROM prompts WHERE 1=1";
 

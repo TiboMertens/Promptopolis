@@ -169,6 +169,8 @@ class User
         $statement->bindValue(":password", $this->password);
         $statement->bindValue(":token", $this->verifyToken);
         $result = $statement->execute();
+
+        
         return $result;
     }
 
