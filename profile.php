@@ -69,7 +69,7 @@ if (isset($_SESSION['loggedin'])) {
         </div>
     <?php endif ?>
 
-    <header class="md:mt-[50px]">
+    <header class="mt-[50px] md:mt-[100px]">
         <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
             <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="<?php echo $profilePicture; ?>" alt="profile picture"></div>
             <div class="mr-5 ml-5 mb-10  ">
@@ -91,7 +91,7 @@ if (isset($_SESSION['loggedin'])) {
                 </div>
                 <?php if ($id == $sessionid) : ?>
                     <!-- a button that redirects to the change password page -->
-                    <div class="flex  items-center mt-[20px] mb-[4px] ">
+                    <div class="flex justify-center md:justify-start items-center mt-[20px] mb-[4px]  ">
                         <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="changePassword.php">Change Password</a>
                     </div>
                 <?php endif ?>
