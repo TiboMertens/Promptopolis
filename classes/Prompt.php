@@ -2,7 +2,6 @@
 class prompt
 {
     private int $id;
-    //prompt properties
     protected string $title;
     protected string $description;
     protected string $price;
@@ -37,17 +36,69 @@ class prompt
         }
     }
 
+    public static function getAllowedModels($filterModel){
+        // if one of the models is not dall-e or midjourney, return all
+        $models = ['Midjourney', 'Dall-E'];
+        
+        if (!in_array($filterModel, $models)) {
+            return 'all';
+        } else {
+            return $filterModel;
+        }
+    }
+
+    public static function getAllowedDate($filterDate){
+        // if one of the models is not dall-e or midjourney, return all
+        $dates = ['new', 'old'];
+        
+        if (!in_array($filterDate, $dates)) {
+            return 'all';
+        } else {
+            return $filterDate;
+        }
+    }
+
+    public static function getAllowedStatus($filterApprove){
+        // if one of the models is not dall-e or midjourney, return all
+        $approved = ['not_approved'];
+        
+        if (!in_array($filterApprove, $approved)) {
+            return 'all';
+        } else {
+            return $filterApprove;
+        }
+    }
+
+    public static function getAllowedPrice($filterPrice){
+        // if one of the models is not dall-e or midjourney, return all
+        $prices = ['low', 'high'];
+        
+        if (!in_array($filterPrice, $prices)) {
+            return 'all';
+        } else {
+            return $filterPrice;
+        }
+    }
+
     public static function filter($filterApprove, $filterDate, $filterPrice, $filterModel, $limit, $offset)
     {
         try {
             // getallowedmodels functie
+            $model = self::getAllowedModels($filterModel);
+            $date = self::getAllowedDate($filterDate);
+            $approve = self::getAllowedStatus($filterApprove);
+            $price = self::getAllowedPrice($filterPrice);
             // of get all of custom
             // sql injectie voor deze filter
 
             $conn = Db::getInstance();
             $sql = "SELECT * FROM prompts WHERE 1=1";
 
-            switch ($filterApprove) {
+            if ($model != 'all') {
+                $sql .= " AND model = :model";
+            }
+
+            switch ($date) {
                 case "all":
                     $sql .= " AND is_approved = 1";
                     break;
@@ -56,16 +107,7 @@ class prompt
                     break;
             }
 
-            switch ($filterModel) {
-                case "Midjourney":
-                    $sql .= " AND model = 'Midjourney'";
-                    break;
-                case "Dall-E":
-                    $sql .= " AND model = 'Dall-E'";
-                    break;
-            }
-
-            switch ($filterDate) {
+            switch ($approve) {
                 case "new":
                     $sql .= " ORDER BY tstamp DESC";
                     break;
@@ -74,7 +116,7 @@ class prompt
                     break;
             }
 
-            switch ($filterPrice) {
+            switch ($price) {
                 case "high":
                     $sql .= " ORDER BY price DESC";
                     break;
@@ -100,6 +142,9 @@ class prompt
             $sql .= " LIMIT $limit OFFSET $offset";
 
             $statement = $conn->prepare($sql);
+            if ($model != 'all') {
+                $statement->bindValue(":model", $model);
+            }
             $statement->execute();
             $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
             return $prompts;
@@ -114,10 +159,22 @@ class prompt
     public static function getAll($filterApprove, $filterDate, $filterPrice, $filterModel)
     {
         try {
+            // getallowedmodels functie
+            $model = self::getAllowedModels($filterModel);
+            $date = self::getAllowedDate($filterDate);
+            $approve = self::getAllowedStatus($filterApprove);
+            $price = self::getAllowedPrice($filterPrice);
+            // of get all of custom
+            // sql injectie voor deze filter
+
             $conn = Db::getInstance();
             $sql = "SELECT * FROM prompts WHERE 1=1";
 
-            switch ($filterApprove) {
+            if ($model != 'all') {
+                $sql .= " AND model = :model";
+            }
+
+            switch ($date) {
                 case "all":
                     $sql .= " AND is_approved = 1";
                     break;
@@ -126,16 +183,7 @@ class prompt
                     break;
             }
 
-            switch ($filterModel) {
-                case "Midjourney":
-                    $sql .= " AND model = 'Midjourney'";
-                    break;
-                case "Dall-E":
-                    $sql .= " AND model = 'Dall-E'";
-                    break;
-            }
-
-            switch ($filterDate) {
+            switch ($approve) {
                 case "new":
                     $sql .= " ORDER BY tstamp DESC";
                     break;
@@ -144,7 +192,7 @@ class prompt
                     break;
             }
 
-            switch ($filterPrice) {
+            switch ($price) {
                 case "high":
                     $sql .= " ORDER BY price DESC";
                     break;
@@ -168,6 +216,9 @@ class prompt
             }
 
             $statement = $conn->prepare($sql);
+            if ($model != 'all') {
+                $statement->bindValue(":model", $model);
+            }
             $statement->execute();
             $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
             return $prompts;
