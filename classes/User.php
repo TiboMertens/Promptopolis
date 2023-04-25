@@ -1,4 +1,7 @@
 <?php
+
+require_once("traits\mail.php");
+
 class User
 {
     protected int $id;
@@ -8,6 +11,9 @@ class User
     protected string $verifyToken;
     protected string $resetToken;
     protected string $bio;
+
+    //traits    
+    use EmailVerificationTrait;
 
     /**
      * Get the value of id
@@ -479,7 +485,7 @@ class User
 
     public function signup($key){
         self::save();
-        self::sendVerifyEmail($key);
+        $this->sendVerifyEmail($key);
         header("Location:index.php");
     }
 }
