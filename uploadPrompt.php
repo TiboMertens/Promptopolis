@@ -213,7 +213,7 @@ if (isset($_SESSION["loggedin"])) {
                         <option value="Nature">Nature</option>
                         <option value="Logo">Logo</option>
                         <option value="Civilisation">Civilisation</option>
-                        <option value="Line art">Line art</option>
+                        <option value="Line_art">Line art</option>
                     </select>
                     <?php if (isset($modelError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $modelError; ?></p>
