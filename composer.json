@@ -1,0 +1,15 @@
+{
+    "name": "tibom/eindwerk",
+    "autoload": {
+        "psr-4": {
+            "Tibom\\Eindwerk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "TiboMertens",
+            "email": "tibomertens25@gmail.com"
+        }
+    ],
+    "require": {}
+}
