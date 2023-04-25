@@ -6,6 +6,9 @@ try {
         $user->setId($_SESSION['id']['id']);
         $userDetails = $user->getUserDetails();
         $profilePicture = $userDetails['profile_picture_url'];
+        if (User::isModerator($_SESSION['id']['id'])) {
+            $moderator = true;
+        }
     }
 
     $filters = ['filterApprove', 'filterDate', 'filterPrice', 'filterModel', 'filterCategory'];
@@ -73,7 +76,7 @@ try {
         <div class="ml-6 flex justify-start">
             <p class="text-white">Current filter:
                 <?php if (isset($_SESSION['loggedin'])) : ?>
-                    <?php if (User::isModerator($_SESSION['id']['id'])) : ?>
+                    <?php if (isset($moderator)) : ?>
                         <a id="approve" href="showcase.php?<?php echo "filterApprove=all" . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterApprove ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -85,7 +88,7 @@ try {
         <div class="flex justify-end">
             <form id="filter-form" method="get">
                 <?php if (isset($_SESSION['loggedin'])) : ?>
-                    <?php if (User::isModerator($_SESSION['id']['id'])) : ?>
+                    <?php if (isset($moderator)) : ?>
                         <label for="filterApprove" class="text-white relative bottom-[2px] ml-[10px]">Status: &nbsp;</label>
                         <select name="filterApprove" class="filter-select rounded-md">
                             <option value="all">All</option>
