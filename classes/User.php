@@ -478,8 +478,8 @@ class User
     }
 
     public function signup($key){
-        $this->save();
-        $this->sendVerifyEmail($key);
+        self::save();
+        self::sendVerifyEmail($key);
         header("Location:index.php");
     }
 }
