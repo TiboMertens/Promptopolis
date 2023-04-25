@@ -6,6 +6,7 @@ if (isset($_SESSION["loggedin"])) {
     $user->setId($_SESSION['id']['id']);
     $userDetails = $user->getUserDetails();
     $profilePicture = $userDetails['profile_picture_url'];
+    $isVerified = $userDetails['is_verified'];
 
     if (!empty($_FILES["mainImage"]["tmp_name"])) {
         $target_dir = "uploads/";
@@ -133,6 +134,11 @@ if (isset($_SESSION["loggedin"])) {
             }
 
             if (!$exceptionCaught) {
+                if ($isVerified == 1) {
+                    $prompt->setIs_approved(1);
+                } else {
+                    $prompt->setIs_approved(0);
+                }
                 $prompt->savePrompt();
                 header("Location: profile.php");
             }

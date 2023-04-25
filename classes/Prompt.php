@@ -13,6 +13,7 @@ class prompt
     protected string $image3;
     protected string $image4;
     protected int $user_id;
+    protected int $is_approved;
 
     /**
      * Get the value of id
@@ -235,7 +236,7 @@ class prompt
         }
     
         // Insert prompt into prompts table
-        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2, image_url3, image_url4) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4)");
+        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2, image_url3, image_url4, is_approved) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4, :is_approved)");
         $statement->bindValue(":title", $this->title);
         $statement->bindValue(":description", $this->description);
         $statement->bindValue(":price", $this->price);
@@ -246,6 +247,7 @@ class prompt
         $statement->bindValue(":image_url2", $this->overviewImage);
         $statement->bindValue(":image_url3", $this->image3);
         $statement->bindValue(":image_url4", $this->image4);
+        $statement->bindValue(":is_approved", $this->is_approved);
         $statement->execute();
     
         // Get ID of the prompt that was just inserted
@@ -612,5 +614,25 @@ class prompt
                 $overviewImageError = $e->getMessage();
             }
         }
+    }
+
+    /**
+     * Get the value of is_approved
+     */ 
+    public function getIs_approved()
+    {
+        return $this->is_approved;
+    }
+
+    /**
+     * Set the value of is_approved
+     *
+     * @return  self
+     */ 
+    public function setIs_approved($is_approved)
+    {
+        $this->is_approved = $is_approved;
+
+        return $this;
     }
 }
