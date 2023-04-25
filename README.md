@@ -15,22 +15,9 @@ MEDEDELINGEN
 
 **BRITT & QUINTT**
 
-TODO deadline 1:
----------------------
-**QUINTT**
-- profile design maken voor Britt
-
-**BRITT**
-- update profile
-- profile frontend doen adhv Quintt zijn figma design
-- logout
-
-TODO deadline 2:
+TODO deadline 3:
 ------------------
-**TIBO**
-- verified users should be able to post prompts without approval needed
-- better notifications for users on prompt approval instead of error message
-- frontend for prompt approval & list of prompts to approve
+**BRITT**
 
 DONE:
 ------------------
@@ -43,6 +30,21 @@ DONE:
 - verify user after 3 approved prompts
 - password reset
 - user should only be able to login when email is confirmed
+- update profile
+- profile frontend doen adhv Quintt zijn figma design
+- logout
+- filter
+- display prompts on user profile
+- blur effect
+- display new prompts
+- change password
+- verified users should be able to post prompts without approval needed
+
+GOOD CODING WORKSHOP JORIS:
+-----------------
+- vscode extensie: php cs fixer
+- composer --> autoload
+- namespaces
 
 RULES:
 -----------------
