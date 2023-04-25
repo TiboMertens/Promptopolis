@@ -6,6 +6,7 @@ class prompt
     protected string $description;
     protected string $price;
     protected string $model;
+    protected string $category;
     protected array $tags;
     protected string $mainImage;
     protected string $overviewImage;
@@ -291,11 +292,12 @@ class prompt
         }
     
         // Insert prompt into prompts table
-        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2, image_url3, image_url4, is_approved) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4, :is_approved)");
+        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, category, tstamp, user_id, cover_url, image_url2, image_url3, image_url4, is_approved) VALUES (:title, :description, :price, :model, :category, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4, :is_approved)");
         $statement->bindValue(":title", $this->title);
         $statement->bindValue(":description", $this->description);
         $statement->bindValue(":price", $this->price);
         $statement->bindValue(":model", $this->model);
+        $statement->bindValue(":category", $this->category);
         $statement->bindValue(":tstamp", date('Y-m-d'));
         $statement->bindValue(":user_id", $this->user_id);
         $statement->bindValue(":cover_url", $this->mainImage);
@@ -687,6 +689,26 @@ class prompt
     public function setIs_approved($is_approved)
     {
         $this->is_approved = $is_approved;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of category
+     */ 
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set the value of category
+     *
+     * @return  self
+     */ 
+    public function setCategory($category)
+    {
+        $this->category = $category;
 
         return $this;
     }
