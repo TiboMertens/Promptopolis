@@ -133,6 +133,8 @@ if (isset($_SESSION["loggedin"])) {
                 $exceptionCaught = true;
             }
 
+            $prompt->setCategory($_POST["category"]);
+
             if (!$exceptionCaught) {
                 if ($isVerified == 1) {
                     $prompt->setIs_approved(1);
@@ -199,6 +201,19 @@ if (isset($_SESSION["loggedin"])) {
                     <select class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" name="model" class="rounded-md">
                         <option value="Midjourney">Midjourney</option>
                         <option value="Dall-E">Dall-E</option>
+                    </select>
+                    <?php if (isset($modelError)) : ?>
+                        <p class="text-red-500 text-xs italic"><?php echo $modelError; ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="mb-4">
+                    <label class="block font-bold mb-0.5 text-white" for="model">Category</label>
+                    <select class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" name="category" class="rounded-md">
+                        <option value="None">None</option>
+                        <option value="Nature">Nature</option>
+                        <option value="Logo">Logo</option>
+                        <option value="Civilisation">Civilisation</option>
+                        <option value="Line_art">Line art</option>
                     </select>
                     <?php if (isset($modelError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo $modelError; ?></p>

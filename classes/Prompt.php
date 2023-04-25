@@ -6,6 +6,7 @@ class prompt
     protected string $description;
     protected string $price;
     protected string $model;
+    protected string $category;
     protected array $tags;
     protected string $mainImage;
     protected string $overviewImage;
@@ -80,7 +81,18 @@ class prompt
         }
     }
 
-    public static function filter($filterApprove, $filterDate, $filterPrice, $filterModel, $limit, $offset)
+    public static function getAllowedCategory($filterCategory){
+        // if one of the models is not dall-e or midjourney, return all
+        $categories = ["Nature", "Logo", "Civilisation", "Line_art"];
+        
+        if (!in_array($filterCategory, $categories)) {
+            return 'all';
+        } else {
+            return $filterCategory;
+        }
+    }
+
+    public static function filter($filterApprove, $filterDate, $filterPrice, $filterModel, $filterCategory, $limit, $offset)
     {
         try {
             // getallowedmodels functie
@@ -88,6 +100,7 @@ class prompt
             $date = self::getAllowedDate($filterDate);
             $approve = self::getAllowedStatus($filterApprove);
             $price = self::getAllowedPrice($filterPrice);
+            $category = self::getAllowedCategory($filterCategory);
             // of get all of custom
             // sql injectie voor deze filter
 
@@ -98,7 +111,11 @@ class prompt
                 $sql .= " AND model = :model";
             }
 
-            switch ($date) {
+            if ($category != 'all') {
+                $sql .= " AND category = :category";
+            }
+
+            switch ($approve) {
                 case "all":
                     $sql .= " AND is_approved = 1";
                     break;
@@ -107,7 +124,7 @@ class prompt
                     break;
             }
 
-            switch ($approve) {
+            switch ($date) {
                 case "new":
                     $sql .= " ORDER BY tstamp DESC";
                     break;
@@ -145,6 +162,9 @@ class prompt
             if ($model != 'all') {
                 $statement->bindValue(":model", $model);
             }
+            if ($category != 'all') {
+                $statement->bindValue(":category", $category);
+            }
             $statement->execute();
             $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
             return $prompts;
@@ -156,72 +176,80 @@ class prompt
 
 
 
-    public static function getAll($filterApprove, $filterDate, $filterPrice, $filterModel)
+    public static function getAll($filterApprove, $filterDate, $filterPrice, $filterModel, $filterCategory)
     {
         try {
-            // getallowedmodels functie
-            $model = self::getAllowedModels($filterModel);
-            $date = self::getAllowedDate($filterDate);
-            $approve = self::getAllowedStatus($filterApprove);
-            $price = self::getAllowedPrice($filterPrice);
-            // of get all of custom
-            // sql injectie voor deze filter
-
-            $conn = Db::getInstance();
-            $sql = "SELECT * FROM prompts WHERE 1=1";
-
-            if ($model != 'all') {
-                $sql .= " AND model = :model";
-            }
-
-            switch ($date) {
-                case "all":
-                    $sql .= " AND is_approved = 1";
-                    break;
-                case "not_approved":
-                    $sql .= " AND is_approved = 0";
-                    break;
-            }
-
-            switch ($approve) {
-                case "new":
-                    $sql .= " ORDER BY tstamp DESC";
-                    break;
-                case "old":
-                    $sql .= " ORDER BY tstamp ASC";
-                    break;
-            }
-
-            switch ($price) {
-                case "high":
-                    $sql .= " ORDER BY price DESC";
-                    break;
-                case "low":
-                    $sql .= " ORDER BY price ASC";
-                    break;
-            }
-
-            if ($filterDate == "new" && $filterPrice == "low") {
-                // Select the newest prompts with the lowest price
-                $sql = "SELECT * FROM (" . $sql . ") AS new_prompts_low_price ORDER BY price ASC, tstamp DESC";
-            } else if ($filterDate == "old" && $filterPrice == "high") {
-                // Select the oldest prompts with the highest price
-                $sql = "SELECT * FROM (" . $sql . ") AS old_prompts_high_price ORDER BY price DESC, tstamp ASC";
-            } else if ($filterDate == "new" && $filterPrice == "high") {
-                // Select the newest prompts with the highest price
-                $sql = "SELECT * FROM (" . $sql . ") AS new_prompts_high_price ORDER BY price DESC, tstamp DESC";
-            } else if ($filterDate == "old" && $filterPrice == "low") {
-                // Select the oldest prompts with the lowest price
-                $sql = "SELECT * FROM (" . $sql . ") AS old_prompts_low_price ORDER BY price ASC, tstamp ASC";
-            }
-
-            $statement = $conn->prepare($sql);
-            if ($model != 'all') {
-                $statement->bindValue(":model", $model);
-            }
-            $statement->execute();
-            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
-            return $prompts;
+             // getallowedmodels functie
+             $model = self::getAllowedModels($filterModel);
+             $date = self::getAllowedDate($filterDate);
+             $approve = self::getAllowedStatus($filterApprove);
+             $price = self::getAllowedPrice($filterPrice);
+             $category = self::getAllowedCategory($filterCategory);
+             // of get all of custom
+             // sql injectie voor deze filter
+ 
+             $conn = Db::getInstance();
+             $sql = "SELECT * FROM prompts WHERE 1=1";
+ 
+             if ($model != 'all') {
+                 $sql .= " AND model = :model";
+             }
+ 
+             if ($category != 'all') {
+                 $sql .= " AND category = :category";
+             }
+ 
+             switch ($approve) {
+                 case "all":
+                     $sql .= " AND is_approved = 1";
+                     break;
+                 case "not_approved":
+                     $sql .= " AND is_approved = 0";
+                     break;
+             }
+ 
+             switch ($date) {
+                 case "new":
+                     $sql .= " ORDER BY tstamp DESC";
+                     break;
+                 case "old":
+                     $sql .= " ORDER BY tstamp ASC";
+                     break;
+             }
+ 
+             switch ($price) {
+                 case "high":
+                     $sql .= " ORDER BY price DESC";
+                     break;
+                 case "low":
+                     $sql .= " ORDER BY price ASC";
+                     break;
+             }
+ 
+             if ($filterDate == "new" && $filterPrice == "low") {
+                 // Select the newest prompts with the lowest price
+                 $sql = "SELECT * FROM (" . $sql . ") AS new_prompts_low_price ORDER BY price ASC, tstamp DESC";
+             } else if ($filterDate == "old" && $filterPrice == "high") {
+                 // Select the oldest prompts with the highest price
+                 $sql = "SELECT * FROM (" . $sql . ") AS old_prompts_high_price ORDER BY price DESC, tstamp ASC";
+             } else if ($filterDate == "new" && $filterPrice == "high") {
+                 // Select the newest prompts with the highest price
+                 $sql = "SELECT * FROM (" . $sql . ") AS new_prompts_high_price ORDER BY price DESC, tstamp DESC";
+             } else if ($filterDate == "old" && $filterPrice == "low") {
+                 // Select the oldest prompts with the lowest price
+                 $sql = "SELECT * FROM (" . $sql . ") AS old_prompts_low_price ORDER BY price ASC, tstamp ASC";
+             }
+ 
+             $statement = $conn->prepare($sql);
+             if ($model != 'all') {
+                 $statement->bindValue(":model", $model);
+             }
+             if ($category != 'all') {
+                 $statement->bindValue(":category", $category);
+             }
+             $statement->execute();
+             $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+             return $prompts;
         } catch (PDOException $e) {
             error_log("PDO error: " . $e->getMessage());
             return [];
@@ -291,11 +319,12 @@ class prompt
         }
     
         // Insert prompt into prompts table
-        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, tstamp, user_id, cover_url, image_url2, image_url3, image_url4, is_approved) VALUES (:title, :description, :price, :model, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4, :is_approved)");
+        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, category, tstamp, user_id, cover_url, image_url2, image_url3, image_url4, is_approved) VALUES (:title, :description, :price, :model, :category, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4, :is_approved)");
         $statement->bindValue(":title", $this->title);
         $statement->bindValue(":description", $this->description);
         $statement->bindValue(":price", $this->price);
         $statement->bindValue(":model", $this->model);
+        $statement->bindValue(":category", $this->category);
         $statement->bindValue(":tstamp", date('Y-m-d'));
         $statement->bindValue(":user_id", $this->user_id);
         $statement->bindValue(":cover_url", $this->mainImage);
@@ -687,6 +716,26 @@ class prompt
     public function setIs_approved($is_approved)
     {
         $this->is_approved = $is_approved;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of category
+     */ 
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set the value of category
+     *
+     * @return  self
+     */ 
+    public function setCategory($category)
+    {
+        $this->category = $category;
 
         return $this;
     }

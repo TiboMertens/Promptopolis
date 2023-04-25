@@ -8,7 +8,7 @@ try {
         $profilePicture = $userDetails['profile_picture_url'];
     }
 
-    $filters = ['filterApprove', 'filterDate', 'filterPrice', 'filterModel'];
+    $filters = ['filterApprove', 'filterDate', 'filterPrice', 'filterModel', 'filterCategory'];
 
     // This loop iterates over an array of the four filter variables, and for each one,
     // it checks if the corresponding $_GET parameter is set. If it is, it sets the variable with a dynamic variable variable
@@ -26,27 +26,15 @@ try {
         $filterApprove = 'all';
     }
 
-    if ($filterDate != 'all' && $filterDate != 'new' && $filterDate != 'old') {
-        $filterDate = 'all';
-    }
-
-    if ($filterPrice != 'all' && $filterPrice != 'low' && $filterPrice != 'high') {
-        $filterPrice = 'all';
-    }
-
-    if ($filterModel != 'all' && $filterModel != 'Midjourney' && $filterModel != 'Dall-E') {
-        $filterModel = 'all';
-    }
-
     $limit = 15; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
 
     // get the prompts with the selected filter, limited to the current page
-    $prompts = Prompt::filter($filterApprove,  $filterDate, $filterPrice, $filterModel, $limit, $offset);
+    $prompts = Prompt::filter($filterApprove,  $filterDate, $filterPrice, $filterModel, $filterCategory, $limit, $offset);
 
     // count the total number of prompts with the selected filter
-    $totalPrompts = count(Prompt::getAll($filterApprove, $filterDate, $filterPrice, $filterModel));
+    $totalPrompts = count(Prompt::getAll($filterApprove, $filterDate, $filterPrice, $filterModel, $filterCategory));
 
     $amount = count($prompts);
 
@@ -123,6 +111,14 @@ try {
                     <option value="Midjourney">Midjourney</option>
                     <option value="Dall-E">Dall-E</option>
                 </select>
+                <label class="text-white relative bottom-[2px] ml-[10px]" for="filterCategory">Category</label>
+                    <select class="filter-select rounded-md" name="filterCategory" class="rounded-md">
+                        <option value="None">None</option>
+                        <option value="Nature">Nature</option>
+                        <option value="Logo">Logo</option>
+                        <option value="Civilisation">Civilisation</option>
+                        <option value="Line_art">Line art</option>
+                    </select>
             </form>
         </div>
     </section>
