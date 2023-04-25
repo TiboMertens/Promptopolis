@@ -40,6 +40,7 @@ try {
             $tag3 = $promptDetails['tag_names'][2];
         }
         $model = $promptDetails['model'];
+        $isApproved = $promptDetails['is_approved'];
 
         //get author id
         $authorID = $promptDetails['user_id'];
@@ -65,7 +66,7 @@ try {
     }
 
     //if on aprove page and approve button is clicked, approve prompt
-    if (isset($_GET['approve'])) {
+    if ($isApproved == 0) {
         //if user is not a moderator, redirect to index
         if (!$isModerator) {
             header("Location: index.php");
@@ -157,7 +158,7 @@ try {
                     ?>
                     <?php if (isset($_SESSION["loggedin"])) : ?>
                         <div class="flex mb-3 items-center">
-                            <?php if (isset($_GET['approve'])) : ?>
+                            <?php if ($isApproved == 0) : ?>
                                 <form action="" method="post">
                                     <button type=submit name=approve class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Approve prompt</a>
                                 </form>

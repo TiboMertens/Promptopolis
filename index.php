@@ -57,7 +57,7 @@ if (isset($_SESSION['loggedin'])) {
                     <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
                         <div class=" flex flex-shrink-0 gap-5">
                             <?php foreach ($promptsToApprove as $promptToApprove) : ?>
-                                <a href="promptDetails.php?id=<?php echo $promptToApprove['id'] ?>&approve">
+                                <a href="promptDetails.php?id=<?php echo $promptToApprove['id'] ?>">
                                     <img  src="<?php echo $promptToApprove['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                                     <h2 class="text-white font-bold text-[18px] mt-2"><?php echo $promptToApprove['title'] ?></h2>
                                 </a>

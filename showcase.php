@@ -38,12 +38,6 @@ try {
         $filterModel = 'all';
     }
 
-    if ($filterApprove == 'not_approved') {
-        $approve = "&approve";
-    } else {
-        $approve = "";
-    }
-
     $limit = 15; // number of prompts to display per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // current page number
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
@@ -84,7 +78,7 @@ try {
         </div>
     <?php endif; ?>
 
-    <div class="flex justify-center py-5 lg:py-15">
+    <div class="flex justify-center pb-5 pt-[70px] lg:py-15">
         <h1 class="text-white text-[24px] font-extrabold lg:text-[36px]">Prompt showcase</h1>
     </div>
     <section class="flex justify-between mr-6">
@@ -138,7 +132,7 @@ try {
                 <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">No prompts found</p>
             <?php endif ?>
             <?php foreach ($prompts as $prompt) : ?>
-                <a href="promptDetails.php?id=<?php echo $prompt['id'] . $approve ?>">
+                <a href="promptDetails.php?id=<?php echo $prompt['id']?>">
                     <img src="<?php echo $prompt['cover_url'] ?>" alt="Prompt" class="w-[170px] h-[100px] sm:w-[220px] sm:h-[120px] lg:w-[270px] lg:h-[150px] object-cover object-center rounded-lg">
                     <h2 class="text-white font-bold text-[14px] sm:text-[18px] mt-2"><?php echo $prompt['title'] ?></h2>
                 </a>
