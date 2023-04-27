@@ -458,4 +458,31 @@ class User
         // $this->sendVerifyEmail($key);
         header("Location:index.php");
     }
+
+    public function getVotes($id){
+        $conn = Db::getInstance();
+        //get all the rows where the user has been voted for
+        $statement = $conn->prepare("SELECT * FROM user_vote WHERE voted_for = :user_id");
+        $statement->bindValue(":user_id", $id);
+        $statement->execute();
+        //count the amount of rows and return it
+        $count = $statement->rowCount();
+        return $count;
+    }
+
+    public function checkAdmin($id){
+        $conn = Db::getInstance();
+        //get all the rows where the user has been voted for
+        $statement = $conn->prepare("SELECT * FROM user_vote WHERE voted_for = :user_id");
+        $statement->bindValue(":user_id", $id);
+        $statement->execute();
+        //count the amount of rows and return it
+        $count = $statement->rowCount();
+        //if the user has been voted for 2 times, he becomes an admin
+        if($count == 2){
+            $statement = $conn->prepare("UPDATE users SET is_admin = 1 WHERE id = :id");
+            $statement->bindValue(":id", $id);
+            $statement->execute();
+        }
+    }
 }

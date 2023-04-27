@@ -30,6 +30,26 @@ if (isset($_SESSION['loggedin'])) {
         if ($userDetails === false) {
             throw new Exception("User not found");
         }
+
+        //check if logged in user is_admin
+        if ($ownUserDetails['is_admin'] === 1) {
+            $ownIsAdmin = true;
+            $moderator = new \Promptopolis\Framework\Moderator();
+            //check if the user is_admin
+            if ($userDetails['is_admin'] === 1) {
+                $isAdmin = true;
+            } else {
+                $isAdmin = false;
+                $votes = $user->getVotes($id);
+
+                if (!empty($_POST['voted'])) {
+                    $moderator->updateVotes($id);
+                    $user->checkAdmin($id);
+                }
+            }
+        } else {
+            $ownIsAdmin = false;
+        }
         //get username form userdetails
         $username = $userDetails['username'];
         //get bio from userdetails
@@ -86,6 +106,10 @@ if (isset($_SESSION['loggedin'])) {
                             <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-[#BB86FC]"></i>
                             <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="editProfile.php">Edit</a>
                         </div>
+                    <?php elseif ($isAdmin == false && $ownIsAdmin) : ?>
+                        <form method="post" class="flex justify-center items-center mb-[4px] ml-4">
+                            <input type="submit" value="Vote for moderator &nbsp; Votes: <?php echo $votes  ?>/2" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center">
+                        </form>
                     <?php endif ?>
                 </div>
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
