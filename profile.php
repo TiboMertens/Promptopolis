@@ -38,6 +38,12 @@ if (isset($_SESSION['loggedin'])) {
             //check if the user is_admin
             if ($userDetails['is_admin'] === 1) {
                 $isAdmin = true;
+                $votes = $user->getVotes($id);
+
+                if (!empty($_POST['voted'])) {
+                    $moderator->updateVotes($id);
+                    $moderator->checkToRemoveAdmin($id);
+                }
             } else {
                 $isAdmin = false;
                 $votes = $user->getVotes($id);
@@ -109,6 +115,10 @@ if (isset($_SESSION['loggedin'])) {
                     <?php elseif ($isAdmin == false && $ownIsAdmin) : ?>
                         <form method="post" class="flex justify-center items-center mb-[4px] ml-4">
                             <input type="submit" value="Vote for moderator &nbsp; Votes: <?php echo $votes  ?>/2" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center">
+                        </form>
+                    <?php elseif ($isAdmin && $ownIsAdmin): ?>
+                        <form method="post" class="flex justify-center items-center mb-[4px] ml-4">
+                            <input type="submit" value="Vote to remove moderator &nbsp; Votes: <?php echo $votes  ?>/2" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center">
                         </form>
                     <?php endif ?>
                 </div>

@@ -483,6 +483,10 @@ class User
             $statement = $conn->prepare("UPDATE users SET is_admin = 1 WHERE id = :id");
             $statement->bindValue(":id", $id);
             $statement->execute();
+            //remove the votes for this user
+            $statement = $conn->prepare("DELETE FROM user_vote WHERE voted_for = :user_id");
+            $statement->bindValue(":user_id", $id);
+            $statement->execute();
         }
     }
 }

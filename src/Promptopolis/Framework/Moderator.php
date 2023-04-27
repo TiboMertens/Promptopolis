@@ -27,4 +27,22 @@ class Moderator extends User
             $statement->execute();
         }
     }
+
+    public function checkToRemoveAdmin($id){
+        //if a user has more than 2 votes, he will be removed as admin
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM user_vote WHERE voted_for = :voted_for");
+        $statement->bindValue(":voted_for", $id);
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if(count($result) >= 2){
+            $statement = $conn->prepare("UPDATE users SET is_admin = 0 WHERE id = :id");
+            $statement->bindValue(":id", $id);
+            $statement->execute();
+            //if the user is removed as admin, remove all votes for that user
+            $statement = $conn->prepare("DELETE FROM user_vote WHERE voted_for = :voted_for");
+            $statement->bindValue(":voted_for", $id);
+            $statement->execute();
+        }
+    }
 }
