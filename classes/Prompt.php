@@ -6,7 +6,7 @@ class prompt
     private string $description;
     private string $price;
     private string $model;
-    protected string $category;
+    private string $category;
     private array $tags;
     private string $mainImage;
     private string $overviewImage;
