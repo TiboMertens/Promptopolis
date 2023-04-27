@@ -1,4 +1,5 @@
 <?php
+require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 if (isset($_SESSION["loggedin"])) {
     if (!empty($_POST)) {
@@ -8,7 +9,7 @@ if (isset($_SESSION["loggedin"])) {
             $password = $_POST['password'];
             $newPassword = $_POST['newPassword'];
             //create a new user object
-            $user = new User();
+            $user = new \Promptopolis\Framework\User();
             $user->setId($id);
             $result = $user->canChangePassword($password);
 

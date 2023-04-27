@@ -1,4 +1,6 @@
 <?php
+namespace Promptopolis\Framework;
+
 class prompt
 {
     private int $id;
@@ -108,9 +110,9 @@ class prompt
                 $statement->bindValue(":category", $category);
             }
             $statement->execute();
-            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $prompts;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             error_log("PDO error: " . $e->getMessage());
             return [];
         }
@@ -140,9 +142,9 @@ class prompt
                 $statement->bindValue(":category", $category);
             }
             $statement->execute();
-            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $prompts;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             error_log("PDO error: " . $e->getMessage());
             return [];
         }
@@ -155,9 +157,9 @@ class prompt
             $conn = Db::getInstance();
             $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 0 ORDER BY tstamp DESC LIMIT 15");
             $statement->execute();
-            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $prompts;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             error_log("PDO error: " . $e->getMessage());
             return [];
         }
@@ -170,7 +172,7 @@ class prompt
         $statement = $conn->prepare("SELECT p.*, GROUP_CONCAT(t.name SEPARATOR ', ') as tag_names FROM prompts p JOIN prompt_tags pt ON p.id = pt.prompt_id JOIN tags t ON pt.tag_id = t.id WHERE p.id = :id");
         $statement->bindValue(":id", $this->id);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
         // Convert the string of tag names to an array
         $result['tag_names'] = explode(', ', $result['tag_names']);
         return $result;
@@ -189,7 +191,7 @@ class prompt
         $statement = $conn->prepare($sql);
         $statement->bindValue(":user_id", $user_id);
         $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;
     }
 
@@ -204,7 +206,7 @@ class prompt
             $statement = $conn->prepare("SELECT id FROM tags WHERE name = :name");
             $statement->bindValue(":name", $tag);
             $statement->execute();
-            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            $row = $statement->fetch(\PDO::FETCH_ASSOC);
             if ($row) {
                 // Tag already exists, use its ID
                 $tagIds[] = $row['id'];
@@ -264,7 +266,7 @@ class prompt
             $this->title = $title;
             return $this;
         } else {
-            throw new Exception("Title cannot be empty");
+            throw new \exception("Title cannot be empty");
         }
     }
 
@@ -287,7 +289,7 @@ class prompt
             $this->description = $description;
             return $this;
         } else {
-            throw new Exception("Description cannot be empty");
+            throw new \exception("Description cannot be empty");
         }
     }
 
@@ -310,7 +312,7 @@ class prompt
             $this->price = $price;
             return $this;
         } else {
-            throw new Exception("Price must be a number");
+            throw new \exception("Price must be a number");
         }
     }
 
@@ -333,7 +335,7 @@ class prompt
             $this->model = $model;
             return $this;
         } else {
-            throw new Exception("Model cannot be empty");
+            throw new \exception("Model cannot be empty");
         }
     }
 
@@ -361,7 +363,7 @@ class prompt
 
                     $uploadOk = 1;
                 } else {
-                    throw new Exception("File is not an image.");
+                    throw new \exception("File is not an image.");
                     $uploadOk = 0;
                 }
                 // Check file size, if file is larger than 1MB give error
@@ -370,7 +372,7 @@ class prompt
 
                     $uploadOk = 1;
                 } else {
-                    throw new Exception("File is too large.");
+                    throw new \exception("File is too large.");
                 }
 
                 // Allow certain file formats
@@ -378,13 +380,13 @@ class prompt
                     $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
                     && $imageFileType != "gif"
                 ) {
-                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                    throw new \exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
                     $uploadOk = 0;
                 }
 
                 // Check if $uploadOk is set to 0 by an error
                 if ($uploadOk == 0) {
-                    throw new Exception("Sorry, your file was not uploaded.");
+                    throw new \exception("Sorry, your file was not uploaded.");
                     // if everything is ok, try to upload file
                 } else {
                     if (move_uploaded_file($_FILES["mainImage"]["tmp_name"], $target_file)) {
@@ -393,10 +395,10 @@ class prompt
                         $this->mainImage = $target_file;
                         // $user->setProfile_picture_url($target_file);
                     } else {
-                        throw new Exception("Sorry, there was an error uploading your file.");
+                        throw new \exception("Sorry, there was an error uploading your file.");
                     }
                 }
-            } catch (Exception $e) {
+            } catch (\exception $e) {
                 $mainImageError = $e->getMessage();
             }
         }
@@ -422,26 +424,26 @@ class prompt
             try {
                 $check = getimagesize($_FILES["overviewImage"]["tmp_name"]);
                 if ($check === false) {
-                    throw new Exception("File is not an image.");
+                    throw new \exception("File is not an image.");
                 }
 
                 if ($_FILES["overviewImage"]["size"] > 1000000) {
-                    throw new Exception("File is too large.");
+                    throw new \exception("File is too large.");
                 }
 
                 if (
                     $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
                     && $imageFileType != "gif"
                 ) {
-                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                    throw new \exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
                 }
 
                 if (move_uploaded_file($_FILES["overviewImage"]["tmp_name"], $target_file_overview)) {
                     $this->overviewImage = $target_file_overview;
                 } else {
-                    throw new Exception("Sorry, there was an error uploading your file.");
+                    throw new \exception("Sorry, there was an error uploading your file.");
                 }
-            } catch (Exception $e) {
+            } catch (\exception $e) {
                 $overviewImageError = $e->getMessage();
             }
         }
@@ -466,7 +468,7 @@ class prompt
             $this->user_id = $user_id;
             return $this;
         } else {
-            throw new Exception("User id must be a number");
+            throw new \exception("User id must be a number");
         }
     }
 
@@ -491,7 +493,7 @@ class prompt
             $this->tags = $tags;
             return $this;
         } else {
-            throw new Exception("Tags cannot be empty");
+            throw new \exception("Tags cannot be empty");
         }
     }
 
@@ -501,9 +503,9 @@ class prompt
             $conn = Db::getInstance();
             $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 1 ORDER BY tstamp DESC LIMIT 15 ");
             $statement->execute();
-            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $prompts;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             error_log("PDO error: " . $e->getMessage());
             return [];
         }
@@ -529,26 +531,26 @@ class prompt
             try {
                 $check = getimagesize($_FILES["image3"]["tmp_name"]);
                 if ($check === false) {
-                    throw new Exception("File is not an image.");
+                    throw new \exception("File is not an image.");
                 }
 
                 if ($_FILES["image3"]["size"] > 1000000) {
-                    throw new Exception("File is too large.");
+                    throw new \exception("File is too large.");
                 }
 
                 if (
                     $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
                     && $imageFileType != "gif"
                 ) {
-                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                    throw new \exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
                 }
 
                 if (move_uploaded_file($_FILES["image3"]["tmp_name"], $target_file_overview)) {
                     $this->image3 = $target_file_overview;
                 } else {
-                    throw new Exception("Sorry, there was an error uploading your file.");
+                    throw new \exception("Sorry, there was an error uploading your file.");
                 }
-            } catch (Exception $e) {
+            } catch (\exception $e) {
                 $overviewImageError = $e->getMessage();
             }
         }
@@ -574,26 +576,26 @@ class prompt
             try {
                 $check = getimagesize($_FILES["image4"]["tmp_name"]);
                 if ($check === false) {
-                    throw new Exception("File is not an image.");
+                    throw new \exception("File is not an image.");
                 }
 
                 if ($_FILES["image4"]["size"] > 1000000) {
-                    throw new Exception("File is too large.");
+                    throw new \exception("File is too large.");
                 }
 
                 if (
                     $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
                     && $imageFileType != "gif"
                 ) {
-                    throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+                    throw new \exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
                 }
 
                 if (move_uploaded_file($_FILES["image4"]["tmp_name"], $target_file_overview)) {
                     $this->image4 = $target_file_overview;
                 } else {
-                    throw new Exception("Sorry, there was an error uploading your file.");
+                    throw new \exception("Sorry, there was an error uploading your file.");
                 }
-            } catch (Exception $e) {
+            } catch (\exception $e) {
                 $overviewImageError = $e->getMessage();
             }
         }

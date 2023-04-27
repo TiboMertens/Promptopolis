@@ -1,4 +1,9 @@
 {
+    "autoload": {
+        "psr-4": {
+            "Promptopolis\\Framework\\": "src/Promptopolis/Framework"
+        }
+    },
     "require": {
         "sendgrid/sendgrid": "~7"
     }

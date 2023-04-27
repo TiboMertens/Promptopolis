@@ -1,4 +1,5 @@
 <?php
+require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
 //check if user is logged in, else redirect to login page
@@ -7,9 +8,8 @@ if (isset($_SESSION['loggedin'])) {
     //Get id from logged in user
     $id = $_SESSION['id']['id'];
 
-    $user = new User();
-    $user->setId($id);
-    $userDetails = $user->getUserDetails();
+    $user = new \Promptopolis\Framework\User();
+    $userDetails = $user->getUserDetails($id);
     //get username form userdetails
     $username = $userDetails['username'];
     //get bio from userdetails

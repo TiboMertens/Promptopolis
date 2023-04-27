@@ -1,4 +1,6 @@
 <?php
+namespace Promptopolis\Framework;
+
 class Moderator extends User
 {
     public function approve($id)

@@ -1,12 +1,13 @@
 <?php
 try {
+    require_once 'vendor/autoload.php';
     include_once("bootstrap.php");
+
     if (isset($_SESSION["loggedin"])) {
-        $user = new User();
-        $user->setId($_SESSION['id']['id']);
-        $userDetails = $user->getUserDetails();
+        $user = new \Promptopolis\Framework\User();
+        $userDetails = $user->getUserDetails($_SESSION['id']['id']);
         $profilePicture = $userDetails['profile_picture_url'];
-        if (User::isModerator($_SESSION['id']['id'])) {
+        if (Promptopolis\Framework\User::isModerator($_SESSION['id']['id'])) {
             $moderator = true;
         }
     }
@@ -25,7 +26,7 @@ try {
         }
     }
 
-    if (!isset($_SESSION['loggedin']) || !User::isModerator($_SESSION['id']['id']) || $filterApprove != 'not_approved') {
+    if (!isset($_SESSION['loggedin']) || !Promptopolis\Framework\User::isModerator($_SESSION['id']['id']) || $filterApprove != 'not_approved') {
         $filterApprove = 'all';
     }
 
@@ -34,10 +35,10 @@ try {
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
 
     // get the prompts with the selected filter, limited to the current page
-    $prompts = Prompt::filter($filterApprove,  $filterOrder, $filterModel, $filterCategory, $limit, $offset);
+    $prompts = Promptopolis\Framework\Prompt::filter($filterApprove,  $filterOrder, $filterModel, $filterCategory, $limit, $offset);
 
     // count the total number of prompts with the selected filter
-    $totalPrompts = count(Prompt::getAll($filterApprove, $filterOrder, $filterModel, $filterCategory));
+    $totalPrompts = count(Promptopolis\Framework\Prompt::getAll($filterApprove, $filterOrder, $filterModel, $filterCategory));
 
     $amount = count($prompts);
 

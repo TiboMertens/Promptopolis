@@ -1,7 +1,6 @@
 <?php
 require_once 'vendor/autoload.php';
-include_once(__DIR__ . "/classes/User.php");
-include_once(__DIR__ . "/classes/Db.php");
+include_once("bootstrap.php");
 
 $config = parse_ini_file('config/config.ini', true);
 
@@ -9,7 +8,7 @@ $key = $config[' keys ']['SENDGRID_API_KEY'];
 
 if (!empty($_POST)) {
     $email = $_POST['email'];
-    $user = new User();
+    $user = new \Promptopolis\Framework\User();
     try {
         $correctEmail = $user->checkEmail($email);
         if ($correctEmail == true) {

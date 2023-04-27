@@ -1,11 +1,12 @@
 <?php
-include_once(__DIR__ . "/bootstrap.php");
+require_once 'vendor/autoload.php';
+include_once("bootstrap.php");
 
 // retrieve the token from the URL
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
-    $user = new User();
+    $user = new \Promptopolis\Framework\User();
 
     // retrieve the user from the database using the token
     $verify = $user->checkVerifyToken($token);

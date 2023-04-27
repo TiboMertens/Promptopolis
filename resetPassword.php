@@ -1,9 +1,10 @@
 <?php
+require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 try {
     if (isset($_GET['token'])) {
         $token = $_GET['token'];
-        $user = new User();
+        $user = new \Promptopolis\Framework\User();
         $user->setResetToken($token);
         $resetToken = $user->checkResetToken();
         $timestamp = $user->checkTimestamp();

@@ -1,11 +1,14 @@
 <?php
+require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
+use Promptopolis\Framework\Prompt;
+
 if (isset($_SESSION['loggedin'])) {
+
     //check if user is an admin
-    $user = new User();
-    $user->setId($_SESSION['id']['id']);
-    $userDetails = $user->getUserDetails();
+    $user = new \Promptopolis\Framework\User();
+    $userDetails = $user->getUserDetails($_SESSION['id']['id']);
     $profilePicture = $userDetails['profile_picture_url'];
     $isModerator = $user->isModerator($_SESSION['id']['id']);
 

@@ -1,6 +1,8 @@
 <?php
+namespace Promptopolis\Framework;
 
-require_once("traits\mail.php");
+//traits    
+use Promptopolis\Framework\Traits\EmailVerificationTrait;
 
 class User
 {
@@ -12,8 +14,7 @@ class User
     protected string $resetToken;
     protected string $bio;
 
-    //traits    
-    use EmailVerificationTrait;
+    // use EmailVerificationTrait;
 
     /**
      * Get the value of id
@@ -24,7 +25,7 @@ class User
         $statement = $conn->prepare("SELECT id FROM users WHERE username = :username");
         $statement->bindValue(":username", $username);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result;
     }
 
@@ -61,7 +62,7 @@ class User
             $this->username = $username;
             return $this;
         } else {
-            throw new Exception("Not a valid username");
+            throw new \exception("Not a valid username");
         }
     }
 
@@ -84,7 +85,7 @@ class User
             $this->email = $email;
             return $this;
         } else {
-            throw new Exception("Not a valid email address");
+            throw new \exception("Not a valid email address");
         }
     }
 
@@ -111,7 +112,7 @@ class User
             $this->password = $password;
             return $this;
         } else {
-            throw new Exception("Password cannot be empty and must be at least 5 characters long");
+            throw new \exception("Password cannot be empty and must be at least 5 characters long");
         }
     }
 
@@ -171,17 +172,17 @@ class User
     {
         try {
             $conn = Db::getInstance();
-        } catch (Throwable $e) {
-            throw new Exception("connection failed.");
+        } catch (\Throwable $e) {
+            throw new \exception("connection failed.");
         }
         $statement = $conn->prepare("SELECT * FROM users WHERE username = :username");
         $statement->bindValue(":username", $username);
         $statement->execute();
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $user = $statement->fetch(\PDO::FETCH_ASSOC);
 
         //check if user exists, if not throw exception
         if (!$user) {
-            throw new Exception("Incorrect username.");
+            throw new \exception("Incorrect username.");
         }
 
         $hash = $user['password'];
@@ -191,10 +192,10 @@ class User
             if ($user['can_login'] == 1) {
                 return true;
             } else {
-                throw new Exception("Please verify your email first.");
+                throw new \exception("Please verify your email first.");
             }
         } else {
-            throw new Exception("Incorrect password.");
+            throw new \exception("Incorrect password.");
         }
     }
 
@@ -204,7 +205,7 @@ class User
         $statement = $conn->prepare("SELECT is_admin FROM users WHERE id = :id");
         $statement->bindValue(":id", intval($id));
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
         $result = $result['is_admin'];
 
         //if result is 1, user is admin, else user is not admin
@@ -221,7 +222,7 @@ class User
         $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");
         $statement->bindValue(":id", $id);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result;
     }
 
@@ -231,7 +232,7 @@ class User
         $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :id AND is_approved = 1");
         $statement->bindValue(":id", $this->id);
         $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         //if result is 1, user is eligible to be verified, else user is not
         if (count($result) >= 3) {
@@ -254,13 +255,13 @@ class User
         $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
         $statement->bindValue(":email", $email);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
         //if result is 1, email is already in use, else email is not in use
         if ($result) {
             return true;
         } else {
-            throw new Exception("Email is not in use.");
+            throw new \exception("Email is not in use.");
         }
     }
     public function sendResetMail($key)
@@ -284,7 +285,7 @@ class User
         try {
             $response = $sendgrid->send($email);
             return true;
-        } catch (Exception $e) {
+        } catch (\exception $e) {
             echo 'Caught exception: ' . $e->getMessage() . "\n";
             return false;
         }
@@ -327,7 +328,7 @@ class User
         $statement = $conn->prepare("SELECT * FROM users WHERE reset_token = :token");
         $statement->bindValue(":token", $this->resetToken);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
         //if result is 1, token is valid, else token is not valid
         if ($result) {
@@ -342,7 +343,7 @@ class User
         $statement = $conn->prepare("SELECT tstamp FROM users WHERE reset_token = :token");
         $statement->bindValue(":token", $this->resetToken);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
         $result = $result['tstamp'];
 
         //if result is 1, token is valid, else token is not valid
@@ -370,7 +371,7 @@ class User
         $statement->bindValue(":id", $this->id);
         $statement->bindValue(":profile_picture_url", $this->profile_picture_url);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result;
     }
 
@@ -400,7 +401,7 @@ class User
         $statement = $conn->prepare("DELETE FROM users WHERE id = :id");
         $statement->bindValue(":id", $this->id);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result;
     }
 
@@ -432,7 +433,7 @@ class User
         $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");
         $statement->bindValue(":id", $this->id);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
         //check if filled in password is the same as the one in the database
         if (password_verify($password, $result['password'])) {
@@ -448,13 +449,13 @@ class User
         $statement->bindValue(":password", $this->password);
         $statement->bindValue(":id", $this->id);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result;
     }
 
     public function signup($key){
         self::save();
-        $this->sendVerifyEmail($key);
+        // $this->sendVerifyEmail($key);
         header("Location:index.php");
     }
 }

@@ -1,4 +1,6 @@
 <?php
+    namespace Promptopolis\Framework;
+
     abstract class Db {
         private static $conn;
 
@@ -23,7 +25,7 @@
                 $password = $config['password'];
                 $host = $config['host'];
 
-                self::$conn = new PDO("mysql:host=$host;dbname=".$database, $user, $password);
+                self::$conn = new \PDO("mysql:host=$host;dbname=".$database, $user, $password);
                 return self::$conn;
             }
         }

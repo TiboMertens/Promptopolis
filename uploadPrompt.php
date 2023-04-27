@@ -1,10 +1,10 @@
 <?php
+require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
 if (isset($_SESSION["loggedin"])) {
-    $user = new User();
-    $user->setId($_SESSION['id']['id']);
-    $userDetails = $user->getUserDetails();
+    $user = new \Promptopolis\Framework\User();
+    $userDetails = $user->getUserDetails($id);
     $profilePicture = $userDetails['profile_picture_url'];
     $isVerified = $userDetails['is_verified'];
 
@@ -39,7 +39,7 @@ if (isset($_SESSION["loggedin"])) {
 
     if (!empty($_POST["submit"])) {
         try {
-            $prompt = new Prompt();
+            $prompt = new Promptopolis\Framework\Prompt();
             $prompt->setUser_id($_SESSION["id"]["id"]);
 
             $exceptionCaught = false;

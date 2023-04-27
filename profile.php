@@ -1,4 +1,5 @@
 <?php
+require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 //Check if user is logged in
 if (isset($_SESSION['loggedin'])) {
@@ -19,7 +20,7 @@ if (isset($_SESSION['loggedin'])) {
             $id = $_SESSION['id']['id'];
         }
 
-        $user = new User();
+        $user = new \Promptopolis\Framework\User();
         if ($id != 0) {
             $userDetails = $user->getUserDetails($id);
             $ownUserDetails = $user->getUserDetails($_SESSION['id']['id']);
@@ -37,7 +38,7 @@ if (isset($_SESSION['loggedin'])) {
         $profilePicture = $ownUserDetails['profile_picture_url'];
 
         //get user's prompts
-        $prompts = Prompt::getPromptsByUser($id);
+        $prompts = Promptopolis\Framework\Prompt::getPromptsByUser($id);
         $amount = count($prompts);
     } catch (Throwable $e) {
         $error = $e->getMessage();

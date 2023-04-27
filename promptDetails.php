@@ -1,12 +1,11 @@
 <?php
+require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
-//DO NOT FORGET XSS PROTECTION
 
-$user = new User();
+$user = new \Promptopolis\Framework\User();
 
 if (isset($_SESSION['loggedin'])) {
-    $user->setId($_SESSION['id']['id']);
-    $userDetails = $user->getUserDetails();
+    $userDetails = $user->getUserDetails($_SESSION['id']['id']);
     $profilePicture = $userDetails['profile_picture_url'];
 }
 
@@ -14,7 +13,7 @@ try {
     //if id is set and not NULL, get prompt details
     if (isset($_GET['id']) && !empty($_GET['id'])) {
         $prompt_id = $_GET['id'];
-        $prompt = new Prompt();
+        $prompt = new Promptopolis\Framework\Prompt();
         $prompt->setId($prompt_id);
 
         //get prompt details
@@ -44,7 +43,6 @@ try {
 
         //get author id
         $authorID = $promptDetails['user_id'];
-        $user->setId($authorID);
         if (isset($_SESSION["loggedin"])) {
             //check if user is a moderator
             $isModerator = $user->isModerator($_SESSION['id']['id']);
@@ -54,7 +52,7 @@ try {
         }
 
         //get author name
-        $userDetails = $user->getUserDetails();
+        $userDetails = $user->getUserDetails($authorID);
         if ($userDetails == false) {
             $authorName = "deleted user";
             $authorID = "";
@@ -71,7 +69,7 @@ try {
         if (!$isModerator) {
             header("Location: index.php");
         } else {
-            $moderator = new Moderator();
+            $moderator = new Promptopolis\Framework\Moderator();
         }
 
         if (isset($_POST['approve'])) {

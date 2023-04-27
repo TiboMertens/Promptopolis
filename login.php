@@ -1,4 +1,5 @@
 <?php
+require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
 if (!empty($_POST)) {
@@ -7,7 +8,7 @@ if (!empty($_POST)) {
     $password = $_POST['password'];
 
     //create a new user object
-    $user = new User();
+    $user = new \Promptopolis\Framework\User();
 
     //check if the user can login
     try {
