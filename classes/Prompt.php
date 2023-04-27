@@ -121,27 +121,27 @@ class prompt
     public static function getAll($filterApprove, $filterOrder, $filterModel, $filterCategory)
     {
         try {
-           // getallowedmodels functie
-           $model = self::getAllowedModels($filterModel);
-           $order = self::getAllowedOrder($filterOrder);
-           $approve = self::getAllowedStatus($filterApprove);
-           $category = self::getAllowedCategory($filterCategory);
-           // of get all of custom
-           // sql injectie voor deze filter
+            // getallowedmodels functie
+            $model = self::getAllowedModels($filterModel);
+            $order = self::getAllowedOrder($filterOrder);
+            $approve = self::getAllowedStatus($filterApprove);
+            $category = self::getAllowedCategory($filterCategory);
+            // of get all of custom
+            // sql injectie voor deze filter
 
-           $conn = Db::getInstance();
-           $sql = "SELECT * FROM prompts WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
+            $conn = Db::getInstance();
+            $sql = "SELECT * FROM prompts WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
 
-           $statement = $conn->prepare($sql);
-           if ($model != 'all') {
-               $statement->bindValue(":model", $model);
-           }
-           if ($category != 'all') {
-               $statement->bindValue(":category", $category);
-           }
-           $statement->execute();
-           $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
-           return $prompts;
+            $statement = $conn->prepare($sql);
+            if ($model != 'all') {
+                $statement->bindValue(":model", $model);
+            }
+            if ($category != 'all') {
+                $statement->bindValue(":category", $category);
+            }
+            $statement->execute();
+            $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $prompts;
         } catch (PDOException $e) {
             error_log("PDO error: " . $e->getMessage());
             return [];
