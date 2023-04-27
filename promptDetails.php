@@ -101,7 +101,7 @@ try {
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
-    <title><?php echo $title ?> - Details</title>
+    <title><?php echo htmlspecialchars($title) ?> - Details</title>
 </head>
 
 <body class="bg-[#121212]">
