@@ -215,11 +215,11 @@ class User
         }
     }
 
-    public function getUserDetails()
+    public function getUserDetails($id)
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");
-        $statement->bindValue(":id", $this->id);
+        $statement->bindValue(":id", $id);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result;
