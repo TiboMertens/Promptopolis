@@ -11,7 +11,7 @@ try {
         }
     }
 
-    $filters = ['filterApprove', 'filterDate', 'filterPrice', 'filterModel', 'filterCategory'];
+    $filters = ['filterApprove', 'filterOrder', 'filterModel', 'filterCategory'];
 
     // This loop iterates over an array of the four filter variables, and for each one,
     // it checks if the corresponding $_GET parameter is set. If it is, it sets the variable with a dynamic variable variable
@@ -34,10 +34,10 @@ try {
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
 
     // get the prompts with the selected filter, limited to the current page
-    $prompts = Prompt::filter($filterApprove,  $filterDate, $filterPrice, $filterModel, $filterCategory, $limit, $offset);
+    $prompts = Prompt::filter($filterApprove,  $filterOrder, $filterModel, $filterCategory, $limit, $offset);
 
     // count the total number of prompts with the selected filter
-    $totalPrompts = count(Prompt::getAll($filterApprove, $filterDate, $filterPrice, $filterModel, $filterCategory));
+    $totalPrompts = count(Prompt::getAll($filterApprove, $filterOrder, $filterModel, $filterCategory));
 
     $amount = count($prompts);
 
@@ -73,18 +73,7 @@ try {
         <h1 class="text-white text-[24px] font-extrabold lg:text-[36px]">Prompt showcase</h1>
     </div>
     <section class="flex justify-between mr-6">
-        <div class="ml-6 flex justify-start">
-            <p class="text-white">Current filter:
-                <?php if (isset($_SESSION['loggedin'])) : ?>
-                    <?php if (isset($moderator)) : ?>
-                        <a id="approve" href="showcase.php?<?php echo "filterApprove=all" . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterApprove ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
-                    <?php endif; ?>
-                <?php endif; ?>
-                <a id="date" href="showcase.php?<?php echo "filterApprove=" . $filterDate . "&filterDate=All" . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterDate ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
-                <a id="price" href="showcase.php?<?php echo "filterApprove=" . $filterDate . "&filterDate=" . $filterDate . "&filterPrice=All" . "&filterModel=" . $filterModel ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterPrice ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
-                <a id="model" href="showcase.php?<?php echo "filterApprove=" . $filterDate . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=All" ?>"><span class="text-[#BB86FC] hover:bg-[#A25AFB] hover:text-white px-[7px] pb-[2px] rounded-lg"><?php echo $filterModel ?><i class="fa-solid fa-xmark fa-2xs ml-2 relative top-[2px]"></i></span></a>
-            </p>
-        </div>
+        <div class="ml-6 flex justify-start"></div>
         <div class="flex justify-end">
             <form id="filter-form" method="get">
                 <?php if (isset($_SESSION['loggedin'])) : ?>
@@ -96,15 +85,10 @@ try {
                         </select>
                     <?php endif; ?>
                 <?php endif; ?>
-                <label for="filterDate" class="text-white relative bottom-[2px] ml-[10px]">New/old: &nbsp;</label>
-                <select name="filterDate" class="filter-select rounded-md">
-                    <option value="all">All</option>
+                <label for="filterOrder" class="text-white relative bottom-[2px] ml-[10px]">Order by: &nbsp;</label>
+                <select name="filterOrder" class="filter-select rounded-md">
                     <option value="new">New</option>
                     <option value="old">Old</option>
-                </select>
-                <label for="filterPrice" class="text-white relative bottom-[2px] ml-[10px]">Price: &nbsp;</label>
-                <select name="filterPrice" class="filter-select rounded-md">
-                    <option value="all">All</option>
                     <option value="low">Price(lowest)</option>
                     <option value="high">Price(highest)</option>
                 </select>
@@ -142,15 +126,15 @@ try {
         <?php if ($totalPages > 1) : ?>
             <div class="pagination text-white">
                 <?php if ($page > 1) : ?>
-                    <a href="?filterApprove=<?php echo $filterApprove . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>&page=<?php echo $page - 1 ?>">Previous</a>
+                    <a href="?filterApprove=<?php echo $filterApprove . "&filterOrder=" . $filterOrder . "&filterModel=" . $filterModel ?>&page=<?php echo $page - 1 ?>">Previous</a>
                 <?php endif; ?>
 
                 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                    <a href="?filterApprove=<?php echo $filterApprove . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>&page=<?php echo $i ?>" <?php if ($i === $page) echo 'class="active"'; ?>><?php echo $i ?></a>
+                    <a href="?filterApprove=<?php echo $filterApprove . "&filterOrder=" . $filterOrder . "&filterModel=" . $filterModel ?>&page=<?php echo $i ?>" <?php if ($i === $page) echo 'class="active"'; ?>><?php echo $i ?></a>
                 <?php endfor; ?>
 
                 <?php if ($page < $totalPages) : ?>
-                    <a href="?filterApprove=<?php echo $filterApprove . "&filterDate=" . $filterDate . "&filterPrice=" . $filterPrice . "&filterModel=" . $filterModel ?>&page=<?php echo $page + 1 ?>">Next</a>
+                    <a href="?filterApprove=<?php echo $filterApprove . "&filterOrder=" . $filterOrder . "&filterModel=" . $filterModel ?>&page=<?php echo $page + 1 ?>">Next</a>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
