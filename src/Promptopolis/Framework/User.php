@@ -206,7 +206,11 @@ class User
         $statement->bindValue(":id", intval($id));
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        $result = $result['is_admin'];
+        if ($result) {
+            $result = 1;
+        } else {
+            $result = 0;
+        }
 
         //if result is 1, user is admin, else user is not admin
         if ($result === 1) {
@@ -457,5 +461,16 @@ class User
         self::save();
         // $this->sendVerifyEmail($key);
         header("Location:index.php");
+    }
+
+    public function getVotes($id){
+        $conn = Db::getInstance();
+        //get all the rows where the user has been voted for
+        $statement = $conn->prepare("SELECT * FROM user_vote WHERE voted_for = :user_id");
+        $statement->bindValue(":user_id", $id);
+        $statement->execute();
+        //count the amount of rows and return it
+        $count = $statement->rowCount();
+        return $count;
     }
 }

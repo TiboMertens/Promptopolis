@@ -30,6 +30,22 @@ if (isset($_SESSION['loggedin'])) {
         if ($userDetails === false) {
             throw new Exception("User not found");
         }
+
+        //check if logged in user is_admin
+        if ($ownUserDetails['is_admin'] === 1) {
+            $ownIsAdmin = true;
+            $moderator = new \Promptopolis\Framework\Moderator();
+            //check if the user is_admin
+            if ($userDetails['is_admin'] === 1) {
+                $isAdmin = true;
+                $votes = $user->getVotes($id);
+            } else {
+                $isAdmin = false;
+                $votes = $user->getVotes($id);
+            }
+        } else {
+            $ownIsAdmin = false;
+        }
         //get username form userdetails
         $username = $userDetails['username'];
         //get bio from userdetails
@@ -58,6 +74,7 @@ if (isset($_SESSION['loggedin'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/voting.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
@@ -86,6 +103,12 @@ if (isset($_SESSION['loggedin'])) {
                             <i class="fa-solid fa-pen fa-xs mt-1 mr-2 text-[#BB86FC]"></i>
                             <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="editProfile.php">Edit</a>
                         </div>
+                    <?php elseif ($isAdmin == false && $ownIsAdmin) : ?>
+                        <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']['id']) ?>" value="Vote for admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
+                        <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[1px]"><p class="voting">Votes: <?php echo $votes  ?>/2</p></div>
+                    <?php elseif ($isAdmin && $ownIsAdmin) : ?>
+                        <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']['id']) ?>" value="Vote to remove admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
+                        <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[1px]"><p class="voting">Votes: <?php echo $votes  ?>/2</p></div>
                     <?php endif ?>
                 </div>
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
@@ -115,7 +138,6 @@ if (isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </section>
-
 </body>
 
 </html>
