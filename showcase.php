@@ -131,10 +131,10 @@ try {
                 <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">No prompts found</p>
             <?php endif ?>
             <?php foreach ($prompts as $prompt) : ?>
-                <a href="promptDetails.php?id=<?php echo $prompt['id']?>">
-                    <img src="<?php echo $prompt['cover_url'] ?>" alt="Prompt" class="w-[170px] h-[100px] sm:w-[220px] sm:h-[120px] lg:w-[270px] lg:h-[150px] object-cover object-center rounded-lg">
-                    <h2 class="text-white font-bold text-[14px] sm:text-[18px] mt-2"><?php echo $prompt['title'] ?></h2>
-                </a>
+                <a href="promptDetails.php?id=<?php echo htmlspecialchars($prompt['id']) ?>">
+                    <img src="<?php echo htmlspecialchars($prompt['cover_url']) ?>" alt="Prompt" class="w-[170px] h-[100px] sm:w-[220px] sm:h-[120px] lg:w-[270px] lg:h-[150px] object-cover object-center rounded-lg">
+                    <h2 class="text-white font-bold text-[14px] sm:text-[18px] mt-2"><?php echo htmlspecialchars($prompt['title']) ?></h2>
+                </a> 
             <?php endforeach; ?>
         </div>
 

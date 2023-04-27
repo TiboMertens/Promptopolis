@@ -57,9 +57,9 @@ if (isset($_SESSION['loggedin'])) {
                     <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
                         <div class=" flex flex-shrink-0 gap-5">
                             <?php foreach ($promptsToApprove as $promptToApprove) : ?>
-                                <a href="promptDetails.php?id=<?php echo $promptToApprove['id'] ?>">
-                                    <img  src="<?php echo $promptToApprove['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
-                                    <h2 class="text-white font-bold text-[18px] mt-2"><?php echo $promptToApprove['title'] ?></h2>
+                                <a href="promptDetails.php?id=<?php echo htmlspecialchars($promptToApprove['id']) ?>">
+                                    <img  src="<?php echo htmlspecialchars($promptToApprove['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                                    <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($promptToApprove['title']) ?></h2>
                                 </a>
                             <?php endforeach; ?>
                             <div class="pt-20 mt-2 px-10">
@@ -76,9 +76,9 @@ if (isset($_SESSION['loggedin'])) {
                     <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
                         <div class=" flex flex-shrink-0 gap-5">
                             <?php foreach ($newPrompts as $newPrompt) : ?>
-                                <a href="promptDetails.php?id=<?php echo $newPrompt['id'] ?>&new">
-                                    <img  src="<?php echo $newPrompt['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
-                                    <h2 class="text-white font-bold text-[18px] mt-2"><?php echo $newPrompt['title'] ?></h2>
+                                <a href="promptDetails.php?id=<?php echo htmlspecialchars($newPrompt['id']) ?>&new">
+                                    <img  src="<?php echo htmlspecialchars($newPrompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                                    <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($newPrompt['title']) ?></h2>
                                 </a>
                             <?php endforeach; ?>
                             <div class="pt-20 mt-2 px-10">

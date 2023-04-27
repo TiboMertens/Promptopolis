@@ -124,7 +124,7 @@ try {
                                 <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
                             </div>
                             <div class="flex-1 justify-end mr-5 md:mr-0">
-                                <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo $authorID ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
+                                <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
                             </div>
                         </div>
                         <div class="flex justify-between mb-3">
