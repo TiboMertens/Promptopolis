@@ -2,18 +2,18 @@
 class prompt
 {
     private int $id;
-    protected string $title;
-    protected string $description;
-    protected string $price;
-    protected string $model;
+    private string $title;
+    private string $description;
+    private string $price;
+    private string $model;
     protected string $category;
-    protected array $tags;
-    protected string $mainImage;
-    protected string $overviewImage;
-    protected string $image3;
-    protected string $image4;
-    protected int $user_id;
-    protected int $is_approved;
+    private array $tags;
+    private string $mainImage;
+    private string $overviewImage;
+    private string $image3;
+    private string $image4;
+    private int $user_id;
+    private int $is_approved;
 
     /**
      * Get the value of id
