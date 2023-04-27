@@ -219,7 +219,7 @@ class prompt
     public static function getPromptsByUser($user_id)
     {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :user_id AND is_approved = 1");
+        $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :user_id AND is_approved = 1 ORDER BY tstamp DESC");
         $statement->bindValue(":user_id", $user_id);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
