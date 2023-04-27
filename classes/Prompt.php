@@ -193,7 +193,7 @@ class prompt
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 0 LIMIT 15");
+            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 0 ORDER BY tstamp DESC LIMIT 15");
             $statement->execute();
             $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
             return $prompts;
