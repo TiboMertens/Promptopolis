@@ -12,7 +12,6 @@ if (!empty($_POST)) {
     $votes = $user->getVotes($user_id);
     $moderator->checkStatus($user_id);
 
-
     $result = [
         "status" => "success",
         "message" => "Vote was saved",

@@ -1,4 +1,5 @@
 <?php
+
 namespace Promptopolis\Framework;
 
 //traits    
@@ -146,7 +147,7 @@ class User
         $statement->bindValue(":token", $this->verifyToken);
         $result = $statement->execute();
 
-        
+
         return $result;
     }
 
@@ -457,13 +458,15 @@ class User
         return $result;
     }
 
-    public function signup($key){
+    public function signup($key)
+    {
         self::save();
         // $this->sendVerifyEmail($key);
         header("Location:index.php");
     }
 
-    public function getVotes($id){
+    public function getVotes($id)
+    {
         $conn = Db::getInstance();
         //get all the rows where the user has been voted for
         $statement = $conn->prepare("SELECT * FROM user_vote WHERE voted_for = :user_id");

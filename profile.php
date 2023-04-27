@@ -105,10 +105,14 @@ if (isset($_SESSION['loggedin'])) {
                         </div>
                     <?php elseif ($isAdmin == false && $ownIsAdmin) : ?>
                         <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']['id']) ?>" value="Vote for admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
-                        <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[1px]"><p class="voting">Votes: <?php echo $votes  ?>/2</p></div>
+                        <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[1px]">
+                            <p class="voting">Votes: <?php echo $votes  ?>/2</p>
+                        </div>
                     <?php elseif ($isAdmin && $ownIsAdmin) : ?>
                         <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']['id']) ?>" value="Vote to remove admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
-                        <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[1px]"><p class="voting">Votes: <?php echo $votes  ?>/2</p></div>
+                        <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[1px]">
+                            <p class="voting">Votes: <?php echo $votes  ?>/2</p>
+                        </div>
                     <?php endif ?>
                 </div>
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
