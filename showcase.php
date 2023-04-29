@@ -2,6 +2,8 @@
 try {
     require_once 'vendor/autoload.php';
     include_once("bootstrap.php");
+
+    $pageName = 'showcase';
     
     if (!empty($_GET['search'])) {
         $searchTerm = $_GET['search'];

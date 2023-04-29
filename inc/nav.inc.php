@@ -5,7 +5,7 @@
         </div>
 
         <div class="flex mt-[2px] md:flex-1 justify-center">
-            <form method="GET" action="#" class="flex h-9">
+            <form method="GET" action="#" class="flex h-9 <?php echo !isset($pageName) ? 'opacity-0' : '' ?>">
                 <div class="">
                     <input type="text" value="<?php echo htmlspecialchars($searchTerm); ?>" name="search" placeholder="Search.." class="text-base mt-2 p-1.5 rounded-l h-7 bg-white w-30">
                 </div>
@@ -14,7 +14,6 @@
                 </button>
             </form>
         </div>
-
         <div class="mt-1">
             <div class="mt-2 mr-5 ml-2 relative bottom-[2px] flex flex-row-reverse">
                 <!-- If the user is logged in, show the logout button, else show the login button -->
