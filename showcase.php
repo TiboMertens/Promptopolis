@@ -2,6 +2,12 @@
 try {
     require_once 'vendor/autoload.php';
     include_once("bootstrap.php");
+    
+    if (!empty($_GET['search'])) {
+        $searchTerm = $_GET['search'];
+    } else {
+        $searchTerm = "";
+    }
 
     if (isset($_SESSION["loggedin"])) {
         $user = new \Promptopolis\Framework\User();
@@ -35,10 +41,10 @@ try {
     $offset = ($page - 1) * $limit; // calculate the offset for SQL LIMIT
 
     // get the prompts with the selected filter, limited to the current page
-    $prompts = Promptopolis\Framework\Prompt::filter($filterApprove,  $filterOrder, $filterModel, $filterCategory, $limit, $offset);
+    $prompts = Promptopolis\Framework\Prompt::filter($filterApprove,  $filterOrder, $filterModel, $filterCategory, $searchTerm, $limit, $offset);
 
     // count the total number of prompts with the selected filter
-    $totalPrompts = count(Promptopolis\Framework\Prompt::getAll($filterApprove, $filterOrder, $filterModel, $filterCategory));
+    $totalPrompts = count(Promptopolis\Framework\Prompt::getAll($filterApprove, $filterOrder, $filterModel, $filterCategory, $searchTerm));
 
     $amount = count($prompts);
 
@@ -60,6 +66,7 @@ try {
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
     <script src="js/showcase.js" defer></script>
+    <script src="js/refresh.js" defer></script>
 </head>
 
 <body class="bg-[#121212]">
@@ -100,13 +107,13 @@ try {
                     <option value="Dall-E">Dall-E</option>
                 </select>
                 <label class="text-white relative bottom-[2px] ml-[10px]" for="filterCategory">Category</label>
-                    <select class="filter-select rounded-md" name="filterCategory" class="rounded-md">
-                        <option value="None">None</option>
-                        <option value="Nature">Nature</option>
-                        <option value="Logo">Logo</option>
-                        <option value="Civilisation">Civilisation</option>
-                        <option value="Line_art">Line art</option>
-                    </select>
+                <select class="filter-select rounded-md" name="filterCategory" class="rounded-md">
+                    <option value="None">None</option>
+                    <option value="Nature">Nature</option>
+                    <option value="Logo">Logo</option>
+                    <option value="Civilisation">Civilisation</option>
+                    <option value="Line_art">Line art</option>
+                </select>
             </form>
         </div>
     </section>
@@ -119,7 +126,7 @@ try {
                 <a href="promptDetails.php?id=<?php echo htmlspecialchars($prompt['id']) ?>">
                     <img src="<?php echo htmlspecialchars($prompt['cover_url']) ?>" alt="Prompt" class="w-[170px] h-[100px] sm:w-[220px] sm:h-[120px] lg:w-[270px] lg:h-[150px] object-cover object-center rounded-lg">
                     <h2 class="text-white font-bold text-[14px] sm:text-[18px] mt-2"><?php echo htmlspecialchars($prompt['title']) ?></h2>
-                </a> 
+                </a>
             <?php endforeach; ?>
         </div>
 

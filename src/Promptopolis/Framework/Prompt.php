@@ -1,4 +1,5 @@
 <?php
+
 namespace Promptopolis\Framework;
 
 class prompt
@@ -87,7 +88,7 @@ class prompt
         }
     }
 
-    public static function filter($filterApprove, $filterOrder, $filterModel, $filterCategory, $limit, $offset)
+    public static function filter($filterApprove, $filterOrder, $filterModel, $filterCategory, $searchTerm, $limit, $offset)
     {
         try {
             // getallowedmodels functie
@@ -99,8 +100,14 @@ class prompt
             // sql injectie voor deze filter
 
             $conn = Db::getInstance();
-            $sql = "SELECT * FROM prompts WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
+            $sql = "SELECT p.* FROM prompts p
+            INNER JOIN prompt_tags pt ON p.id = pt.prompt_id
+            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
+            if ($searchTerm != '') {
+                $sql .= " AND LOWER (p.title) LIKE LOWER (:searchTerm) OR LOWER (t.name) LIKE LOWER (:searchTerm)";
+            }
             $sql .= " LIMIT $limit OFFSET $offset";
+
 
             $statement = $conn->prepare($sql);
             if ($model != 'all') {
@@ -108,6 +115,9 @@ class prompt
             }
             if ($category != 'all') {
                 $statement->bindValue(":category", $category);
+            }
+            if ($searchTerm != '') {
+                $statement->bindValue(":searchTerm", '%' . $searchTerm . '%');
             }
             $statement->execute();
             $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -120,7 +130,7 @@ class prompt
 
 
 
-    public static function getAll($filterApprove, $filterOrder, $filterModel, $filterCategory)
+    public static function getAll($filterApprove, $filterOrder, $filterModel, $filterCategory, $searchTerm)
     {
         try {
             // getallowedmodels functie
@@ -133,13 +143,19 @@ class prompt
 
             $conn = Db::getInstance();
             $sql = "SELECT * FROM prompts WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
-
+            if ($searchTerm != '') {
+                $sql .= " AND LOWER (title) LIKE LOWER (:searchTerm)";
+            }
+           
             $statement = $conn->prepare($sql);
             if ($model != 'all') {
                 $statement->bindValue(":model", $model);
             }
             if ($category != 'all') {
                 $statement->bindValue(":category", $category);
+            }
+            if ($searchTerm != '') {
+                $statement->bindValue(":searchTerm", '%' . $searchTerm . '%');
             }
             $statement->execute();
             $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);

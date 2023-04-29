@@ -5,9 +5,9 @@
         </div>
 
         <div class="flex mt-[2px] md:flex-1 justify-center">
-            <form class="flex h-9">
+            <form method="GET" action="#" class="flex h-9">
                 <div class="">
-                    <input type="text" placeholder="Search.." class="text-base mt-2 p-1.5 rounded-l h-7 bg-white w-30">
+                    <input type="text" value="<?php echo htmlspecialchars($searchTerm); ?>" name="search" placeholder="Search.." class="text-base mt-2 p-1.5 rounded-l h-7 bg-white w-30">
                 </div>
                 <button type="submit" class="text-sm cursor-pointer rounded-r mt-2 px-2 bg-[#BB86FC] hover:bg-[#A25AFB]">
                     <i class="fa fa-search relative top-[0.75px]"></i>
