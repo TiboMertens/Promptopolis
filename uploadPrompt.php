@@ -4,115 +4,90 @@ include_once("bootstrap.php");
 
 if (isset($_SESSION["loggedin"])) {
     $user = new \Promptopolis\Framework\User();
+    $id = $_SESSION["id"]["id"];
     $userDetails = $user->getUserDetails($id);
     $profilePicture = $userDetails['profile_picture_url'];
     $isVerified = $userDetails['is_verified'];
-
-    if (!empty($_FILES["mainImage"]["tmp_name"])) {
-        $target_dir = "uploads/";
-        $target_file = $target_dir . basename($_FILES["mainImage"]["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    }
-
-    if (!empty($_FILES["overviewImage"]["tmp_name"])) {
-        $target_dir = "uploads/";
-        $target_file_overview = $target_dir . basename($_FILES["overviewImage"]["name"]);
-        $uploadOk = 1;
-        $imageFileType_overview = strtolower(pathinfo($target_file_overview, PATHINFO_EXTENSION));
-    }
-
-    if (!empty($_FILES["image3"]["tmp_name"])) {
-        $target_dir = "uploads/";
-        $target_file_image3 = $target_dir . basename($_FILES["image3"]["name"]);
-        $uploadOk = 1;
-        $imageFileType_image3 = strtolower(pathinfo($target_file_image3, PATHINFO_EXTENSION));
-    }
-
-    if (!empty($_FILES["image4"]["tmp_name"])) {
-        $target_dir = "uploads/";
-        $target_file_image4 = $target_dir . basename($_FILES["image4"]["name"]);
-        $uploadOk = 1;
-        $imageFileType_image4 = strtolower(pathinfo($target_file_image4, PATHINFO_EXTENSION));
-    }
-
+    $target_dir = "uploads/";
 
     if (!empty($_POST["submit"])) {
         try {
-            $prompt = new Promptopolis\Framework\Prompt();
-            $prompt->setUser_id($_SESSION["id"]["id"]);
+            $upload = new Promptopolis\Framework\Upload();
+            $upload->setUser_id($_SESSION["id"]["id"]);
 
-            $exceptionCaught = false;
+            $images = ["mainImage", "overviewImage", "image3", "image4"];
+
+            foreach ($images as $image) {
+                if (!empty($_FILES[$image]["tmp_name"])) {
+                    $target_file = $target_dir . basename($_FILES[$image]["name"]);
+                    $uploadOk = 1;
+                    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                    $exceptionCaught = false;
+
+                    try {
+                        if (!isset($imageFileType)) {
+                            throw new exception("Please upload an image");
+                        } else {
+                            switch ($image) {
+                                case "mainImage":
+                                    $upload->setMainImage($imageFileType, $target_file);
+                                    break;
+                                case "overviewImage":
+                                    $upload->setOverviewImage($imageFileType, $target_file);
+                                    break;
+                                case "image3":
+                                    $upload->setImage3($imageFileType, $target_file);
+                                    break;
+                                case "image4":
+                                    $upload->setImage4($imageFileType, $target_file);
+                                    break;
+                            }
+                        }
+                    } catch (Exception $e) {
+                        switch ($image) {
+                            case "mainImage":
+                                $mainImageError = $e->getMessage();
+                                break;
+                            case "overviewImage":
+                                $overviewImageError = $e->getMessage();
+                                break;
+                            case "image3":
+                                $image3Error = $e->getMessage();
+                                break;
+                            case "image4":
+                                $image4Error = $e->getMessage();
+                                break;
+                        }
+                        $exceptionCaught = true;
+                    }
+                }
+            }
 
             try {
-                $prompt->setTitle($_POST["title"]);
+                $upload->setTitle($_POST["title"]);
             } catch (Exception $e) {
                 $titleError = $e->getMessage();
                 $exceptionCaught = true;
             }
 
             try {
-                $prompt->setDescription($_POST["description"]);
+                $upload->setDescription($_POST["description"]);
             } catch (Exception $e) {
                 $descriptionError = $e->getMessage();
                 $exceptionCaught = true;
             }
 
             try {
-                $prompt->setPrice($_POST["price"]);
+                $upload->setPrice($_POST["price"]);
             } catch (Exception $e) {
                 $priceError = $e->getMessage();
                 $exceptionCaught = true;
             }
 
             try {
-                $prompt->setModel($_POST["model"]);
+                $upload->setModel($_POST["model"]);
             } catch (Exception $e) {
                 $modelError = $e->getMessage();
-                $exceptionCaught = true;
-            }
-
-            try {
-                if (!isset($imageFileType)) {
-                    throw new exception("Please upload an image");
-                } else {
-                    $prompt->setMainImage($imageFileType, $target_file);
-                }
-            } catch (Exception $e) {
-                $mainImageError = $e->getMessage();
-                $exceptionCaught = true;
-            }
-
-            try {
-                if (!isset($imageFileType_overview)) {
-                    throw new exception("Please upload an image");
-                } else {
-                    $prompt->setOverviewImage($imageFileType_overview, $target_file_overview);
-                }
-            } catch (Exception $e) {
-                $overviewImageError = $e->getMessage();
-                $exceptionCaught = true;
-            }
-
-            try {
-                if (!isset($imageFileType_image3)) {
-                    throw new exception("Please upload an image");
-                } else {
-                    $prompt->setImage3($imageFileType_image3, $target_file_image3);
-                }
-            } catch (Exception $e) {
-                $image3Error = $e->getMessage();
-                $exceptionCaught = true;
-            }
-
-            try {
-                if (!isset($imageFileType_image4)) {
-                    throw new exception("Please upload an image");
-                } else {
-                    $prompt->setImage4($imageFileType_image4, $target_file_image4);
-                }
-            } catch (Exception $e) {
-                $image4Error = $e->getMessage();
                 $exceptionCaught = true;
             }
 
@@ -127,21 +102,21 @@ if (isset($_SESSION["loggedin"])) {
                 $tags[] = $_POST['tag3'];
             }
             try {
-                $prompt->setTags($tags);
+                $upload->setTags($tags);
             } catch (Exception $e) {
                 $tagsError = $e->getMessage();
                 $exceptionCaught = true;
             }
 
-            $prompt->setCategory($_POST["category"]);
+            $upload->setCategory($_POST["category"]);
 
             if (!$exceptionCaught) {
                 if ($isVerified == 1) {
-                    $prompt->setIs_approved(1);
+                    $upload->setIs_approved(1);
                 } else {
-                    $prompt->setIs_approved(0);
+                    $upload->setIs_approved(0);
                 }
-                $prompt->savePrompt();
+                $upload->savePrompt();
                 header("Location: profile.php");
             }
         } catch (Exception $e) {
@@ -293,3 +268,4 @@ if (isset($_SESSION["loggedin"])) {
 </body>
 
 </html>
+Schrijven naar Tibo Mertens
