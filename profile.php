@@ -56,9 +56,24 @@ if (isset($_SESSION['loggedin'])) {
         //get user's prompts
         $prompts = Promptopolis\Framework\Prompt::getPromptsByUser($id);
         $amount = count($prompts);
+
+        
+        if($id != $sessionid) {
+            if($user->isFollowing($id)) {      
+                $following=true;
+                $followingbtn="Unfollow";
+            } else {
+                $following=false;
+                $followingbtn="Follow";
+            }
+        } 
+        
+        
+
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
+    
 } else {
     //if user is not logged in, redirect to login page
     header("Location: login.php");
@@ -114,7 +129,11 @@ if (isset($_SESSION['loggedin'])) {
                             <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>
                     <?php endif ?>
+                    <?php if ($id != $sessionid) : ?>
+                        <div><button data-id="<?php echo $id?>" data-state="<?php echo $followingbtn ?>" name="follow" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-1 px-7 text-lg  rounded flex justify-center ml-3"><?php echo $followingbtn ?></button></div>
+                <?php endif ?>
                 </div>
+                
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>
                 </div>
@@ -124,6 +143,7 @@ if (isset($_SESSION['loggedin'])) {
                         <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="changePassword.php">Change Password</a>
                     </div>
                 <?php endif ?>
+                
             </div>
     </header>
     <section class="mt-10">
@@ -142,6 +162,36 @@ if (isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </section>
+    <script>
+        // get the follow button
+        const followBtn = document.querySelector('button[name="follow"]')
+        // add console.log when follow button is clicked
+        followBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // get the id of the user being followed
+            const id = e.target.dataset.id;
+            // get the state of the follow button
+            const state = e.target.dataset.state;
+            let formData = new FormData();
+            //append user id to formdata
+            formData.append("id", id);
+            formData.append("state", state);
+            fetch("ajax/follow.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (json) {
+                    followBtn.innerHTML = json.message;
+                
+                    followBtn.setAttribute("data-state", json.message);
+                
+
+                });
+        });
+    </script>
 </body>
 
 </html>
