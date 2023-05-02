@@ -63,26 +63,26 @@ if (!empty($_POST)) {
                     <div class="w-30">
                         <div class="mb-4">
                             <label class="block font-bold mb-0.5 text-white" for="Email">Email</label>
-                            <input class="w-30 lg:w-55 px-3 py-2 border-[3px] rounded hover:border-[#BB86FC] active:border-[#BB86FC] <?php echo isset($emailError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="email">
+                            <input class="w-30 lg:w-55 px-3 py-2 border-[3px] rounded hover:border-[#BB86FC] active:border-[#BB86FC] <?php echo htmlspecialchars(isset($emailError)) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="email">
                             <!-- if there is an error, show it -->
                             <?php if (isset($emailError)) : ?>
-                                <p class="text-red-500 text-xs italic"><?php echo $emailError; ?></p>
+                                <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($emailError); ?></p>
                             <?php endif; ?>
                         </div>
                         <div class="mb-4">
                             <label class="block font-bold mb-0.5 text-white" for="Username">Username</label>
-                            <input class="w-30 lg:w-50 px-3 py-2 border-[3px] rounded hover:border-[#BB86FC] active:border-[#BB86FC] <?php echo isset($usernameError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" style="height:17px">
+                            <input class="w-30 lg:w-50 px-3 py-2 border-[3px] rounded hover:border-[#BB86FC] active:border-[#BB86FC] <?php echo htmlspecialchars(isset($usernameError)) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" style="height:17px">
                             <!-- if there is an error, show it -->
                             <?php if (isset($usernameError)) : ?>
-                                <p class="text-red-500 text-xs italic"><?php echo $usernameError; ?></p>
+                                <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($usernameError); ?></p>
                             <?php endif; ?>
                         </div>
                         <div class="mb-4">
                             <label class="block font-bold mb-0.5 text-white" for="Password">Password <span style="font-size: 7.65px; font-style: italic;">*a minimum of 5 characters</span></label>
-                            <input class="w-30 lg:w-50 px-3 py-2 border-[3px] rounded hover:border-[#BB86FC] active:border-[#BB86FC] <?php echo isset($passwordError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="password" name="password" style="height:17px">
+                            <input class="w-30 lg:w-50 px-3 py-2 border-[3px] rounded hover:border-[#BB86FC] active:border-[#BB86FC] <?php echo htmlspecialchars(isset($passwordError)) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="password" name="password" style="height:17px">
                             <!-- if there is an error, show it -->
                             <?php if (isset($passwordError)) : ?>
-                                <p class="text-red-500 text-xs italic" style="width: 200px;"><?php echo $passwordError; ?></p>
+                                <p class="text-red-500 text-xs italic" style="width: 200px;"><?php echo htmlspecialchars($passwordError); ?></p>
                             <?php endif; ?>
                         </div>
                         <div class="flex flex-col items-center mb-8">

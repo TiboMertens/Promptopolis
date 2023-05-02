@@ -48,14 +48,14 @@ try {
     <?php if (isset($result)) : ?>
         <div class="absolute inset-0 flex items-center justify-center">
             <div class="bg-[#2A2A2A] w-1/2 md:w-1/3 xl:w-1/4 mx-auto my-auto rounded text-center pt-10 pb-10">
-                <h1 class="text-center text-[26px] font-bold pb-5 text-white"><?php echo $result ?></h1>
+                <h1 class="text-center text-[26px] font-bold pb-5 text-white"><?php echo htmlspecialchars($result) ?></h1>
                 <a class="mt-4 text-[#BB86FC] hover:text-[#A25AFB]" href="login.php">Back to login.</a>
             </div>
         </div>
     <?php elseif (isset($error)) : ?>
         <div class="absolute inset-0 flex items-center justify-center">
             <div class="bg-[#2A2A2A] w-1/2 md:w-1/3 xl:w-1/4 mx-auto my-auto rounded text-center pt-10 pb-10">
-                <h1 class="text-center text-[26px] font-bold pb-5 text-white"><?php echo $error ?></h1>
+                <h1 class="text-center text-[26px] font-bold pb-5 text-white"><?php echo htmlspecialchars($error) ?></h1>
                 <a class="mt-4 text-[#BB86FC] hover:text-[#A25AFB]" href="login.php">Back to login.</a>
             </div>
         </div>
@@ -69,10 +69,10 @@ try {
                         <div class="w-30">
                             <div class="mb-4">
                                 <label class="block font-bold mb-0.5 text-white" for="newPassword">New Password</label>
-                                <input class="w-full lg:w-55 px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB] <?php echo isset($passwordError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="password" name="password">
+                                <input class="w-full lg:w-55 px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB] <?php echo htmlspecialchars(isset($passwordError)) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="password" name="password">
                                 <!-- if there is an error, show it -->
                                 <?php if (isset($passwordError)) : ?>
-                                    <p class="text-red-500 text-xs italic" style="width: 200px;"><?php echo $passwordError; ?></p>
+                                    <p class="text-red-500 text-xs italic" style="width: 200px;"><?php echo htmlspecialchars($passwordError); ?></p>
                                 <?php endif; ?>
                             </div>
                             <div class="flex flex-col items-center mb-10">

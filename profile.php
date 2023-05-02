@@ -90,7 +90,7 @@ if (isset($_SESSION['loggedin'])) {
 
     <header class="mt-[50px] md:mt-[100px]">
         <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
-            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="<?php echo $accountProfilePicture; ?>" alt="profile picture"></div>
+            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="<?php echo htmlspecialchars($accountProfilePicture); ?>" alt="profile picture"></div>
             <div class="mr-5 ml-5 mb-10  ">
                 <div class="flex justify-center items-center md:mt-15 md:flex md:justify-start">
                     <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($username); ?></h1>
@@ -106,12 +106,12 @@ if (isset($_SESSION['loggedin'])) {
                     <?php elseif ($isAdmin == false && $ownIsAdmin) : ?>
                         <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']['id']) ?>" value="Vote for admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
                         <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[1px]">
-                            <p class="voting">Votes: <?php echo $votes  ?>/2</p>
+                            <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>
                     <?php elseif ($isAdmin && $ownIsAdmin) : ?>
                         <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']['id']) ?>" value="Vote to remove admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
                         <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[2px]">
-                            <p class="voting">Votes: <?php echo $votes  ?>/2</p>
+                            <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>
                     <?php endif ?>
                 </div>
@@ -128,15 +128,15 @@ if (isset($_SESSION['loggedin'])) {
     </header>
     <section class="mt-10">
         <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Prompts</h1>
-        <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg <?php echo $amount <= 0 ? 'justify-center items-center' : '' ?>">
+        <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg <?php echo htmlspecialchars($amount) <= 0 ? 'justify-center items-center' : '' ?>">
             <div class="flex flex-shrink-0 gap-5">
                 <?php if ($amount <= 0) : ?>
                     <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">User has no prompts</p>
                 <?php endif ?>
                 <?php foreach ($prompts as $prompt) : ?>
                     <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>">
-                        <img src="<?php echo $prompt['cover_url']; ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
-                        <h2 class="text-white font-bold text-[18px] mt-2"><?php echo $prompt['title'] ?></h2>
+                        <img src="<?php echo htmlspecialchars($prompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                        <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($prompt['title']) ?></h2>
                     </a>
                 <?php endforeach; ?>
             </div>
