@@ -1,5 +1,6 @@
 <?php
 require_once('../vendor/autoload.php');
+session_start();
 
 if (!empty($_POST)) {
     $user_id = $_POST['user_id'];
