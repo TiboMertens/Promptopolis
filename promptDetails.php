@@ -107,7 +107,7 @@ try {
     <!-- if error, show error -->
     <?php if (isset($error)) : ?>
         <div class="flex flex-col items-center justify-center h-screen">
-            <h1 class="text-center text-[26px] font-bold text-white"><?php echo $error ?></h1>
+            <h1 class="text-center text-[26px] font-bold text-white"><?php echo htmlspecialchars($error) ?></h1>
             <a class="mt-4 text-[#BB86FC] hover:text-[#A25AFB]" href="index.php">Go to homepage</a>
         </div>
     <?php else : ?>

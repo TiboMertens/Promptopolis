@@ -154,21 +154,21 @@ if (isset($_SESSION["loggedin"])) {
                     <label class="block font-bold mb-0.5 text-white" for="title">Title</label>
                     <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="text" name="title" id="title">
                     <?php if (isset($titleError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $titleError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($titleError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
                     <label class="block font-bold mb-0.5 text-white" for="description">Description</label>
                     <textarea class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" name="description" id="description" rows="4"></textarea>
                     <?php if (isset($descriptionError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $descriptionError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($descriptionError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
                     <label class="block font-bold mb-0.5 text-white" for="price">Price</label>
                     <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="text" name="price" id="price">
                     <?php if (isset($priceError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $priceError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($priceError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
@@ -178,7 +178,7 @@ if (isset($_SESSION["loggedin"])) {
                         <option value="Dall-E">Dall-E</option>
                     </select>
                     <?php if (isset($modelError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $modelError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($modelError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
@@ -191,7 +191,7 @@ if (isset($_SESSION["loggedin"])) {
                         <option value="Line_art">Line art</option>
                     </select>
                     <?php if (isset($modelError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $modelError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($modelError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
@@ -200,7 +200,7 @@ if (isset($_SESSION["loggedin"])) {
                     <div id="tag-container"></div>
                     <button class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded mt-3" name="tag" id="add-tag-btn">Add another Tag</button>
                     <?php if (isset($tagsError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $tagsError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($tagsError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
@@ -216,7 +216,7 @@ if (isset($_SESSION["loggedin"])) {
                         file:border-[#A25AFB]
                         file:active:border-[#A25AFB]" type="file" name="mainImage" id="mainImage" onchange="previewFile()">
                     <?php if (isset($mainImageError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $mainImageError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($mainImageError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
@@ -230,7 +230,7 @@ if (isset($_SESSION["loggedin"])) {
                         file:border-[#A25AFB]
                         file:active:border-[#A25AFB]" type="file" name="overviewImage" id="overviewImage" onchange="previewFileOverview()">
                     <?php if (isset($overviewImageError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $overviewImageError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($overviewImageError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
@@ -243,7 +243,7 @@ if (isset($_SESSION["loggedin"])) {
                         file:border-[#A25AFB]
                         file:active:border-[#A25AFB]" type="file" name="image3" id="image3" onchange="previewFile3()">
                     <?php if (isset($image3Error)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $image3Error; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($image3Error); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
@@ -256,7 +256,7 @@ if (isset($_SESSION["loggedin"])) {
                         file:border-[#A25AFB]
                         file:active:border-[#A25AFB]" type="file" name="image4" id="image4" onchange="previewFile4()">
                     <?php if (isset($image4Error)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $image4Error; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($image4Error); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="flex justify-center">
@@ -268,4 +268,3 @@ if (isset($_SESSION["loggedin"])) {
 </body>
 
 </html>
-Schrijven naar Tibo Mertens

@@ -52,7 +52,7 @@ if (!empty($_POST)) {
                             <label class="block font-bold mb-0.5 text-white" for="email">Email</label>
                             <input class="w-full lg:w-55 px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB] <?php echo isset($emailError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="email">
                             <?php if (isset($emailError)) : ?>
-                                <p class="text-red-500 text-xs italic" style="width: 200px;"><?php echo $emailError; ?></p>
+                                <p class="text-red-500 text-xs italic" style="width: 200px;"><?php echo htmlspecialchars($emailError); ?></p>
                             <?php endif; ?>
                         </div>
                         <div class="flex flex-col items-center mb-10">

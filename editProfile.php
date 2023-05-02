@@ -160,16 +160,16 @@ if (isset($_SESSION['loggedin'])) {
                     <p class="block font-bold mb-0.5 text-white">Selecteer foto om te uploaden:</p>
                     <input type="file" name="fileToUpload" id="fileToUpload">
                     <?php if (isset($profilePictureError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $profilePictureError ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($profilePictureError) ?></p>
                     <?php endif; ?>
                 </div>
 
 
                 <div class="mb-4">
                     <label for="username" class="block font-bold mb-0.5 text-white">Username</label>
-                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB] <?php echo isset($usernameError) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB] <?php echo htmlspecialchars(isset($usernameError)) ? 'border-red-500' : ''; ?>" style="height: 35px; font-size:1rem;" type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
                     <?php if (isset($usernameError)) : ?>
-                        <p class="text-red-500 text-xs italic"><?php echo $usernameError; ?></p>
+                        <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($usernameError); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
