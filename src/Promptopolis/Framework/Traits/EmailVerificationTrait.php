@@ -1,4 +1,6 @@
 <?php 
+namespace Promptopolis\Framework\Traits;
+
 trait EmailVerificationTrait {
     public function sendVerifyEmail($key) 
     { 
@@ -23,7 +25,7 @@ trait EmailVerificationTrait {
         try { 
             $response = $sendgrid->send($email); 
             return true; 
-        } catch (Exception $e) { 
+        } catch (\Exception $e) { 
             echo 'Caught exception: ' . $e->getMessage() . "\n"; 
             return false; 
         } 

@@ -15,7 +15,7 @@ class User
     protected string $resetToken;
     protected string $bio;
 
-    // use EmailVerificationTrait;
+    use EmailVerificationTrait;
 
     /**
      * Get the value of id
