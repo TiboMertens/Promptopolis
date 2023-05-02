@@ -2,9 +2,9 @@
 require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
-$config = parse_ini_file('config/config.ini', true);
+$config = parse_ini_file(__DIR__ . "\src\Promptopolis\Framework\config\config.ini");
 
-$key = $config[' keys ']['SENDGRID_API_KEY'];
+$key = $config['SENDGRID_API_KEY'];
 
 if (!empty($_POST)) {
     try {
@@ -50,10 +50,10 @@ if (!empty($_POST)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 </head>
-
-<body class="bg-cover bg-[#121212]" style="background-image: url(images/signup-image.jpg);">
+<!-- style="background-image: url(images/signup-image.jpg);" -->
+<body class="bg-cover bg-[#121212]" >
 
     <form action="" method="post">
         <div class="absolute inset-0 flex items-center justify-center">

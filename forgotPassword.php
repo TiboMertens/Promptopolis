@@ -2,9 +2,9 @@
 require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
-$config = parse_ini_file('config/config.ini', true);
+$config = parse_ini_file(__DIR__ . "\src\Promptopolis\Framework\config\config.ini");
 
-$key = $config[' keys ']['SENDGRID_API_KEY'];
+$key = $config['SENDGRID_API_KEY'];
 
 if (!empty($_POST)) {
     $email = $_POST['email'];
