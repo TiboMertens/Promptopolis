@@ -89,7 +89,6 @@ if (isset($_SESSION['loggedin'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script src="js/voting.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
@@ -129,9 +128,17 @@ if (isset($_SESSION['loggedin'])) {
                             <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>
                     <?php endif ?>
+
                     <?php if ($id != $sessionid) : ?>
                         <div><button data-id="<?php echo $id?>" data-state="<?php echo $followingbtn ?>" name="follow" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-1 px-7 text-lg  rounded flex justify-center ml-3"><?php echo $followingbtn ?></button></div>
-                <?php endif ?>
+                    <?php endif ?>
+                
+                    <?php if($id != $sessionid): ?>
+                    <div class="message text-red-500 text-xs italic ml-3">
+                        <p class="text-red-500 text-xs italic"></p>
+                    </div>
+                    <?php endif ?>
+
                 </div>
                 
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
@@ -192,6 +199,8 @@ if (isset($_SESSION['loggedin'])) {
                 });
         });
     </script>
+
+    <script src="js/voting.js"></script>
 </body>
 
 </html>

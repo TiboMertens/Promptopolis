@@ -8,14 +8,22 @@ if (!empty($_POST)) {
 
     $user = new \Promptopolis\Framework\User();
     $moderator = new \Promptopolis\Framework\Moderator();
-    $moderator->updateVotes($user_id, $loggedInUser_id);
+    $canVote = $moderator->updateVotes($user_id, $loggedInUser_id);
+
+    if ($canVote == false) {
+        $status = "error";
+        $message = "You have already voted for this user";
+    } else {
+        $status = "success";
+        $message = "Vote was saved";
+    }
 
     $votes = $user->getVotes($user_id);
     $moderator->checkStatus($user_id);
 
     $result = [
-        "status" => "success",
-        "message" => "Vote was saved",
+        "status" => $status,
+        "message" => $message,
         "votes" => $votes
     ];
 
