@@ -13,7 +13,8 @@ if (isset($_SESSION["loggedin"])) {
     if (!empty($_POST["submit"])) {
         try {
             $upload = new Promptopolis\Framework\Upload();
-            $upload->setUser_id($_SESSION["id"]["id"]);
+            $prompt = new Promptopolis\Framework\Prompt();
+            $prompt->setUser_id($_SESSION["id"]["id"]);
 
             $images = ["mainImage", "overviewImage", "image3", "image4"];
 
@@ -31,15 +32,19 @@ if (isset($_SESSION["loggedin"])) {
                             switch ($image) {
                                 case "mainImage":
                                     $upload->setMainImage($imageFileType, $target_file);
+                                    $prompt->setMainImage($target_file);
                                     break;
                                 case "overviewImage":
                                     $upload->setOverviewImage($imageFileType, $target_file);
+                                    $prompt->setOverviewImage($target_file);
                                     break;
                                 case "image3":
                                     $upload->setImage3($imageFileType, $target_file);
+                                    $prompt->setImage3($target_file);
                                     break;
                                 case "image4":
                                     $upload->setImage4($imageFileType, $target_file);
+                                    $prompt->setImage4($target_file);
                                     break;
                             }
                         }
@@ -64,28 +69,28 @@ if (isset($_SESSION["loggedin"])) {
             }
 
             try {
-                $upload->setTitle($_POST["title"]);
+                $prompt->setTitle($_POST["title"]);
             } catch (Exception $e) {
                 $titleError = $e->getMessage();
                 $exceptionCaught = true;
             }
 
             try {
-                $upload->setDescription($_POST["description"]);
+                $prompt->setDescription($_POST["description"]);
             } catch (Exception $e) {
                 $descriptionError = $e->getMessage();
                 $exceptionCaught = true;
             }
 
             try {
-                $upload->setPrice($_POST["price"]);
+                $prompt->setPrice($_POST["price"]);
             } catch (Exception $e) {
                 $priceError = $e->getMessage();
                 $exceptionCaught = true;
             }
 
             try {
-                $upload->setModel($_POST["model"]);
+                $prompt->setModel($_POST["model"]);
             } catch (Exception $e) {
                 $modelError = $e->getMessage();
                 $exceptionCaught = true;
@@ -102,21 +107,21 @@ if (isset($_SESSION["loggedin"])) {
                 $tags[] = $_POST['tag3'];
             }
             try {
-                $upload->setTags($tags);
+                $prompt->setTags($tags);
             } catch (Exception $e) {
                 $tagsError = $e->getMessage();
                 $exceptionCaught = true;
             }
 
-            $upload->setCategory($_POST["category"]);
+            $prompt->setCategory($_POST["category"]);
 
             if (!$exceptionCaught) {
                 if ($isVerified == 1) {
-                    $upload->setIs_approved(1);
+                    $prompt->setIs_approved(1);
                 } else {
-                    $upload->setIs_approved(0);
+                    $prompt->setIs_approved(0);
                 }
-                $upload->savePrompt();
+                $prompt->savePrompt($mainImage, $overviewImage, $image3, $image4);
                 header("Location: profile.php");
             }
         } catch (Exception $e) {
