@@ -50,10 +50,10 @@ if (!empty($_POST)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up</title>
     <link rel="stylesheet" href="css/styles.css">
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<!-- style="background-image: url(images/signup-image.jpg);" -->
-<body class="bg-cover bg-[#121212]" >
+
+<body class="bg-cover bg-[#121212]" style="background-image: url(images/signup-image.jpg);" >
 
     <form action="" method="post">
         <div class="absolute inset-0 flex items-center justify-center">
