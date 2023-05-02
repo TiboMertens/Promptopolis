@@ -461,7 +461,7 @@ class User
     public function signup($key)
     {
         self::save();
-        // $this->sendVerifyEmail($key);
+        $this->sendVerifyEmail($key);
         header("Location:index.php");
     }
 
