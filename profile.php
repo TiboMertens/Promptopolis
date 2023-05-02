@@ -74,7 +74,7 @@ if (isset($_SESSION['loggedin'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script src="js/voting.js" defer></script>
+    <!-- <script src="js/voting.js" defer></script> -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/c2626c7e45.js" crossorigin="anonymous"></script>
 </head>
@@ -114,6 +114,11 @@ if (isset($_SESSION['loggedin'])) {
                             <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>
                     <?php endif ?>
+                    <?php if($id != $sessionid): ?>
+                    <div class="message text-red-500 text-xs italic ml-3">
+                        <p class="text-red-500 text-xs italic"></p>
+                    </div>
+                    <?php endif ?>
                 </div>
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>
@@ -142,6 +147,46 @@ if (isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </section>
+    <script>
+        //add click event to voted button
+        const voted = document.querySelector('[name="voted"]');
+
+        //select the voting text
+        const voting = document.querySelector(".voting");
+
+        //select the p tag with id message
+        var message = document.querySelector(".message");
+
+        message.addEventListener("click", function(e) {
+            e.preventDefault();
+            console.log("message clicked");
+        });
+
+        //add eventlistener
+        voted.addEventListener("click", function(e) {
+            e.preventDefault();
+
+            let user_id = this.getAttribute("data-id");
+
+            //create formdata object
+            let formData = new FormData();
+            //append user id to formdata
+            formData.append("user_id", user_id);
+
+            console.log(formData);
+            fetch("ajax/votes.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(json) {
+                    voting.innerHTML = "Votes: " + json.votes + "/2";
+                    message.innerHTML = json.message;
+                });
+        });
+    </script>
 </body>
 
 </html>

@@ -4,6 +4,14 @@ const voted = document.querySelector('[name="voted"]');
 //select the voting text
 const voting = document.querySelector(".voting");
 
+//select the p tag with id message
+var message = document.querySelector(".message");
+
+message.addEventListener("click", function(e) {
+  e.preventDefault();
+  console.log("message clicked");
+});
+
 //add eventlistener
 voted.addEventListener("click", function (e) {
   e.preventDefault();
@@ -25,5 +33,6 @@ voted.addEventListener("click", function (e) {
     })
     .then(function (json) {
       voting.innerHTML = "Votes: " + json.votes + "/2";
+      message.innerHTML = 'hey';
     });
 });
