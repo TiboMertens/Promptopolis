@@ -90,7 +90,7 @@ if (isset($_SESSION['loggedin'])) {
                     $user->setBio($newBio);
 
                     //update user details
-                    $user->updateUserDetails();
+                    $users = $user->updateUserDetails();
 
                     //redirect to profile
                     header("Location: profile.php");
@@ -118,9 +118,6 @@ if (isset($_SESSION['loggedin'])) {
 } else {
     header('Location: login.php');
 }
-
-
-
 
 ?>
 <!DOCTYPE html>
