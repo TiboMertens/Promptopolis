@@ -3,7 +3,7 @@ require_once('../vendor/autoload.php');
 
 if (!empty($_POST)) {
     $user_id = $_POST['user_id'];
-    $loggedInUser_id = $_POST['loggedInUser_id'];
+    $loggedInUser_id = $_SESSION['id']['id'];
 
     $user = new \Promptopolis\Framework\User();
     $moderator = new \Promptopolis\Framework\Moderator();

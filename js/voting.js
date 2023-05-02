@@ -10,14 +10,11 @@ voted.addEventListener("click", function (e) {
 
   let user_id = this.getAttribute("data-id");
 
-  let loggedInUser_id = this.getAttribute("data-loggedInUserId");
-
   //create formdata object
   let formData = new FormData();
   //append user id to formdata
   formData.append("user_id", user_id);
-  formData.append("loggedInUser_id", loggedInUser_id);
-
+  
   console.log(formData);
   fetch("ajax/votes.php", {
     method: "POST",
