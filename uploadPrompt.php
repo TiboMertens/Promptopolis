@@ -2,8 +2,11 @@
 require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
+use Promptopolis\Framework\Upload;
+
 if (isset($_SESSION["loggedin"])) {
     $user = new \Promptopolis\Framework\User();
+    $prompt = new \Promptopolis\Framework\Prompt();
     $id = $_SESSION["id"]["id"];
     $userDetails = $user->getUserDetails($id);
     $profilePicture = $userDetails['profile_picture_url'];
@@ -13,7 +16,6 @@ if (isset($_SESSION["loggedin"])) {
     if (!empty($_POST["submit"])) {
         try {
             $upload = new Promptopolis\Framework\Upload();
-            $prompt = new Promptopolis\Framework\Prompt();
             $prompt->setUser_id($_SESSION["id"]["id"]);
 
             $images = ["mainImage", "overviewImage", "image3", "image4"];
@@ -31,19 +33,19 @@ if (isset($_SESSION["loggedin"])) {
                         } else {
                             switch ($image) {
                                 case "mainImage":
-                                    $upload->setMainImage($imageFileType, $target_file);
+                                    Upload::uploadImage($image, $imageFileType, $target_file);
                                     $prompt->setMainImage($target_file);
                                     break;
                                 case "overviewImage":
-                                    $upload->setOverviewImage($imageFileType, $target_file);
+                                    Upload::uploadImage($image, $imageFileType, $target_file);
                                     $prompt->setOverviewImage($target_file);
                                     break;
                                 case "image3":
-                                    $upload->setImage3($imageFileType, $target_file);
+                                    Upload::uploadImage($image, $imageFileType, $target_file);
                                     $prompt->setImage3($target_file);
                                     break;
                                 case "image4":
-                                    $upload->setImage4($imageFileType, $target_file);
+                                    Upload::uploadImage($image, $imageFileType, $target_file);
                                     $prompt->setImage4($target_file);
                                     break;
                             }
@@ -121,7 +123,7 @@ if (isset($_SESSION["loggedin"])) {
                 } else {
                     $prompt->setIs_approved(0);
                 }
-                $prompt->savePrompt($mainImage, $overviewImage, $image3, $image4);
+                $prompt->savePrompt();
                 header("Location: profile.php");
             }
         } catch (Exception $e) {
