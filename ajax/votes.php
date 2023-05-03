@@ -10,12 +10,12 @@ if (!empty($_POST)) {
     $moderator = new \Promptopolis\Framework\Moderator();
     $canVote = $moderator->updateVotes($user_id, $loggedInUser_id);
 
-    if ($canVote == false) {
+    if ($canVote) {
         $status = "error";
         $message = "You have already voted for this user";
     } else {
         $status = "success";
-        $message = "Vote was saved";
+        $message = "";
     }
 
     $votes = $user->getVotes($user_id);

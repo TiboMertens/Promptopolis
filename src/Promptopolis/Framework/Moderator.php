@@ -27,9 +27,8 @@ class Moderator extends User
             $statement->bindValue(":voted_for", $id);
             $statement->bindValue(":voted_by", $loggedInUser_id);
             $statement->execute();
-        } else {
-            return false;
         }
+        return $result;
     }
 
     public function checkStatus($id)
