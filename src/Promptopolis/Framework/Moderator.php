@@ -33,7 +33,10 @@ class Moderator extends User
 
     public function checkStatus($id)
     {
-        if (User::isModerator($id) == false) {
+        //check if the user is admin
+        $admin = User::isModerator($id);
+
+        if (User::isModerator($id) == 0) {
             $this->checkToMakeAdmin($id);
         } else {
             $this->checkToRemoveAdmin($id);
