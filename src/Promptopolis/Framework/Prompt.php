@@ -184,7 +184,7 @@ class prompt
         }
     }
 
-       /**
+    /**
      * Get the value of user_id
      */
     public function getUser_id()
@@ -230,7 +230,7 @@ class prompt
         }
     }
 
-       /**
+    /**
      * Get the value of is_approved
      */
     public function getIs_approved()
@@ -453,7 +453,7 @@ class prompt
 
     /**
      * Get the value of mainImage
-     */ 
+     */
     public function getMainImage()
     {
         return $this->mainImage;
@@ -463,7 +463,7 @@ class prompt
      * Set the value of mainImage
      *
      * @return  self
-     */ 
+     */
     public function setMainImage($mainImage)
     {
         $this->mainImage = $mainImage;
@@ -473,7 +473,7 @@ class prompt
 
     /**
      * Get the value of overviewImage
-     */ 
+     */
     public function getOverviewImage()
     {
         return $this->overviewImage;
@@ -483,7 +483,7 @@ class prompt
      * Set the value of overviewImage
      *
      * @return  self
-     */ 
+     */
     public function setOverviewImage($overviewImage)
     {
         $this->overviewImage = $overviewImage;
@@ -493,7 +493,7 @@ class prompt
 
     /**
      * Get the value of image3
-     */ 
+     */
     public function getImage3()
     {
         return $this->image3;
@@ -503,7 +503,7 @@ class prompt
      * Set the value of image3
      *
      * @return  self
-     */ 
+     */
     public function setImage3($image3)
     {
         $this->image3 = $image3;
@@ -513,7 +513,7 @@ class prompt
 
     /**
      * Get the value of image4
-     */ 
+     */
     public function getImage4()
     {
         return $this->image4;
@@ -523,7 +523,7 @@ class prompt
      * Set the value of image4
      *
      * @return  self
-     */ 
+     */
     public function setImage4($image4)
     {
         $this->image4 = $image4;

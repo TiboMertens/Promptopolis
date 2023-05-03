@@ -17,10 +17,9 @@ if (isset($_SESSION['loggedin'])) {
         //get 15 prompts to approve
         $promptsToApprove = Prompt::get15ToApprovePrompts();
     }
-  
 }
-  //::newPrompts
-  $newPrompts = Prompt::getNewPrompts();
+//::newPrompts
+$newPrompts = Prompt::getNewPrompts();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +36,7 @@ if (isset($_SESSION['loggedin'])) {
 
 <body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php") ?>
-    
+
     <div class="flex flex-col justify-center items-center h-[420px]">
         <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Lorem ipsum dolor, sit amet consectetur adipiscing elit!</h1>
         <div class="flex justify-center items-center">
@@ -61,7 +60,7 @@ if (isset($_SESSION['loggedin'])) {
                         <div class=" flex flex-shrink-0 gap-5">
                             <?php foreach ($promptsToApprove as $promptToApprove) : ?>
                                 <a href="promptDetails.php?id=<?php echo htmlspecialchars($promptToApprove['id']) ?>">
-                                    <img  src="<?php echo htmlspecialchars($promptToApprove['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                                    <img src="<?php echo htmlspecialchars($promptToApprove['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                                     <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($promptToApprove['title']) ?></h2>
                                 </a>
                             <?php endforeach; ?>
@@ -75,20 +74,20 @@ if (isset($_SESSION['loggedin'])) {
         <?php endif; ?>
         <!-- nieuwe prompts worden chronologisch getoond - feature britt -->
         <section>
-        <h1 class="font-bold text-[24px] text-white mb-2 ml-5">New prompts <a href="showcase.php?filterOrder=new" class="text-[12px] text-[#BB86FC] hover:text-[#A25AFB] hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
-                    <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
-                        <div class=" flex flex-shrink-0 gap-5">
-                            <?php foreach ($newPrompts as $newPrompt) : ?>
-                                <a href="promptDetails.php?id=<?php echo htmlspecialchars($newPrompt['id']) ?>&new">
-                                    <img  src="<?php echo htmlspecialchars($newPrompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
-                                    <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($newPrompt['title']) ?></h2>
-                                </a>
-                            <?php endforeach; ?>
-                            <div class="pt-20 mt-2 px-10">
-                                <a href="showcase.php?filter=new" class="text-[#BB86FC] hover:bg-[#A25AFB] font-bold underline">View all</a>
-                            </div>
-                        </div>
+            <h1 class="font-bold text-[24px] text-white mb-2 ml-5">New prompts <a href="showcase.php?filterOrder=new" class="text-[12px] text-[#BB86FC] hover:text-[#A25AFB] hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
+            <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
+                <div class=" flex flex-shrink-0 gap-5">
+                    <?php foreach ($newPrompts as $newPrompt) : ?>
+                        <a href="promptDetails.php?id=<?php echo htmlspecialchars($newPrompt['id']) ?>&new">
+                            <img src="<?php echo htmlspecialchars($newPrompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                            <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($newPrompt['title']) ?></h2>
+                        </a>
+                    <?php endforeach; ?>
+                    <div class="pt-20 mt-2 px-10">
+                        <a href="showcase.php?filter=new" class="text-[#BB86FC] hover:bg-[#A25AFB] font-bold underline">View all</a>
                     </div>
+                </div>
+            </div>
         </section>
     </main>
 </body>

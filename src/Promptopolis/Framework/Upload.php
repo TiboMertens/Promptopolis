@@ -4,27 +4,31 @@ namespace Promptopolis\Framework;
 
 class Upload
 {
-    public static function uploadImage($image, $imageFileType, $target_file){
-            self::checkImage($image);
-            self::checkSize($image);
-            self::checkImageType($imageFileType);
-            self::move($image, $target_file);
+    public static function uploadImage($image, $imageFileType, $target_file)
+    {
+        self::checkImage($image);
+        self::checkSize($image);
+        self::checkImageType($imageFileType);
+        self::move($image, $target_file);
     }
 
-    public static function checkImage($image){
+    public static function checkImage($image)
+    {
         $check = getimagesize($_FILES[$image]["tmp_name"]);
         if ($check === false) {
             throw new \exception("File is not an image.");
         }
     }
 
-    public static function checkSize($image){
+    public static function checkSize($image)
+    {
         if ($_FILES[$image]["size"] > 1000000) {
             throw new \exception("File is too large.");
         }
     }
 
-    public static function checkImageType($imageFileType){
+    public static function checkImageType($imageFileType)
+    {
         if (
             $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif"
@@ -33,7 +37,8 @@ class Upload
         }
     }
 
-    public static function move($image, $target_file){
+    public static function move($image, $target_file)
+    {
         if (move_uploaded_file($_FILES[$image]["tmp_name"], $target_file)) {
             //is uploaded
         } else {

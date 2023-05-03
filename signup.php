@@ -35,7 +35,6 @@ if (!empty($_POST)) {
         //$user->signup ---> daarin functie save & mail aanroepen.
         // save the user to the database
         $user->signup($key);
-            
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
@@ -53,7 +52,7 @@ if (!empty($_POST)) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-cover bg-[#121212]" style="background-image: url(images/signup-image.jpg);" >
+<body class="bg-cover bg-[#121212]" style="background-image: url(images/signup-image.jpg);">
 
     <form action="" method="post">
         <div class="absolute inset-0 flex items-center justify-center">

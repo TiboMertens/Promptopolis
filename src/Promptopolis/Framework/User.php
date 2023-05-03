@@ -476,23 +476,26 @@ class User
         $count = $statement->rowCount();
         return $count;
     }
-    public function followUser($followsId){
+    public function followUser($followsId)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("INSERT INTO user_follow (followed_by, follows) VALUES (:followed_by, :follows)");
         $statement->bindValue(":followed_by", $_SESSION['id']['id']);
         $statement->bindValue(":follows", $followsId);
         $statement->execute();
     }
-    
-    public function unfollowUser($followsId){
+
+    public function unfollowUser($followsId)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("DELETE FROM user_follow WHERE followed_by = :followed_by AND follows = :follows");
         $statement->bindValue(":followed_by", $_SESSION['id']['id']);
         $statement->bindValue(":follows", $followsId);
         $statement->execute();
     }
-    
-    public function isFollowing($followsId){
+
+    public function isFollowing($followsId)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM user_follow WHERE followed_by = :followed_by AND follows = :follows");
         $statement->bindValue(":followed_by", $_SESSION['id']['id']);
