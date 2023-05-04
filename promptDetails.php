@@ -24,6 +24,8 @@ try {
 
         //get data
         $title = $promptDetails['title'];
+        $motivation = $promptDetails['message'];
+        $denied = $promptDetails['is_denied'];
         $description = $promptDetails['description'];
         $cover_url = $promptDetails['cover_url'];
         $image2 = $promptDetails['image_url2'];
@@ -126,6 +128,12 @@ try {
         <main class="ml-auto mr-auto max-w-[500px] md:flex md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]">
             <div class="m-5 md:mt-[60px] lg:mt-5 pt-[70px]">
                 <div class=""><img src="<?php echo htmlspecialchars($cover_url); ?>" alt="prompt cover" class="rounded-md max-h-[600px] xl:max-h-[500px] xl:w-[700px]"></div>
+                <?php if ($denied == 1) : ?>
+                    <div class="flex gap-2 mt-5">
+                        <h1 class="font-bold text-white text-[22px] mb-2">Why your prompt was denied: </h1>
+                        <p class="text-white relative top-[5px]"><?php echo htmlspecialchars($motivation) ?></p>
+                    </div>
+                <?php else: ?>
                 <div class="text-[#cccccc] text-[14px] lg:text-[16px]">
                     <div class="flex gap-4">
                         <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
@@ -180,6 +188,7 @@ try {
                         </div>
                     <?php endif ?>
                 </div>
+                <?php endif ?>
             </div>
             <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
                 <div class="relative">

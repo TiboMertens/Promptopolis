@@ -437,6 +437,17 @@ class prompt
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public static function getDeniedPromptsByUser($user_id)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :user_id AND is_denied = 1 ORDER BY tstamp DESC");
+        $statement->bindValue(":user_id", $user_id);
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
+
     public static function getNewPrompts()
     {
         try {
