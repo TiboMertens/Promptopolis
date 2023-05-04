@@ -526,4 +526,52 @@ class User
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return !empty($result);
     }
+
+    public static function getFavourites($id, $limit, $offset)
+    {
+        $conn = Db::getInstance();
+        //get all promptDetails from table prompts, only the prompts the user has favourited in the table favourites
+        $statement = $conn->prepare("SELECT * FROM prompts INNER JOIN favourites ON prompts.id = favourites.prompt_id WHERE favourites.user_id = :user_id ORDER BY favourites.id DESC LIMIT :limit OFFSET :offset");
+        $statement->bindValue(":user_id", $id);
+        $statement->bindValue(":limit", $limit, \PDO::PARAM_INT);
+        $statement->bindValue(":offset", $offset, \PDO::PARAM_INT);
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public static function getAllFavourites($id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM favourites WHERE user_id = :user_id");
+        $statement->bindValue(":user_id", $id);
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function checkFavourite($user_id, $prompt_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM favourites WHERE user_id = :user_id AND prompt_id = :prompt_id");
+        $statement->bindValue(":user_id", $user_id);
+        $statement->bindValue(":prompt_id", $prompt_id);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        return !empty($result);
+    }
+
+    public function addFav($prompt_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("INSERT INTO favourites (user_id, prompt_id) VALUES (:user_id, :prompt_id)");
+        $statement->bindValue(":user_id", $_SESSION['id']);
+        $statement->bindValue(":prompt_id", $prompt_id);
+        $statement->execute();
+    }
+
+    public function removeFav($prompt_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("DELETE FROM favourites WHERE user_id = :user_id AND prompt_id = :prompt_id");
+        $statement->bindValue(":user_id", $_SESSION['id']);
+        $statement->bindValue(":prompt_id", $prompt_id);
+        $statement->execute();
+    }
 }
