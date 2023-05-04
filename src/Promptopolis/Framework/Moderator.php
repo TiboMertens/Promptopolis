@@ -12,6 +12,15 @@ class Moderator extends User
         $statement->execute();
     }
 
+    public function deny($id, $message)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE prompts SET is_denied = 1, is_approved = 0, message = :message WHERE id = :id");
+        $statement->bindValue(":message", $message);
+        $statement->bindValue(":id", $id);
+        $statement->execute();
+    }
+
     public function updateVotes($id, $loggedInUser_id)
     {
         $conn = Db::getInstance();

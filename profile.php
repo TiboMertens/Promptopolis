@@ -55,7 +55,9 @@ if (isset($_SESSION['loggedin'])) {
 
         //get user's prompts
         $prompts = Promptopolis\Framework\Prompt::getPromptsByUser($id);
+        $deniedPrompts = Promptopolis\Framework\Prompt::getDeniedPromptsByUser($id);
         $amount = count($prompts);
+        $deniedAmount = count($deniedPrompts);
 
 
         if ($id != $sessionid) {
@@ -165,6 +167,21 @@ if (isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </section>
+    <?php if ($id == $_SESSION['id'] && $deniedAmount != 0) : ?>
+        <section class="mt-10">
+            <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Denied prompts</h1>
+            <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
+                <div class="flex flex-shrink-0 gap-5">
+                    <?php foreach ($deniedPrompts as $prompt) : ?>
+                        <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>">
+                            <img src="<?php echo htmlspecialchars($prompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                            <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($prompt['title']) ?></h2>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+    <?php endif ?>
     <script src="js/follow.js"></script>
     <script src="js/voting.js"></script>
 </body>

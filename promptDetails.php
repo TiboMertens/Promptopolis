@@ -24,6 +24,8 @@ try {
 
         //get data
         $title = $promptDetails['title'];
+        $motivation = $promptDetails['message'];
+        $denied = $promptDetails['is_denied'];
         $description = $promptDetails['description'];
         $cover_url = $promptDetails['cover_url'];
         $image2 = $promptDetails['image_url2'];
@@ -51,6 +53,20 @@ try {
             }
         }
 
+        if ($denied == 1 && $authorID != $_SESSION['id']) {
+            header("Location: index.php");
+        }
+
+        //if prompt is not approved, only moderators and the author can see it
+        if ($isApproved == 0 && $authorID != $_SESSION['id']) {
+            //if user is not a moderator, redirect to index
+            if (!$isModerator) {
+                header("Location: index.php");
+            } else {
+                $moderator = new Promptopolis\Framework\Moderator();
+            }
+        }
+
         if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
             $state = "remove";
         } else {
@@ -69,7 +85,6 @@ try {
         throw new exception('No correct id provided');
     }
 
-    //if on aprove page and approve button is clicked, approve prompt
     if ($isApproved == 0) {
         //if user is not a moderator, redirect to index
         if (!$isModerator) {
@@ -84,6 +99,15 @@ try {
             if ($user->checkToVerify()) {
                 $user->verify();
             }
+            //redirect to showcase
+            header("Location: showcase.php");
+        }
+
+        if (isset($_POST['deny'])) {
+            $motivation = $_POST['motivation'];
+
+            $moderator->deny($prompt_id, $motivation);
+
             //redirect to showcase
             header("Location: showcase.php");
         }
@@ -118,6 +142,12 @@ try {
         <main class="ml-auto mr-auto max-w-[500px] md:flex md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]">
             <div class="m-5 md:mt-[60px] lg:mt-5 pt-[70px]">
                 <div class=""><img src="<?php echo htmlspecialchars($cover_url); ?>" alt="prompt cover" class="rounded-md max-h-[600px] xl:max-h-[500px] xl:w-[700px]"></div>
+                <?php if ($denied == 1) : ?>
+                    <div class="flex gap-2 mt-5">
+                        <h1 class="font-bold text-white text-[22px] mb-2">Why your prompt was denied: </h1>
+                        <p class="text-white relative top-[5px]"><?php echo htmlspecialchars($motivation) ?></p>
+                    </div>
+                <?php else: ?>
                 <div class="text-[#cccccc] text-[14px] lg:text-[16px]">
                     <div class="flex gap-4">
                         <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
@@ -162,7 +192,8 @@ try {
                         <div class="flex mb-3 items-center">
                             <?php if ($isApproved == 0) : ?>
                                 <form action="" method="post">
-                                    <button type=submit name=approve class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Approve prompt</a>
+                                    <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
+                                        <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
                                 </form>
                             <?php else : ?>
                                 <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</a>
@@ -171,6 +202,7 @@ try {
                         </div>
                     <?php endif ?>
                 </div>
+                <?php endif ?>
             </div>
             <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
                 <div class="relative">
@@ -191,7 +223,36 @@ try {
                 </div>
             </div>
         </main>
+        <div class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
+            <div class="bg-[#2A2A2A] p-8 rounded shadow-md text-center">
+                <form action="" method="post">
+                    <h2 class="text-lg font-bold mb-4 text-white">Write your motivation to deny this prompt.</h2>
+                    <input type="text" name="motivation" placeholder="Enter your motivation here" class="border border-gray-300 rounded px-4 py-2 mb-4 w-full">
+                    <!-- add close button -->
+                    <div class="flex gap-5">
+                        <button class="close bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Close</button>
+                        <button name="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Deny prompt</button>
+                </form>
+            </div>
+        </div>
+        </div>
     <?php endif ?>
+    <script>
+        const deny = document.getElementById("deny");
+        const overlay = document.querySelector(".hidden");
+        const close = document.querySelector(".close");
+
+        deny.addEventListener("click", (e) => {
+            e.preventDefault();
+            overlay.classList.remove("hidden");
+            overlay.classList.add('flex');
+        });
+
+        close.addEventListener("click", () => {
+            overlay.classList.add("hidden");
+            overlay.classList.add('flex');
+        });
+    </script>
     <script src="js/fav.js"></script>
 </body>
 
