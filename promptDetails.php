@@ -5,7 +5,7 @@ include_once("bootstrap.php");
 $user = new \Promptopolis\Framework\User();
 
 if (isset($_SESSION['loggedin'])) {
-    $userDetails = $user->getUserDetails($_SESSION['id']['id']);
+    $userDetails = $user->getUserDetails($_SESSION['id']);
     $profilePicture = $userDetails['profile_picture_url'];
 }
 
@@ -45,7 +45,7 @@ try {
         $authorID = $promptDetails['user_id'];
         if (isset($_SESSION["loggedin"])) {
             //check if user is a moderator
-            $isModerator = $user->isModerator($_SESSION['id']['id']);
+            $isModerator = $user->isModerator($_SESSION['id']);
             if ($promptDetails['is_approved'] == 0 && !$isModerator) {
                 header("Location: index.php");
             }

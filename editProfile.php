@@ -6,7 +6,7 @@ include_once("bootstrap.php");
 if (isset($_SESSION['loggedin'])) {
 
     //Get id from logged in user
-    $id = $_SESSION['id']['id'];
+    $id = $_SESSION['id'];
 
     $user = new \Promptopolis\Framework\User();
     $userDetails = $user->getUserDetails($id);

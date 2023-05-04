@@ -8,9 +8,9 @@ if (isset($_SESSION['loggedin'])) {
 
     //check if user is an admin
     $user = new \Promptopolis\Framework\User();
-    $userDetails = $user->getUserDetails($_SESSION['id']['id']);
+    $userDetails = $user->getUserDetails($_SESSION['id']);
     $profilePicture = $userDetails['profile_picture_url'];
-    $isModerator = $user->isModerator($_SESSION['id']['id']);
+    $isModerator = $user->isModerator($_SESSION['id']);
 
     if ($isModerator == true) {
         // new Moderator();

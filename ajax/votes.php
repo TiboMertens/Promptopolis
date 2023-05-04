@@ -4,7 +4,7 @@ session_start();
 
 if (!empty($_POST)) {
     $user_id = $_POST['user_id'];
-    $loggedInUser_id = $_SESSION['id']['id'];
+    $loggedInUser_id = $_SESSION['id'];
 
     $user = new \Promptopolis\Framework\User();
     $moderator = new \Promptopolis\Framework\Moderator();

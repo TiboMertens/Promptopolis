@@ -13,9 +13,9 @@ try {
 
     if (isset($_SESSION["loggedin"])) {
         $user = new \Promptopolis\Framework\User();
-        $userDetails = $user->getUserDetails($_SESSION['id']['id']);
+        $userDetails = $user->getUserDetails($_SESSION['id']);
         $profilePicture = $userDetails['profile_picture_url'];
-        if (Promptopolis\Framework\User::isModerator($_SESSION['id']['id'])) {
+        if (Promptopolis\Framework\User::isModerator($_SESSION['id'])) {
             $moderator = true;
         }
     }
@@ -34,7 +34,7 @@ try {
         }
     }
 
-    if (!isset($_SESSION['loggedin']) || !Promptopolis\Framework\User::isModerator($_SESSION['id']['id']) || $filterApprove != 'not_approved') {
+    if (!isset($_SESSION['loggedin']) || !Promptopolis\Framework\User::isModerator($_SESSION['id']) || $filterApprove != 'not_approved') {
         $filterApprove = 'all';
     }
 

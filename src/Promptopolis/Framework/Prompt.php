@@ -426,7 +426,7 @@ class prompt
         $conn = Db::getInstance();
         $sql = "SELECT * FROM prompts WHERE user_id = :user_id";
 
-        if ($_SESSION['id']['id'] != $user_id) {
+        if ($_SESSION['id'] != $user_id) {
             $sql .= " AND is_approved = 1";
         }
 

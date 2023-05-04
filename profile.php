@@ -13,17 +13,17 @@ if (isset($_SESSION['loggedin'])) {
         }
 
         //Get id from logged in user
-        $sessionid = $_SESSION['id']['id'];
+        $sessionid = $_SESSION['id'];
 
         //If id is not set, set it to the id of the logged in user
         if ($id === "" || $id === null) {
-            $id = $_SESSION['id']['id'];
+            $id = $_SESSION['id'];
         }
 
         $user = new \Promptopolis\Framework\User();
         if ($id != 0) {
             $userDetails = $user->getUserDetails($id);
-            $ownUserDetails = $user->getUserDetails($_SESSION['id']['id']);
+            $ownUserDetails = $user->getUserDetails($_SESSION['id']);
         } else {
             throw new Exception("User not found");
         }
@@ -119,7 +119,7 @@ if (isset($_SESSION['loggedin'])) {
                             <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>
                     <?php elseif ($isAdmin && $ownIsAdmin) : ?>
-                        <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']['id']) ?>" value="Vote to remove admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
+                        <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']) ?>" value="Vote to remove admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
                         <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[2px]">
                             <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>

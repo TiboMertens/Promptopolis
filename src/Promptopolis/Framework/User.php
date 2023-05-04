@@ -27,7 +27,7 @@ class User
         $statement->bindValue(":username", $username);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        return $result;
+            return $result["id"];
     }
 
     /**
@@ -373,7 +373,7 @@ class User
         $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, profile_picture_url= :profile_picture_url WHERE id = :id");
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":bio", $this->bio);
-        $statement->bindValue(":id", $_SESSION['id']['id']);
+        $statement->bindValue(":id", $_SESSION['id']);
         $statement->bindValue(":profile_picture_url", $this->profile_picture_url);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -480,7 +480,7 @@ class User
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("INSERT INTO user_follow (followed_by, follows) VALUES (:followed_by, :follows)");
-        $statement->bindValue(":followed_by", $_SESSION['id']['id']);
+        $statement->bindValue(":followed_by", $_SESSION['id']);
         $statement->bindValue(":follows", $followsId);
         $statement->execute();
     }
@@ -489,7 +489,7 @@ class User
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("DELETE FROM user_follow WHERE followed_by = :followed_by AND follows = :follows");
-        $statement->bindValue(":followed_by", $_SESSION['id']['id']);
+        $statement->bindValue(":followed_by", $_SESSION['id']);
         $statement->bindValue(":follows", $followsId);
         $statement->execute();
     }
@@ -498,7 +498,7 @@ class User
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM user_follow WHERE followed_by = :followed_by AND follows = :follows");
-        $statement->bindValue(":followed_by", $_SESSION['id']['id']);
+        $statement->bindValue(":followed_by", $_SESSION['id']);
         $statement->bindValue(":follows", $followsId);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
