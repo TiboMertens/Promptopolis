@@ -12,6 +12,15 @@ class Moderator extends User
         $statement->execute();
     }
 
+    public function deny($id, $message)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE prompts SET is_denied = 1, is_approved = 0, message = :message WHERE id = :id");
+        $statement->bindValue(":message", $message);
+        $statement->bindValue(":id", $id);
+        $statement->execute();
+    }
+
     public function updateVotes($id, $loggedInUser_id)
     {
         $conn = Db::getInstance();
@@ -27,15 +36,16 @@ class Moderator extends User
             $statement->bindValue(":voted_for", $id);
             $statement->bindValue(":voted_by", $loggedInUser_id);
             $statement->execute();
-        } else {
-            return false;
         }
+        return $result;
     }
 
     public function checkStatus($id)
     {
+        //check if the user is admin
+        $admin = User::isModerator($id);
 
-        if (User::isModerator($id)) {
+        if (User::isModerator($id) == 0) {
             $this->checkToMakeAdmin($id);
         } else {
             $this->checkToRemoveAdmin($id);

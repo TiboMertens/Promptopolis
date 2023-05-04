@@ -3,6 +3,8 @@
 namespace Promptopolis\Framework;
 
 //traits    
+
+use Exception;
 use Promptopolis\Framework\Traits\EmailVerificationTrait;
 
 class User
@@ -27,7 +29,7 @@ class User
         $statement->bindValue(":username", $username);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        return $result;
+            return $result["id"];
     }
 
     /**
@@ -59,11 +61,24 @@ class User
      */
     public function setUsername($username)
     {
-        if (!empty($username)) {
+        if (!empty($username) && self::checkUsername($username)) {
             $this->username = $username;
             return $this;
         } else {
             throw new \exception("Not a valid username");
+        }
+    }
+
+    public function checkUsername($username) {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT username FROM users WHERE username = :username");
+        $statement->bindValue(":username", $username);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        if ($result) {
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -82,7 +97,7 @@ class User
      */
     public function setEmail($email)
     {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) && self::checkEmail($email)) {
             $this->email = $email;
             return $this;
         } else {
@@ -207,18 +222,7 @@ class User
         $statement->bindValue(":id", intval($id));
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        if ($result) {
-            $result = 1;
-        } else {
-            $result = 0;
-        }
-
-        //if result is 1, user is admin, else user is not admin
-        if ($result === 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return $result['is_admin'];
     }
 
     public function getUserDetails($id)
@@ -254,7 +258,24 @@ class User
         $statement->bindValue(":id", $this->id);
         $statement->execute();
     }
+
     public function checkEmail($email)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+
+        //if result is 1, email is already in use, else email is not in use
+        if ($result) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function checkExistingEmail($email)
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
@@ -269,6 +290,7 @@ class User
             throw new \exception("Email is not in use.");
         }
     }
+
     public function sendResetMail($key)
     {
         $token = $this->resetToken;
@@ -373,7 +395,7 @@ class User
         $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, profile_picture_url= :profile_picture_url WHERE id = :id");
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":bio", $this->bio);
-        $statement->bindValue(":id", $_SESSION['id']['id']);
+        $statement->bindValue(":id", $_SESSION['id']);
         $statement->bindValue(":profile_picture_url", $this->profile_picture_url);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -475,5 +497,81 @@ class User
         //count the amount of rows and return it
         $count = $statement->rowCount();
         return $count;
+    }
+    public function followUser($followsId)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("INSERT INTO user_follow (followed_by, follows) VALUES (:followed_by, :follows)");
+        $statement->bindValue(":followed_by", $_SESSION['id']);
+        $statement->bindValue(":follows", $followsId);
+        $statement->execute();
+    }
+
+    public function unfollowUser($followsId)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("DELETE FROM user_follow WHERE followed_by = :followed_by AND follows = :follows");
+        $statement->bindValue(":followed_by", $_SESSION['id']);
+        $statement->bindValue(":follows", $followsId);
+        $statement->execute();
+    }
+
+    public function isFollowing($followsId)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM user_follow WHERE followed_by = :followed_by AND follows = :follows");
+        $statement->bindValue(":followed_by", $_SESSION['id']);
+        $statement->bindValue(":follows", $followsId);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        return !empty($result);
+    }
+
+    public static function getFavourites($id, $limit, $offset)
+    {
+        $conn = Db::getInstance();
+        //get all promptDetails from table prompts, only the prompts the user has favourited in the table favourites
+        $statement = $conn->prepare("SELECT * FROM prompts INNER JOIN favourites ON prompts.id = favourites.prompt_id WHERE favourites.user_id = :user_id ORDER BY favourites.id DESC LIMIT :limit OFFSET :offset");
+        $statement->bindValue(":user_id", $id);
+        $statement->bindValue(":limit", $limit, \PDO::PARAM_INT);
+        $statement->bindValue(":offset", $offset, \PDO::PARAM_INT);
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public static function getAllFavourites($id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM favourites WHERE user_id = :user_id");
+        $statement->bindValue(":user_id", $id);
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function checkFavourite($user_id, $prompt_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM favourites WHERE user_id = :user_id AND prompt_id = :prompt_id");
+        $statement->bindValue(":user_id", $user_id);
+        $statement->bindValue(":prompt_id", $prompt_id);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        return !empty($result);
+    }
+
+    public function addFav($prompt_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("INSERT INTO favourites (user_id, prompt_id) VALUES (:user_id, :prompt_id)");
+        $statement->bindValue(":user_id", $_SESSION['id']);
+        $statement->bindValue(":prompt_id", $prompt_id);
+        $statement->execute();
+    }
+
+    public function removeFav($prompt_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("DELETE FROM favourites WHERE user_id = :user_id AND prompt_id = :prompt_id");
+        $statement->bindValue(":user_id", $_SESSION['id']);
+        $statement->bindValue(":prompt_id", $prompt_id);
+        $statement->execute();
     }
 }

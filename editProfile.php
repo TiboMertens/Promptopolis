@@ -6,7 +6,7 @@ include_once("bootstrap.php");
 if (isset($_SESSION['loggedin'])) {
 
     //Get id from logged in user
-    $id = $_SESSION['id']['id'];
+    $id = $_SESSION['id'];
 
     $user = new \Promptopolis\Framework\User();
     $userDetails = $user->getUserDetails($id);
@@ -22,10 +22,10 @@ if (isset($_SESSION['loggedin'])) {
         $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        if (!empty($_FILES["fileToUpload"]["name"])){
+        if (!empty($_FILES["fileToUpload"]["name"])) {
             $profilePicture = $target_file;
         }
-        
+
         // Check if image file is a actual image or fake image
 
         if (isset($_POST["submit"])) {

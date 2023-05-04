@@ -7,7 +7,7 @@ use Promptopolis\Framework\Upload;
 if (isset($_SESSION["loggedin"])) {
     $user = new \Promptopolis\Framework\User();
     $prompt = new \Promptopolis\Framework\Prompt();
-    $id = $_SESSION["id"]["id"];
+    $id = $_SESSION["id"];
     $userDetails = $user->getUserDetails($id);
     $profilePicture = $userDetails['profile_picture_url'];
     $isVerified = $userDetails['is_verified'];
@@ -16,7 +16,7 @@ if (isset($_SESSION["loggedin"])) {
     if (!empty($_POST["submit"])) {
         try {
             $upload = new Promptopolis\Framework\Upload();
-            $prompt->setUser_id($_SESSION["id"]["id"]);
+            $prompt->setUser_id($_SESSION['id']);
 
             $images = ["mainImage", "overviewImage", "image3", "image4"];
 

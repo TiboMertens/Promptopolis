@@ -13,17 +13,17 @@ if (isset($_SESSION['loggedin'])) {
         }
 
         //Get id from logged in user
-        $sessionid = $_SESSION['id']['id'];
+        $sessionid = $_SESSION['id'];
 
         //If id is not set, set it to the id of the logged in user
         if ($id === "" || $id === null) {
-            $id = $_SESSION['id']['id'];
+            $id = $_SESSION['id'];
         }
 
         $user = new \Promptopolis\Framework\User();
         if ($id != 0) {
             $userDetails = $user->getUserDetails($id);
-            $ownUserDetails = $user->getUserDetails($_SESSION['id']['id']);
+            $ownUserDetails = $user->getUserDetails($_SESSION['id']);
         } else {
             throw new Exception("User not found");
         }
@@ -55,7 +55,20 @@ if (isset($_SESSION['loggedin'])) {
 
         //get user's prompts
         $prompts = Promptopolis\Framework\Prompt::getPromptsByUser($id);
+        $deniedPrompts = Promptopolis\Framework\Prompt::getDeniedPromptsByUser($id);
         $amount = count($prompts);
+        $deniedAmount = count($deniedPrompts);
+
+
+        if ($id != $sessionid) {
+            if ($user->isFollowing($id)) {
+                $following = true;
+                $followingbtn = "Unfollow";
+            } else {
+                $following = false;
+                $followingbtn = "Follow";
+            }
+        }
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
@@ -103,22 +116,29 @@ if (isset($_SESSION['loggedin'])) {
                             <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="editProfile.php">Edit</a>
                         </div>
                     <?php elseif ($isAdmin == false && $ownIsAdmin) : ?>
-                        <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" ?>" value="Vote for admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
+                        <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" value="Vote for admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
                         <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[1px]">
                             <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>
                     <?php elseif ($isAdmin && $ownIsAdmin) : ?>
-                        <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" data-loggedInUserId="<?php echo htmlspecialchars($_SESSION['id']['id']) ?>" value="Vote to remove admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
+                        <div class="flex justify-center items-center mb-[4px] ml-4 bg-[#121212]"><input type="submit" data-id="<?php echo htmlspecialchars($id) ?>" value="Vote to remove admin" name="voted" class="text-[#BB86FC] font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center bg-[#121212] cursor-pointer"></div>
                         <div class="ml-4 text-[#BB86FC] font-bold relative bottom-[2px]">
                             <p class="voting">Votes: <?php echo htmlspecialchars($votes)  ?>/2</p>
                         </div>
                     <?php endif ?>
-                    <?php if($id != $sessionid): ?>
-                    <div class="message text-red-500 text-xs italic ml-3">
-                        <p class="text-red-500 text-xs italic"></p>
-                    </div>
+
+                    <?php if ($id != $sessionid) : ?>
+                        <div><button data-id="<?php echo $id ?>" data-state="<?php echo $followingbtn ?>" name="follow" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-1 px-7 text-lg  rounded flex justify-center ml-3"><?php echo $followingbtn ?></button></div>
                     <?php endif ?>
+
+                    <?php if ($id != $sessionid) : ?>
+                        <div class="message text-red-500 text-xs italic ml-3">
+                            <p class="text-red-500 text-xs italic"></p>
+                        </div>
+                    <?php endif ?>
+
                 </div>
+
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>
                 </div>
@@ -128,6 +148,7 @@ if (isset($_SESSION['loggedin'])) {
                         <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="changePassword.php">Change Password</a>
                     </div>
                 <?php endif ?>
+
             </div>
     </header>
     <section class="mt-10">
@@ -146,6 +167,22 @@ if (isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </section>
+    <?php if ($id == $_SESSION['id'] && $deniedAmount != 0) : ?>
+        <section class="mt-10">
+            <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Denied prompts</h1>
+            <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
+                <div class="flex flex-shrink-0 gap-5">
+                    <?php foreach ($deniedPrompts as $prompt) : ?>
+                        <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>">
+                            <img src="<?php echo htmlspecialchars($prompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                            <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($prompt['title']) ?></h2>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+    <?php endif ?>
+    <script src="js/follow.js"></script>
     <script src="js/voting.js"></script>
 </body>
 

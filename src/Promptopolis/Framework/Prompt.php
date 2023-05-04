@@ -184,7 +184,7 @@ class prompt
         }
     }
 
-       /**
+    /**
      * Get the value of user_id
      */
     public function getUser_id()
@@ -230,7 +230,7 @@ class prompt
         }
     }
 
-       /**
+    /**
      * Get the value of is_approved
      */
     public function getIs_approved()
@@ -332,7 +332,7 @@ class prompt
             $conn = Db::getInstance();
             $sql = "SELECT p.* FROM prompts p
             INNER JOIN prompt_tags pt ON p.id = pt.prompt_id
-            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
+            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
             if ($searchTerm != '') {
                 $sql .= " AND LOWER (p.title) LIKE LOWER (:searchTerm) OR LOWER (t.name) LIKE LOWER (:searchTerm)";
             }
@@ -370,7 +370,7 @@ class prompt
             // sql injectie voor deze filter
 
             $conn = Db::getInstance();
-            $sql = "SELECT * FROM prompts WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
+            $sql = "SELECT * FROM prompts WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
             if ($searchTerm != '') {
                 $sql .= " AND LOWER (title) LIKE LOWER (:searchTerm)";
             }
@@ -398,7 +398,7 @@ class prompt
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 0 ORDER BY tstamp DESC LIMIT 15");
+            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 0 AND is_denied = 0 ORDER BY tstamp DESC LIMIT 15");
             $statement->execute();
             $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $prompts;
@@ -424,9 +424,9 @@ class prompt
     public static function getPromptsByUser($user_id)
     {
         $conn = Db::getInstance();
-        $sql = "SELECT * FROM prompts WHERE user_id = :user_id";
+        $sql = "SELECT * FROM prompts WHERE user_id = :user_id AND is_denied = 0";
 
-        if ($_SESSION['id']['id'] != $user_id) {
+        if ($_SESSION['id'] != $user_id) {
             $sql .= " AND is_approved = 1";
         }
 
@@ -437,6 +437,17 @@ class prompt
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public static function getDeniedPromptsByUser($user_id)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :user_id AND is_denied = 1 ORDER BY tstamp DESC");
+        $statement->bindValue(":user_id", $user_id);
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
+
     public static function getNewPrompts()
     {
         try {
@@ -453,7 +464,7 @@ class prompt
 
     /**
      * Get the value of mainImage
-     */ 
+     */
     public function getMainImage()
     {
         return $this->mainImage;
@@ -463,7 +474,7 @@ class prompt
      * Set the value of mainImage
      *
      * @return  self
-     */ 
+     */
     public function setMainImage($mainImage)
     {
         $this->mainImage = $mainImage;
@@ -473,7 +484,7 @@ class prompt
 
     /**
      * Get the value of overviewImage
-     */ 
+     */
     public function getOverviewImage()
     {
         return $this->overviewImage;
@@ -483,7 +494,7 @@ class prompt
      * Set the value of overviewImage
      *
      * @return  self
-     */ 
+     */
     public function setOverviewImage($overviewImage)
     {
         $this->overviewImage = $overviewImage;
@@ -493,7 +504,7 @@ class prompt
 
     /**
      * Get the value of image3
-     */ 
+     */
     public function getImage3()
     {
         return $this->image3;
@@ -503,7 +514,7 @@ class prompt
      * Set the value of image3
      *
      * @return  self
-     */ 
+     */
     public function setImage3($image3)
     {
         $this->image3 = $image3;
@@ -513,7 +524,7 @@ class prompt
 
     /**
      * Get the value of image4
-     */ 
+     */
     public function getImage4()
     {
         return $this->image4;
@@ -523,13 +534,14 @@ class prompt
      * Set the value of image4
      *
      * @return  self
-     */ 
+     */
     public function setImage4($image4)
     {
         $this->image4 = $image4;
 
         return $this;
     }
+
 
     public function getLikes($id)
     {
@@ -580,3 +592,6 @@ class prompt
         return !empty($result);
     }
 }
+
+}
+

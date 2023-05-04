@@ -17,10 +17,15 @@ filterSelects.forEach((select) => {
 const approveLink = document.getElementById("approve");
 if (approveLink) {
   approveLink.addEventListener("click", () => {
-    const filterApprove = document.querySelector('select[name="filterApprove"]');
+    const filterApprove = document.querySelector(
+      'select[name="filterApprove"]'
+    );
     if (filterApprove) {
       filterApprove.value = "all";
-      localStorage.setItem(`selectedFilter_${filterApprove.name}`, filterApprove.value);
+      localStorage.setItem(
+        `selectedFilter_${filterApprove.name}`,
+        filterApprove.value
+      );
       document.getElementById("filter-form").submit();
     }
   });
@@ -32,7 +37,10 @@ if (approveLink) {
     const filterApprove = document.querySelector('select[name="filterDate"]');
     if (filterApprove) {
       filterApprove.value = "all";
-      localStorage.setItem(`selectedFilter_${filterApprove.name}`, filterApprove.value);
+      localStorage.setItem(
+        `selectedFilter_${filterApprove.name}`,
+        filterApprove.value
+      );
       document.getElementById("filter-form").submit();
     }
   });
@@ -44,7 +52,10 @@ if (approveLink) {
     const filterApprove = document.querySelector('select[name="filterPrice"]');
     if (filterApprove) {
       filterApprove.value = "all";
-      localStorage.setItem(`selectedFilter_${filterApprove.name}`, filterApprove.value);
+      localStorage.setItem(
+        `selectedFilter_${filterApprove.name}`,
+        filterApprove.value
+      );
       document.getElementById("filter-form").submit();
     }
   });
@@ -56,9 +67,11 @@ if (approveLink) {
     const filterApprove = document.querySelector('select[name="filterModel"]');
     if (filterApprove) {
       filterApprove.value = "all";
-      localStorage.setItem(`selectedFilter_${filterApprove.name}`, filterApprove.value);
+      localStorage.setItem(
+        `selectedFilter_${filterApprove.name}`,
+        filterApprove.value
+      );
       document.getElementById("filter-form").submit();
     }
   });
 }
-

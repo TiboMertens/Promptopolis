@@ -5,7 +5,7 @@ if (isset($_SESSION["loggedin"])) {
     if (!empty($_POST)) {
         try {
             //get the id and password from the form
-            $id = $_SESSION['id']['id'];
+            $id = $_SESSION['id'];
             $password = $_POST['password'];
             $newPassword = $_POST['newPassword'];
             //create a new user object

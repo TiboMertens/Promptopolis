@@ -4,22 +4,25 @@ session_start();
 
 if (!empty($_POST)) {
     $user_id = $_POST['user_id'];
-    $loggedInUser_id = $_SESSION['id']['id'];
+    $loggedInUser_id = $_SESSION['id'];
 
     $user = new \Promptopolis\Framework\User();
     $moderator = new \Promptopolis\Framework\Moderator();
     $canVote = $moderator->updateVotes($user_id, $loggedInUser_id);
-
-    if ($canVote == false) {
-        $status = "error";
-        $message = "You have already voted for this user";
+    if ($user_id != $loggedInUser_id) {
+        if ($canVote) {
+            $status = "error";
+            $message = "You have already voted for this user";
+        } else {
+            $status = "success";
+            $message = "";
+        }
+        $votes = $user->getVotes($user_id);
+        $moderator->checkStatus($user_id);
     } else {
-        $status = "success";
-        $message = "Vote was saved";
+        $status = "error";
+        $message = "You cannot vote for yourself";
     }
-
-    $votes = $user->getVotes($user_id);
-    $moderator->checkStatus($user_id);
 
     $result = [
         "status" => $status,
