@@ -586,12 +586,12 @@ class prompt
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM user_like WHERE liked_for = :liked_for AND liked_by = :liked_by");
         $statement->bindValue(":liked_for", $id);
-        $statement->bindValue(":liked_by", $_SESSION['id']['id']);
+        $statement->bindValue(":liked_by", $_SESSION['id']);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return !empty($result);
     }
 }
 
-}
+
 

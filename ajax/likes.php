@@ -4,7 +4,7 @@ session_start();
 
 if (!empty($_POST)) {
     $prompt_id = $_POST['prompt_id'];
-    $loggedInUser_id = $_SESSION['id']['id'];
+    $loggedInUser_id = $_SESSION['id'];
 
     $prompt = new \Promptopolis\Framework\Prompt();
     $canLike = $prompt->updateLikes($prompt_id, $loggedInUser_id);
