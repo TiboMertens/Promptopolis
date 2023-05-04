@@ -15,6 +15,7 @@ try {
         $prompt_id = $_GET['id'];
         $prompt = new Promptopolis\Framework\Prompt();
         $prompt->setId($prompt_id);
+        $likes = $prompt->getLikes($prompt_id);
 
         //get prompt details
         $promptDetails = $prompt->getPromptDetails();
@@ -50,6 +51,13 @@ try {
                 header("Location: index.php");
             }
         }
+
+        if ($prompt->checkLiked($prompt_id, $_SESSION['id'])) {
+            $likeState = "remove";
+        } else {
+            $likeState = "add";
+        }
+
 
         //get author name
         $userDetails = $user->getUserDetails($authorID);
@@ -140,19 +148,27 @@ try {
                                 <?php endif ?>
                             </div>
                         </div>
+
+                        <div class="flex mb-[4px] ml-4 bg-[#121212]">
+                        <p class="liking text-[#BB86FC] font-bold"><?php echo htmlspecialchars($likes) ?></p>
+                            <i id="heart" data-liked="<?php echo $likeState ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $likeState == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[15px] left-[5px]" name="like" style="color: #bb86fc;"></i>
+                           
+                        </div>
+                        
+
                         <div class="mr-5 mb-5">
                             <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                             <p><?php echo htmlspecialchars($description); ?></p>
                         </div>
                     </div>
                     <?php
-                        if (isset($_SESSION["loggedin"])) {
-                            // Als de gebruiker is ingelogd, verwijder de overlay-klasse
-                            echo '<div class="absolute inset-0"></div>';
-                        } else {
-                            // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
-                            echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
-                        }
+                    if (isset($_SESSION["loggedin"])) {
+                        // Als de gebruiker is ingelogd, verwijder de overlay-klasse
+                        echo '<div class="absolute inset-0"></div>';
+                    } else {
+                        // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
+                        echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
+                    }
                     ?>
                     <?php if (isset($_SESSION["loggedin"])) : ?>
                         <div class="flex mb-3 items-center">
@@ -189,6 +205,7 @@ try {
 
         </main>
     <?php endif ?>
+    <script src="js/liking.js"></script>
 </body>
 
 </html>
