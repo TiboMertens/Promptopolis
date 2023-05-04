@@ -20,6 +20,7 @@
                 <?php if (isset($_SESSION['loggedin'])) : ?>
                     <a href="logout.php" class="fa-solid fa-arrow-right-from-bracket text-xl text-white"></a>
                     <div class=""> <a href="profile.php?id=<?php echo $_SESSION['id'] ?>"><img src="<?php echo htmlspecialchars($profilePicture) ?>" alt="profile picture" class="w-9 h-9 rounded-full mr-[20px] border-[1px] border-white relative bottom-1"></a></div>
+                    <div class="relative right-5 top-[2px]"><a href="favourites.php"><i class="fa-solid fa-bookmark fa-xl" style="color: #bb86fc;"></i></a></div>
                 <?php else : ?>
                     <a href="login.php" class="text-sm underline text-white">Login</a>
                 <?php endif; ?>
