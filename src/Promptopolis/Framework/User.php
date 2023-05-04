@@ -3,6 +3,8 @@
 namespace Promptopolis\Framework;
 
 //traits    
+
+use Exception;
 use Promptopolis\Framework\Traits\EmailVerificationTrait;
 
 class User
@@ -270,6 +272,22 @@ class User
             return false;
         } else {
             return true;
+        }
+    }
+
+    public function checkExistingEmail($email)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+
+        //if result is 1, email is already in use, else email is not in use
+        if ($result) {
+            return true;
+        } else {
+            throw new \exception("Email is not in use.");
         }
     }
 

@@ -10,7 +10,7 @@ if (!empty($_POST)) {
     $email = $_POST['email'];
     $user = new \Promptopolis\Framework\User();
     try {
-        $correctEmail = $user->checkEmail($email);
+        $correctEmail = $user->checkExistingEmail($email);
         if ($correctEmail == true) {
             $user->setEmail($email);
             $user->setResetToken(bin2hex(openssl_random_pseudo_bytes(32)));
@@ -21,9 +21,6 @@ if (!empty($_POST)) {
         $emailError = $e->getMessage();
     }
 }
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
