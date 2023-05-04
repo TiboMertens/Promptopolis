@@ -18,7 +18,6 @@ voted.addEventListener("click", function (e) {
   //append user id to formdata
   formData.append("user_id", user_id);
 
-  console.log(formData);
   fetch("ajax/votes.php", {
     method: "POST",
     body: formData,

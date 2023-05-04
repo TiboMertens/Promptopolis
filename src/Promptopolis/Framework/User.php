@@ -207,18 +207,7 @@ class User
         $statement->bindValue(":id", intval($id));
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        if ($result) {
-            $result = 1;
-        } else {
-            $result = 0;
-        }
-
-        //if result is 1, user is admin, else user is not admin
-        if ($result === 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return $result['is_admin'];
     }
 
     public function getUserDetails($id)

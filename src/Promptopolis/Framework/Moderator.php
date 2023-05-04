@@ -27,15 +27,16 @@ class Moderator extends User
             $statement->bindValue(":voted_for", $id);
             $statement->bindValue(":voted_by", $loggedInUser_id);
             $statement->execute();
-        } else {
-            return false;
         }
+        return $result;
     }
 
     public function checkStatus($id)
     {
+        //check if the user is admin
+        $admin = User::isModerator($id);
 
-        if (User::isModerator($id)) {
+        if (User::isModerator($id) == 0) {
             $this->checkToMakeAdmin($id);
         } else {
             $this->checkToRemoveAdmin($id);
