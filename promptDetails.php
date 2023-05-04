@@ -53,6 +53,20 @@ try {
             }
         }
 
+        if ($denied == 1 && $authorID != $_SESSION['id']) {
+            header("Location: index.php");
+        }
+
+        //if prompt is not approved, only moderators and the author can see it
+        if ($isApproved == 0 && $authorID != $_SESSION['id']) {
+            //if user is not a moderator, redirect to index
+            if (!$isModerator) {
+                header("Location: index.php");
+            } else {
+                $moderator = new Promptopolis\Framework\Moderator();
+            }
+        }
+
         if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
             $state = "remove";
         } else {
