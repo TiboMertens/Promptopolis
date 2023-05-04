@@ -59,11 +59,24 @@ class User
      */
     public function setUsername($username)
     {
-        if (!empty($username)) {
+        if (!empty($username) && self::checkUsername($username)) {
             $this->username = $username;
             return $this;
         } else {
             throw new \exception("Not a valid username");
+        }
+    }
+
+    public function checkUsername($username) {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT username FROM users WHERE username = :username");
+        $statement->bindValue(":username", $username);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        if ($result["username"] == $username) {
+            throw new \exception("Username already exists");
+        } else {
+            return true;
         }
     }
 
