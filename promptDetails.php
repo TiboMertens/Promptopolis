@@ -3,18 +3,31 @@ require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
 $user = new \Promptopolis\Framework\User();
-
-if (isset($_SESSION['loggedin'])) {
-    $userDetails = $user->getUserDetails($_SESSION['id']);
-    $profilePicture = $userDetails['profile_picture_url'];
-}
+$prompt = new Promptopolis\Framework\Prompt();
 
 try {
     //if id is set and not NULL, get prompt details
     if (isset($_GET['id']) && !empty($_GET['id'])) {
-        $prompt_id = $_GET['id'];
-        $prompt = new Promptopolis\Framework\Prompt();
-        $prompt->setId($prompt_id);
+        if (isset($_SESSION['loggedin'])) {
+            $userDetails = $user->getUserDetails($_SESSION['id']);
+            $profilePicture = $userDetails['profile_picture_url'];
+
+            $prompt_id = $_GET['id'];
+            $prompt->setId($prompt_id);
+
+            if ($prompt->checkLiked($prompt_id, $_SESSION['id'])) {
+                $likeState = "remove";
+            } else {
+                $likeState = "add";
+            }
+
+            if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
+                $state = "remove";
+            } else {
+                $state = "add";
+            }
+        }
+
         $likes = $prompt->getLikes($prompt_id);
 
         //get prompt details
@@ -55,13 +68,6 @@ try {
         }
 
 
-        if ($prompt->checkLiked($prompt_id, $_SESSION['id'])) {
-            $likeState = "remove";
-        } else {
-            $likeState = "add";
-        }
-
-
         if ($denied == 1 && $authorID != $_SESSION['id']) {
             header("Location: index.php");
         }
@@ -75,13 +81,6 @@ try {
                 $moderator = new Promptopolis\Framework\Moderator();
             }
         }
-
-        if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
-            $state = "remove";
-        } else {
-            $state = "add";
-        }
-
 
         //get author name
         $userDetails = $user->getUserDetails($authorID);
@@ -106,11 +105,11 @@ try {
         if (isset($_POST['approve'])) {
             $moderator->approve($prompt_id);
             //if prompt is appoved, check if user can be verified - if yes, verify user
-            if ($user->checkToVerify()) {
-                $user->verify();
+            if ($user->checkToVerify($id)) {
+                $user->verify($id);
             }
             //redirect to showcase
-            header("Location: showcase.php");
+            header("Location: index.php");
         }
 
         if (isset($_POST['deny'])) {
@@ -119,7 +118,7 @@ try {
             $moderator->deny($prompt_id, $motivation);
 
             //redirect to showcase
-            header("Location: showcase.php");
+            header("Location: index.php");
         }
     }
 } catch (Throwable $e) {
