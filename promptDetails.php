@@ -256,25 +256,10 @@ try {
     <?php endif ?>
 
     <script src="js/liking.js"></script>
-
-    <script>
-        const deny = document.getElementById("deny");
-        const overlay = document.querySelector(".hidden");
-        const close = document.querySelector(".close");
-
-        deny.addEventListener("click", (e) => {
-            e.preventDefault();
-            overlay.classList.remove("hidden");
-            overlay.classList.add('flex');
-        });
-
-        close.addEventListener("click", () => {
-            overlay.classList.add("hidden");
-            overlay.classList.add('flex');
-        });
-    </script>
     <script src="js/fav.js"></script>
-
+    <?php if ($is_approved == 0) : ?>
+        <script src="js/deny.js"></script>
+    <?php endif ?>
 </body>
 
 </html>
