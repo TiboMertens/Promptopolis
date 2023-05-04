@@ -51,6 +51,12 @@ try {
             }
         }
 
+        if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
+            $state = "remove";
+        } else {
+            $state = "add";
+        }
+
         //get author name
         $userDetails = $user->getUserDetails($authorID);
         if ($userDetails == false) {
@@ -86,8 +92,6 @@ try {
     $error = $e->getMessage();
 }
 
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -115,7 +119,10 @@ try {
             <div class="m-5 md:mt-[60px] lg:mt-5 pt-[70px]">
                 <div class=""><img src="<?php echo htmlspecialchars($cover_url); ?>" alt="prompt cover" class="rounded-md max-h-[600px] xl:max-h-[500px] xl:w-[700px]"></div>
                 <div class="text-[#cccccc] text-[14px] lg:text-[16px]">
-                    <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
+                    <div class="flex gap-4">
+                        <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
+                        <i data-fav="<?php echo $state ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $state == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-bookmark fa-xl cursor-pointer relative top-[38px]" name="fav" style="color: #bb86fc;"></i>
+                    </div>
                     <div class="relative">
                         <div class="flex justify-between mb-3">
                             <div class="flex-1">
@@ -146,10 +153,7 @@ try {
                         </div>
                     </div>
                     <?php
-                    if (isset($_SESSION["loggedin"])) {
-                        // Als de gebruiker is ingelogd, verwijder de overlay-klasse
-                        echo '<div class="absolute inset-0"></div>';
-                    } else {
+                    if (!isset($_SESSION["loggedin"])) {
                         // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
                         echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
                     }
@@ -186,9 +190,9 @@ try {
                     ?>
                 </div>
             </div>
-
         </main>
     <?php endif ?>
+    <script src="js/fav.js"></script>
 </body>
 
 </html>
