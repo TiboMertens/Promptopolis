@@ -73,8 +73,8 @@ class User
         $statement->bindValue(":username", $username);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        if ($result["username"] == $username) {
-            throw new \exception("Username already exists");
+        if ($result) {
+            return false;
         } else {
             return true;
         }
@@ -95,7 +95,7 @@ class User
      */
     public function setEmail($email)
     {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) && self::checkEmail($email)) {
             $this->email = $email;
             return $this;
         } else {
@@ -256,6 +256,7 @@ class User
         $statement->bindValue(":id", $this->id);
         $statement->execute();
     }
+
     public function checkEmail($email)
     {
         $conn = Db::getInstance();
@@ -266,11 +267,12 @@ class User
 
         //if result is 1, email is already in use, else email is not in use
         if ($result) {
-            return true;
+            return false;
         } else {
-            throw new \exception("Email is not in use.");
+            return true;
         }
     }
+
     public function sendResetMail($key)
     {
         $token = $this->resetToken;
