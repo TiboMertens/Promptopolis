@@ -15,7 +15,8 @@ try {
         $prompt_id = $_GET['id'];
         $prompt = new Promptopolis\Framework\Prompt();
         $prompt->setId($prompt_id);
-        $likes = $prompt->getLikes($prompt_id);
+        $like = new Promptopolis\Framework\Like();
+        $likes = $like->getLikes($prompt_id);
 
         //get prompt details
         $promptDetails = $prompt->getPromptDetails();
@@ -55,7 +56,7 @@ try {
         }
 
 
-        if ($prompt->checkLiked($prompt_id, $_SESSION['id'])) {
+        if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
             $likeState = "remove";
         } else {
             $likeState = "add";
