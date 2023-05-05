@@ -1,6 +1,6 @@
 const deny = document.getElementById("deny");
-const overlay = document.querySelector(".hidden");
-const close = document.querySelector(".close");
+const overlay = document.getElementById("denyPopup");
+const close2 = document.querySelector(".close");
 
 deny.addEventListener("click", (e) => {
     e.preventDefault();
@@ -8,7 +8,7 @@ deny.addEventListener("click", (e) => {
     overlay.classList.add('flex');
 });
 
-close.addEventListener("click", () => {
+close2.addEventListener("click", () => {
     overlay.classList.add("hidden");
     overlay.classList.add('flex');
 });

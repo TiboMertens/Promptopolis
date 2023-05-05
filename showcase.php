@@ -34,7 +34,7 @@ try {
         }
     }
 
-    if (!isset($_SESSION['loggedin']) || !Promptopolis\Framework\User::isModerator($_SESSION['id']) || $filterApprove != 'not_approved') {
+    if (!isset($_SESSION['loggedin']) || !Promptopolis\Framework\User::isModerator($_SESSION['id'])) {
         $filterApprove = 'all';
     }
 
@@ -92,6 +92,7 @@ try {
                         <select name="filterApprove" class="filter-select rounded-md">
                             <option value="all">All</option>
                             <option value="not_approved">Not approved</option>
+                            <option value="reported">Reported</option>
                         </select>
                     <?php endif; ?>
                 <?php endif; ?>

@@ -297,7 +297,7 @@ class prompt
     public static function getAllowedStatus($filterApprove)
     {
         // if one of the models is not dall-e or midjourney, return all
-        $approved = ['not_approved'];
+        $approved = ['not_approved', 'reported'];
 
         if (!in_array($filterApprove, $approved)) {
             return 'all';
@@ -332,7 +332,21 @@ class prompt
             $conn = Db::getInstance();
             $sql = "SELECT p.* FROM prompts p
             INNER JOIN prompt_tags pt ON p.id = pt.prompt_id
-            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
+            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 ". 
+            ($model != 'all' ? "AND model = :model " : "") . 
+            ($category != 'all' ? "AND category = :category " : "") . 
+            ($approve == 'all' ? "AND is_approved = 1 AND is_reported = 0 " : 
+                ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : 
+                ($approve == 'reported' ? "AND is_reported = 1 " : "")
+                )
+            ) . 
+            ($order == 'new' ? "ORDER BY tstamp DESC " : 
+                ($order == 'old' ? "ORDER BY tstamp ASC " : 
+                ($order == 'high' ? "ORDER BY price DESC " : 
+                    ($order == 'low' ? "ORDER BY price ASC " : "")
+                )
+                )
+            );
             if ($searchTerm != '') {
                 $sql .= " AND LOWER (p.title) LIKE LOWER (:searchTerm) OR LOWER (t.name) LIKE LOWER (:searchTerm)";
             }
@@ -370,9 +384,25 @@ class prompt
             // sql injectie voor deze filter
 
             $conn = Db::getInstance();
-            $sql = "SELECT * FROM prompts WHERE 1=1 " . ($model != 'all' ? "AND model = :model " : "") . ($category != 'all' ? "AND category = :category " : "") . ($approve == 'all' ? "AND is_approved = 1 " : ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : "")) . ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : "")) . ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : ""));
+            $sql = "SELECT p.* FROM prompts p
+            INNER JOIN prompt_tags pt ON p.id = pt.prompt_id
+            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 ". 
+            ($model != 'all' ? "AND model = :model " : "") . 
+            ($category != 'all' ? "AND category = :category " : "") . 
+            ($approve == 'all' ? "AND is_approved = 1 AND is_reported = 0 " : 
+                ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : 
+                ($approve == 'reported' ? "AND is_reported = 1 " : "")
+                )
+            ) . 
+            ($order == 'new' ? "ORDER BY tstamp DESC " : 
+                ($order == 'old' ? "ORDER BY tstamp ASC " : 
+                ($order == 'high' ? "ORDER BY price DESC " : 
+                    ($order == 'low' ? "ORDER BY price ASC " : "")
+                )
+                )
+            );
             if ($searchTerm != '') {
-                $sql .= " AND LOWER (title) LIKE LOWER (:searchTerm)";
+                $sql .= " AND LOWER (p.title) LIKE LOWER (:searchTerm) OR LOWER (t.name) LIKE LOWER (:searchTerm)";
             }
 
             $statement = $conn->prepare($sql);
@@ -399,6 +429,20 @@ class prompt
         try {
             $conn = Db::getInstance();
             $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 0 AND is_denied = 0 ORDER BY tstamp DESC LIMIT 15");
+            $statement->execute();
+            $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            return $prompts;
+        } catch (\PDOException $e) {
+            error_log("PDO error: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public static function getReportedPrompts()
+    {
+        try {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("SELECT *FROM prompts WHERE is_reported = 1 ORDER BY tstamp DESC LIMIT 15");
             $statement->execute();
             $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $prompts;
@@ -452,7 +496,7 @@ class prompt
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 1 ORDER BY tstamp DESC LIMIT 15 ");
+            $statement = $conn->prepare("SELECT * FROM prompts WHERE is_approved = 1 AND is_reported = 0 ORDER BY tstamp DESC LIMIT 15 ");
             $statement->execute();
             $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $prompts;
@@ -466,7 +510,7 @@ class prompt
     {
         try {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("SELECT p.* FROM prompts p JOIN user_follow uf ON p.user_id = uf.follows WHERE uf.followed_by = :userId AND p.is_approved = 1 ORDER BY p.tstamp DESC LIMIT 15");
+            $statement = $conn->prepare("SELECT p.* FROM prompts p JOIN user_follow uf ON p.user_id = uf.follows WHERE uf.followed_by = :userId AND p.is_approved = 1 AND p.is_reported = 0 ORDER BY p.tstamp DESC LIMIT 15");
             $statement->bindValue(':userId', $userId);
             $statement->execute();
             $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);

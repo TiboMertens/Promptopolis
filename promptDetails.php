@@ -6,6 +6,7 @@ $user = new \Promptopolis\Framework\User();
 $prompt = new Promptopolis\Framework\Prompt();
 $like = new Promptopolis\Framework\Like();
 $comment = new Promptopolis\Framework\Comment();
+$report = new Promptopolis\Framework\Report();
 
 try {
     //if id is set and not NULL, get prompt details
@@ -118,7 +119,7 @@ try {
         throw new exception('No correct id provided');
     }
 
-    if ($promptDetails['is_approved'] != 1) {
+    if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) {
         //if user is not a moderator, redirect to index
         if (!$isModerator) {
             header("Location: index.php");
@@ -145,6 +146,7 @@ try {
             header("Location: index.php");
         }
     }
+    
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
@@ -189,9 +191,10 @@ try {
                                 <i id="heart" data-liked="<?php echo $likeState ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $likeState == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[36px]" name="like" style="color: #bb86fc;"></i>
                                 <p class="liking text-[#BB86FC] font-bold relative top-[25px] left-[5px]"><?php echo htmlspecialchars($likes) ?></p>
                             </div>
+                            <i id="flag" class="<?php echo $promptDetails['is_reported'] == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
                         </div>
                         <div class="relative">
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
                                 </div>
@@ -199,7 +202,7 @@ try {
                                     <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
                                 </div>
                             </div>
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
                                 </div>
@@ -214,7 +217,7 @@ try {
                                     <?php endif ?>
                                 </div>
                             </div>
-                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
                                 <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                                 <p><?php echo htmlspecialchars($description); ?></p>
                             </div>
@@ -227,7 +230,7 @@ try {
                         ?>
                         <?php if (isset($_SESSION["loggedin"])) : ?>
                             <div class="flex mb-3 items-center">
-                                <?php if ($promptDetails['is_approved'] == 0) : ?>
+                                <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"]==1) : ?>
                                     <form action="" method="post">
                                         <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
                                             <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
@@ -249,9 +252,9 @@ try {
             <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
                 <div class="relative">
                     <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
-                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
-                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
-                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
 
                     <?php
                     if (isset($_SESSION["loggedin"])) {
@@ -265,15 +268,27 @@ try {
                 </div>
             </div>
         </main>
-        <div class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
+        <div id="denyPopup" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
             <div class="bg-[#2A2A2A] p-8 rounded shadow-md text-center">
                 <form action="" method="post">
-                    <h2 class="text-lg font-bold mb-4 text-white">Write your motivation to deny this prompt.</h2>
+                    <h2 class="text-lg font-bold mb-4 text-white">Write your motivation to deny this prompt.<span class="text-[12px]">(optional)</span></h2>
                     <input type="text" name="motivation" placeholder="Enter your motivation here" class="border border-gray-300 rounded px-4 py-2 mb-4 w-full">
                     <!-- add close button -->
                     <div class="flex gap-5">
                         <button class="close bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Close</button>
                         <button name="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Deny prompt</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="reportPopup" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
+            <div class="bg-[#2A2A2A] p-8 rounded shadow-md text-center">
+                <form action="" method="post">
+                    <h2 class="text-lg font-bold mb-4 text-white">Are you sure you want to report this prompt?</h2>
+                    <!-- add close button -->
+                    <div class="flex gap-5">
+                        <button class="close bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Cancel</button>
+                        <button data-id=<?php echo $prompt_id ?> name="report" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Report prompt</button>
                     </div>
                 </form>
             </div>
@@ -299,11 +314,28 @@ try {
     <?php endforeach ?>
     </div>
 
+    <script src="js/commenting.js"></script>
+    <script src="js/reportPrompt.js"></script>
+    <script src="js/reportPromptPopup.js"></script>
     <script src="js/liking.js"></script>
     <script src="js/fav.js"></script>
-    <script src="js/commenting.js"></script>
-    <?php if ($promptDetails['is_approved'] != 1) : ?>
-        <script src="js/deny.js"></script>
+    <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) : ?>
+        <!-- <script src="js/deny.js"></script> -->
+        <script>const deny = document.getElementById("deny");
+            const overlay = document.getElementById("denyPopup");
+            const close2 = document.querySelector(".close");
+
+            deny.addEventListener("click", (e) => {
+                e.preventDefault();
+                overlay.classList.remove("hidden");
+                overlay.classList.add('flex');
+            });
+
+            close2.addEventListener("click", () => {
+                overlay.classList.add("hidden");
+                overlay.classList.add('flex');
+            });
+        </script>
     <?php endif ?>
 </body>
 
