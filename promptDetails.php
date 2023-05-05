@@ -4,10 +4,14 @@ include_once("bootstrap.php");
 
 $user = new \Promptopolis\Framework\User();
 $prompt = new Promptopolis\Framework\Prompt();
+$like = new Promptopolis\Framework\Like();
 
 try {
     //if id is set and not NULL, get prompt details
     if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $prompt_id = $_GET['id'];
+        $prompt->setId($prompt_id);
+        $likes = $like->getLikes($prompt_id);
         if (isset($_SESSION['loggedin'])) {
             $userDetails = $user->getUserDetails($_SESSION['id']);
             $profilePicture = $userDetails['profile_picture_url'];
@@ -15,7 +19,7 @@ try {
             $prompt_id = $_GET['id'];
             $prompt->setId($prompt_id);
 
-            if ($prompt->checkLiked($prompt_id, $_SESSION['id'])) {
+            if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
                 $likeState = "remove";
             } else {
                 $likeState = "add";
@@ -28,7 +32,7 @@ try {
             }
         }
 
-        $likes = $prompt->getLikes($prompt_id);
+        $likes = $like->getLikes($prompt_id);
 
         //get prompt details
         $promptDetails = $prompt->getPromptDetails();
@@ -55,7 +59,6 @@ try {
             $tag3 = $promptDetails['tag_names'][2];
         }
         $model = $promptDetails['model'];
-        $isApproved = $promptDetails['is_approved'];
 
         //get author id
         $authorID = $promptDetails['user_id'];
@@ -67,13 +70,18 @@ try {
             }
         }
 
+        if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
+            $likeState = "remove";
+        } else {
+            $likeState = "add";
+        }
 
         if ($denied == 1 && $authorID != $_SESSION['id']) {
             header("Location: index.php");
         }
 
         //if prompt is not approved, only moderators and the author can see it
-        if ($isApproved == 0 && $authorID != $_SESSION['id']) {
+        if ($promptDetails['is_approved'] != 1 && $authorID != $_SESSION['id']) {
             //if user is not a moderator, redirect to index
             if (!$isModerator) {
                 header("Location: index.php");
@@ -90,6 +98,18 @@ try {
         } else {
             $authorName = $userDetails['username'];
         }
+
+        try {
+            if (isset($_POST['buy'])) {
+                $purchase = new Promptopolis\Framework\Purchase();
+                $purchase->purchase($prompt_id, $_SESSION['id']);
+            }
+        } catch (\Throwable $th) {
+            $purchaseError = $th->getMessage();
+        }
+
+        //check if the user has bought this prompt
+        $hasBought = $user->hasBought($prompt_id, $_SESSION['id']);
     } else {
         throw new exception('No correct id provided');
     }
@@ -169,7 +189,7 @@ try {
                             <i id="flag" class="fa-regular fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
                         </div>
                         <div class="relative">
-                            <div class="flex justify-between mb-3">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
                                 </div>
@@ -177,7 +197,7 @@ try {
                                     <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
                                 </div>
                             </div>
-                            <div class="flex justify-between mb-3">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
                                 </div>
@@ -192,15 +212,13 @@ try {
                                     <?php endif ?>
                                 </div>
                             </div>
-                            <div class="mr-5 mb-5">
+                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
                                 <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                                 <p><?php echo htmlspecialchars($description); ?></p>
                             </div>
                         </div>
                         <?php
-
                         if (!isset($_SESSION["loggedin"])) {
-
                             // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
                             echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
                         }
@@ -213,10 +231,15 @@ try {
                                             <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
                                     </form>
                                 <?php else : ?>
-                                    <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</a>
+                                    <form action="" method="post">
+                                        <button name="buy" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</button>
+                                    </form>
                                     <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price) . "credit(s)"; ?></p>
                                 <?php endif ?>
                             </div>
+                            <?php if (isset($purchaseError)) : ?>
+                                <p class="text-red-500 text-xs italic relative"><?php echo $purchaseError ?></p>
+                            <?php endif ?>
                         <?php endif ?>
                     </div>
                 <?php endif ?>
@@ -224,9 +247,9 @@ try {
             <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
                 <div class="relative">
                     <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
-                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px]">
-                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px]">
-                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px]">
+                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
 
                     <?php
                     if (isset($_SESSION["loggedin"])) {
