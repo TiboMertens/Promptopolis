@@ -20,6 +20,7 @@ if (isset($_SESSION['loggedin'])) {
 }
 //::newPrompts
 $newPrompts = Prompt::getNewPrompts();
+$followedPrompts = Prompt::getFollowedPrompts($_SESSION['id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,6 +82,22 @@ $newPrompts = Prompt::getNewPrompts();
                         <a href="promptDetails.php?id=<?php echo htmlspecialchars($newPrompt['id']) ?>&new">
                             <img src="<?php echo htmlspecialchars($newPrompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                             <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($newPrompt['title']) ?></h2>
+                        </a>
+                    <?php endforeach; ?>
+                    <div class="pt-20 mt-2 px-10">
+                        <a href="showcase.php?filter=new" class="text-[#BB86FC] hover:bg-[#A25AFB] font-bold underline">View all</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <h1 class="font-bold text-[24px] text-white mb-2 ml-5">Followed creators <a href="showcase.php?filterOrder=new" class="text-[12px] text-[#BB86FC] hover:text-[#A25AFB] hover:text-[14px]">Expand<i class="fa-solid fa-arrow-right pl-1"></i></a></h1>
+            <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
+                <div class=" flex flex-shrink-0 gap-5">
+                    <?php foreach ($followedPrompts as $followedPrompt) : ?>
+                        <a href="promptDetails.php?id=<?php echo htmlspecialchars($followedPrompt['id']) ?>&new">
+                            <img src="<?php echo htmlspecialchars($followedPrompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
+                            <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($followedPrompt['title']) ?></h2>
                         </a>
                     <?php endforeach; ?>
                     <div class="pt-20 mt-2 px-10">
