@@ -34,7 +34,7 @@ try {
         }
     }
 
-    if (!isset($_SESSION['loggedin']) || !Promptopolis\Framework\User::isModerator($_SESSION['id']) || $filterApprove != 'not_approved') {
+    if (!isset($_SESSION['loggedin']) || !Promptopolis\Framework\User::isModerator($_SESSION['id'])) {
         $filterApprove = 'all';
     }
 
