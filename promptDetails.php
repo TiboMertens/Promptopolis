@@ -189,7 +189,7 @@ try {
                             <i id="flag" class="fa-regular fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
                         </div>
                         <div class="relative">
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
                                 </div>
@@ -197,7 +197,7 @@ try {
                                     <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
                                 </div>
                             </div>
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
                                 </div>
@@ -212,7 +212,7 @@ try {
                                     <?php endif ?>
                                 </div>
                             </div>
-                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
                                 <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                                 <p><?php echo htmlspecialchars($description); ?></p>
                             </div>
@@ -247,9 +247,9 @@ try {
             <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
                 <div class="relative">
                     <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
-                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
-                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
-                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
 
                     <?php
                     if (isset($_SESSION["loggedin"])) {
