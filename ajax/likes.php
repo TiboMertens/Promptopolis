@@ -6,12 +6,12 @@ if (!empty($_POST)) {
     $prompt_id = $_POST['prompt_id'];
     $loggedInUser_id = $_SESSION['id'];
 
-    $prompt = new \Promptopolis\Framework\Prompt();
-    $canLike = $prompt->updateLikes($prompt_id, $loggedInUser_id);
+    $like = new \Promptopolis\Framework\Like();
+    $canLike = $like->updateLikes($prompt_id, $loggedInUser_id);
 
     $likeState = $_POST['state'];
 
-    $likes = $prompt->getLikes($prompt_id);
+    $likes = $like->getLikes($prompt_id);
 
     if ($canLike == true) {
         $message = "liked prompt";

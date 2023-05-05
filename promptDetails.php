@@ -4,10 +4,14 @@ include_once("bootstrap.php");
 
 $user = new \Promptopolis\Framework\User();
 $prompt = new Promptopolis\Framework\Prompt();
+$like = new Promptopolis\Framework\Like();
 
 try {
     //if id is set and not NULL, get prompt details
     if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $prompt_id = $_GET['id'];
+        $prompt->setId($prompt_id);
+        $likes = $like->getLikes($prompt_id);
         if (isset($_SESSION['loggedin'])) {
             $userDetails = $user->getUserDetails($_SESSION['id']);
             $profilePicture = $userDetails['profile_picture_url'];
@@ -67,6 +71,11 @@ try {
             }
         }
 
+        if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
+            $likeState = "remove";
+        } else {
+            $likeState = "add";
+        }
 
         if ($denied == 1 && $authorID != $_SESSION['id']) {
             header("Location: index.php");
