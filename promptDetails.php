@@ -94,7 +94,7 @@ try {
         throw new exception('No correct id provided');
     }
 
-    if ($isApproved == 0) {
+    if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) {
         //if user is not a moderator, redirect to index
         if (!$isModerator) {
             header("Location: index.php");
@@ -207,7 +207,7 @@ try {
                         ?>
                         <?php if (isset($_SESSION["loggedin"])) : ?>
                             <div class="flex mb-3 items-center">
-                                <?php if ($isApproved == 0) : ?>
+                                <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"]==1) : ?>
                                     <form action="" method="post">
                                         <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
                                             <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
@@ -271,8 +271,23 @@ try {
     <script src="js/reportPromptPopup.js"></script>
     <script src="js/liking.js"></script>
     <script src="js/fav.js"></script>
-    <?php if ($is_approved == 0) : ?>
-        <script src="js/deny.js"></script>
+    <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) : ?>
+        <!-- <script src="js/deny.js"></script> -->
+        <script>const deny = document.getElementById("deny");
+            const overlay = document.getElementById("denyPopup");
+            const close2 = document.querySelector(".close");
+
+            deny.addEventListener("click", (e) => {
+                e.preventDefault();
+                overlay.classList.remove("hidden");
+                overlay.classList.add('flex');
+            });
+
+            close2.addEventListener("click", () => {
+                overlay.classList.add("hidden");
+                overlay.classList.add('flex');
+            });
+        </script>
     <?php endif ?>
 </body>
 
