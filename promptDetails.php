@@ -19,7 +19,7 @@ try {
             $prompt_id = $_GET['id'];
             $prompt->setId($prompt_id);
 
-            if ($prompt->checkLiked($prompt_id, $_SESSION['id'])) {
+            if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
                 $likeState = "remove";
             } else {
                 $likeState = "add";
@@ -32,7 +32,7 @@ try {
             }
         }
 
-        $likes = $prompt->getLikes($prompt_id);
+        $likes = $like->getLikes($prompt_id);
 
         //get prompt details
         $promptDetails = $prompt->getPromptDetails();
