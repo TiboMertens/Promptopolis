@@ -11,5 +11,4 @@ class Report
         $statement->bindValue(":id", $id);
         $statement->execute();
     }
-
 }

@@ -5,6 +5,7 @@ include_once("bootstrap.php");
 $user = new \Promptopolis\Framework\User();
 $prompt = new Promptopolis\Framework\Prompt();
 $like = new Promptopolis\Framework\Like();
+$report = new Promptopolis\Framework\Report();
 
 try {
     //if id is set and not NULL, get prompt details
@@ -186,7 +187,7 @@ try {
                                 <i id="heart" data-liked="<?php echo $likeState ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $likeState == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[36px]" name="like" style="color: #bb86fc;"></i>
                                 <p class="liking text-[#BB86FC] font-bold relative top-[25px] left-[5px]"><?php echo htmlspecialchars($likes) ?></p>
                             </div>
-                            <i id="flag" class="fa-regular fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
+                            <i id="flag" class="<?php echo $promptDetails['is_reported'] == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
                         </div>
                         <div class="relative">
                             <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
