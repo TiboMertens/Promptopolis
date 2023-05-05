@@ -5,6 +5,7 @@ include_once("bootstrap.php");
 $user = new \Promptopolis\Framework\User();
 $prompt = new Promptopolis\Framework\Prompt();
 $like = new Promptopolis\Framework\Like();
+$comment = new Promptopolis\Framework\Comment();
 
 try {
     //if id is set and not NULL, get prompt details
@@ -15,6 +16,7 @@ try {
         if (isset($_SESSION['loggedin'])) {
             $userDetails = $user->getUserDetails($_SESSION['id']);
             $profilePicture = $userDetails['profile_picture_url'];
+            $username = $userDetails['username'];
 
             $prompt_id = $_GET['id'];
             $prompt->setId($prompt_id);
@@ -277,8 +279,22 @@ try {
         </div>
     <?php endif ?>
 
+    <?php if (isset($_SESSION["loggedin"])): ?>
+    <form data-id="<?php echo $username ?>"  id="comment-form" class="max-w-md mx-auto mb-10">
+        <h2 class="font-bold text-white text-[22px] mb-2">Place your comment</h2>
+        <textarea id="comment" name="comment" class="w-full px-4 py-2 mb-4 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"></textarea>
+        <button type="submit" class="w-full px-4 py-2 font-bold text-white bg-purple-600 rounded-md hover:bg-purple-700">Send</button>
+    </form>
+    <?php endif ?>
+
+    <div class="max-w-md mx-auto mb-10">
+    <h2 class="font-bold text-white text-[22px] mb-2"> All comments</h2>
+    <div id="comments-container"> </div>
+    </div>
+
     <script src="js/liking.js"></script>
     <script src="js/fav.js"></script>
+    <script src="js/commenting.js"></script>
     <?php if ($promptDetails['is_approved'] != 1) : ?>
         <script src="js/deny.js"></script>
     <?php endif ?>
