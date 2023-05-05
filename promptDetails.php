@@ -267,56 +267,8 @@ try {
         </div>
         </div>
     <?php endif ?>
-    <script>
-        // get the button with the name "report"
-        const flagBtn = document.querySelector('button[name="report"]');
-        const flagIcon = document.querySelector('#flag');
-        // add console.log when follow button is clicked
-        flagBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            // get the id of the user being followed
-            const id = e.target.dataset.id;
-            
-            
-            let formData = new FormData();
-            //append user id to formdata
-            formData.append("id", id);
-            fetch("ajax/reportPrompt.php", {
-                    method: "POST",
-                    body: formData,
-                })
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(json) {     
-                    flagIcon.classList.remove("fa-regular");
-                    flagIcon.classList.add("fa-solid");
-                });
-        });
-    </script>
-    <script>
-        const flagBtn2 = document.querySelector('button[name="report"]');
-        const flag = document.getElementById("flag");
-        const overlay2 = document.getElementById("reportPopup");
-        const close = document.querySelector(".close");
-
-        flagBtn2.addEventListener("click", (e) => {
-            e.preventDefault();
-            overlay2.classList.add("hidden");
-            overlay2.classList.remove('flex');
-        });
-
-        flag.addEventListener("click", (e) => {
-            e.preventDefault();
-            overlay2.classList.remove("hidden");
-            overlay2.classList.add('flex');
-        });
-
-        close.addEventListener("click", () => {
-            overlay2.classList.add("hidden");
-            overlay2.classList.add('flex');
-        });
-    </script>
+    <script src="js/reportPrompt.js"></script>
+    <script src="js/reportPromptPopup.js"></script>
     <script src="js/liking.js"></script>
     <script src="js/fav.js"></script>
     <?php if ($is_approved == 0) : ?>
