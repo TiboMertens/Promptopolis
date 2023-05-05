@@ -5,6 +5,7 @@ include_once("bootstrap.php");
 $user = new \Promptopolis\Framework\User();
 $prompt = new Promptopolis\Framework\Prompt();
 $like = new Promptopolis\Framework\Like();
+$comment = new Promptopolis\Framework\Comment();
 $report = new Promptopolis\Framework\Report();
 
 try {
@@ -16,6 +17,7 @@ try {
         if (isset($_SESSION['loggedin'])) {
             $userDetails = $user->getUserDetails($_SESSION['id']);
             $profilePicture = $userDetails['profile_picture_url'];
+            $username = $userDetails['username'];
 
             $prompt_id = $_GET['id'];
             $prompt->setId($prompt_id);
@@ -32,6 +34,8 @@ try {
                 $state = "add";
             }
         }
+
+        $allComments = $comment->getComments($prompt_id);
 
         $likes = $like->getLikes($prompt_id);
 
@@ -291,6 +295,26 @@ try {
         </div>
         </div>
     <?php endif ?>
+
+    <?php if (isset($_SESSION["loggedin"])): ?>
+    <form data-id="<?php echo $prompt_id ?>" data-user=" <?php echo $_SESSION["username"] ?>" id="comment-form" class="max-w-md mx-auto mb-10">
+        <h2 class="font-bold text-white text-[22px] mb-2">Place your comment</h2>
+        <textarea id="comment" name="comment" class="w-full px-4 py-2 mb-4 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"></textarea>
+        <p id="error" class="text-red-500 text-xs italic"> </p>
+        <button type="submit" class="w-full px-4 py-2 font-bold text-white bg-purple-600 rounded-md hover:bg-purple-700">Send</button>
+    </form>
+    <?php endif ?>
+
+    <div class="max-w-md mx-auto mb-10">
+    <h2 class="font-bold text-white text-[22px] mb-2"> All comments</h2>
+    <div id="comments-container"> </div>
+    <?php foreach($allComments as $comment): ?>
+        <p class="text-white"> <?php echo $comment["comment_by"] ?> </p>
+        <p class=" bg-white p-[10px] my-[10px] rounded-[10px] w-full"><?php echo $comment["comment"] ?></p>
+    <?php endforeach ?>
+    </div>
+
+    <script src="js/commenting.js"></script>
     <script src="js/reportPrompt.js"></script>
     <script src="js/reportPromptPopup.js"></script>
     <script src="js/liking.js"></script>

@@ -17,6 +17,7 @@ if (!empty($_POST)) {
         if ($result === true) {
             $_SESSION['loggedin'] = true;
             $_SESSION['id'] = $user->getId($username);
+            $_SESSION['username'] = $username;
 
             header("Location: index.php");
             return;

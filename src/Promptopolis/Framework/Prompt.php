@@ -259,7 +259,7 @@ class prompt
     }
 
     /**
-     * Set the value of category
+     * Set the value of 
      *
      * @return  self
      */
