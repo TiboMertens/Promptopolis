@@ -92,6 +92,7 @@ try {
                         <select name="filterApprove" class="filter-select rounded-md">
                             <option value="all">All</option>
                             <option value="not_approved">Not approved</option>
+                            <option value="reported">Reported</option>
                         </select>
                     <?php endif; ?>
                 <?php endif; ?>

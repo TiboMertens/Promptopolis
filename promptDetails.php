@@ -114,7 +114,7 @@ try {
         throw new exception('No correct id provided');
     }
 
-    if ($promptDetails['is_approved'] != 1) {
+    if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) {
         //if user is not a moderator, redirect to index
         if (!$isModerator) {
             header("Location: index.php");
@@ -141,6 +141,7 @@ try {
             header("Location: index.php");
         }
     }
+    
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
@@ -185,6 +186,7 @@ try {
                                 <i id="heart" data-liked="<?php echo $likeState ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $likeState == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[36px]" name="like" style="color: #bb86fc;"></i>
                                 <p class="liking text-[#BB86FC] font-bold relative top-[25px] left-[5px]"><?php echo htmlspecialchars($likes) ?></p>
                             </div>
+                            <i id="flag" class="fa-regular fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
                         </div>
                         <div class="relative">
                             <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 ? '' : 'filter blur' ?>">
@@ -223,7 +225,7 @@ try {
                         ?>
                         <?php if (isset($_SESSION["loggedin"])) : ?>
                             <div class="flex mb-3 items-center">
-                                <?php if ($promptDetails['is_approved'] == 0) : ?>
+                                <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"]==1) : ?>
                                     <form action="" method="post">
                                         <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
                                             <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
@@ -261,7 +263,7 @@ try {
                 </div>
             </div>
         </main>
-        <div class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
+        <div id="denyPopup" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
             <div class="bg-[#2A2A2A] p-8 rounded shadow-md text-center">
                 <form action="" method="post">
                     <h2 class="text-lg font-bold mb-4 text-white">Write your motivation to deny this prompt.</h2>
@@ -274,13 +276,41 @@ try {
                 </form>
             </div>
         </div>
+        <div id="reportPopup" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
+            <div class="bg-[#2A2A2A] p-8 rounded shadow-md text-center">
+                <form action="" method="post">
+                    <h2 class="text-lg font-bold mb-4 text-white">Are you sure you want to report this prompt?</h2>
+                    <!-- add close button -->
+                    <div class="flex gap-5">
+                        <button class="close bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Cancel</button>
+                        <button data-id=<?php echo $prompt_id ?> name="report" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Report prompt</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         </div>
     <?php endif ?>
-
+    <script src="js/reportPrompt.js"></script>
+    <script src="js/reportPromptPopup.js"></script>
     <script src="js/liking.js"></script>
     <script src="js/fav.js"></script>
-    <?php if ($promptDetails['is_approved'] != 1) : ?>
-        <script src="js/deny.js"></script>
+    <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) : ?>
+        <!-- <script src="js/deny.js"></script> -->
+        <script>const deny = document.getElementById("deny");
+            const overlay = document.getElementById("denyPopup");
+            const close2 = document.querySelector(".close");
+
+            deny.addEventListener("click", (e) => {
+                e.preventDefault();
+                overlay.classList.remove("hidden");
+                overlay.classList.add('flex');
+            });
+
+            close2.addEventListener("click", () => {
+                overlay.classList.add("hidden");
+                overlay.classList.add('flex');
+            });
+        </script>
     <?php endif ?>
 </body>
 
