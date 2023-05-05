@@ -267,7 +267,7 @@ try {
         <div id="denyPopup" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
             <div class="bg-[#2A2A2A] p-8 rounded shadow-md text-center">
                 <form action="" method="post">
-                    <h2 class="text-lg font-bold mb-4 text-white">Write your motivation to deny this prompt.</h2>
+                    <h2 class="text-lg font-bold mb-4 text-white">Write your motivation to deny this prompt.<span class="text-[12px]">(optional)</span></h2>
                     <input type="text" name="motivation" placeholder="Enter your motivation here" class="border border-gray-300 rounded px-4 py-2 mb-4 w-full">
                     <!-- add close button -->
                     <div class="flex gap-5">
