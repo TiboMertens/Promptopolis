@@ -59,7 +59,6 @@ try {
             $tag3 = $promptDetails['tag_names'][2];
         }
         $model = $promptDetails['model'];
-        $isApproved = $promptDetails['is_approved'];
 
         //get author id
         $authorID = $promptDetails['user_id'];
@@ -82,7 +81,7 @@ try {
         }
 
         //if prompt is not approved, only moderators and the author can see it
-        if ($isApproved == 0 && $authorID != $_SESSION['id']) {
+        if ($promptDetails['is_approved'] != 1 && $authorID != $_SESSION['id']) {
             //if user is not a moderator, redirect to index
             if (!$isModerator) {
                 header("Location: index.php");
@@ -99,11 +98,20 @@ try {
         } else {
             $authorName = $userDetails['username'];
         }
+
+        try {
+            if (isset($_POST['buy'])) {
+                $purchase = new Promptopolis\Framework\Purchase();
+                $purchase->purchase($prompt_id, $_SESSION['id']);
+            }
+        } catch (\Throwable $th) {
+            $purchaseError = $th->getMessage();
+        }
     } else {
         throw new exception('No correct id provided');
     }
 
-    if ($isApproved == 0) {
+    if ($promptDetails['is_approved'] != 1) {
         //if user is not a moderator, redirect to index
         if (!$isModerator) {
             header("Location: index.php");
@@ -205,25 +213,28 @@ try {
                             </div>
                         </div>
                         <?php
-
                         if (!isset($_SESSION["loggedin"])) {
-
                             // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
                             echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
                         }
                         ?>
                         <?php if (isset($_SESSION["loggedin"])) : ?>
                             <div class="flex mb-3 items-center">
-                                <?php if ($isApproved == 0) : ?>
+                                <?php if ($promptDetails['is_approved'] == 0) : ?>
                                     <form action="" method="post">
                                         <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
                                             <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
                                     </form>
                                 <?php else : ?>
-                                    <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</a>
+                                    <form action="" method="post">
+                                        <button name="buy" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</button>
+                                    </form>
                                     <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price) . "credit(s)"; ?></p>
                                 <?php endif ?>
                             </div>
+                            <?php if (isset($purchaseError)) : ?>
+                                <p class="text-red-500 text-xs italic relative"><?php echo $purchaseError ?></p>
+                            <?php endif ?>
                         <?php endif ?>
                     </div>
                 <?php endif ?>
@@ -265,7 +276,7 @@ try {
 
     <script src="js/liking.js"></script>
     <script src="js/fav.js"></script>
-    <?php if ($is_approved == 0) : ?>
+    <?php if ($promptDetails['is_approved'] != 1) : ?>
         <script src="js/deny.js"></script>
     <?php endif ?>
 </body>
