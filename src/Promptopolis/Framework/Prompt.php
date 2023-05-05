@@ -462,6 +462,21 @@ class prompt
         }
     }
 
+    public static function getFollowedPrompts($userId)
+    {
+        try {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("SELECT p.* FROM prompts p JOIN user_follow uf ON p.user_id = uf.follows WHERE uf.followed_by = :userId AND p.is_approved = 1 ORDER BY p.tstamp DESC LIMIT 15");
+            $statement->bindValue(':userId', $userId);
+            $statement->execute();
+            $prompts = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            return $prompts;
+        } catch (\PDOException $e) {
+            error_log("PDO error: " . $e->getMessage());
+            return [];
+        }
+    }
+
     /**
      * Get the value of mainImage
      */

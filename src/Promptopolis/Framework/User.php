@@ -235,11 +235,11 @@ class User
         return $result;
     }
 
-    public function checkToVerify()
+    public function checkToVerify($id)
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM prompts WHERE user_id = :id AND is_approved = 1");
-        $statement->bindValue(":id", $this->id);
+        $statement->bindValue(":id", $id);
         $statement->execute();
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -251,11 +251,11 @@ class User
         }
     }
 
-    public function verify()
+    public function verify($id)
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET is_verified = 1 WHERE id = :id");
-        $statement->bindValue(":id", $this->id);
+        $statement->bindValue(":id", $id);
         $statement->execute();
     }
 

@@ -3,20 +3,36 @@ require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
 $user = new \Promptopolis\Framework\User();
-
-if (isset($_SESSION['loggedin'])) {
-    $userDetails = $user->getUserDetails($_SESSION['id']);
-    $profilePicture = $userDetails['profile_picture_url'];
-}
+$prompt = new Promptopolis\Framework\Prompt();
+$like = new Promptopolis\Framework\Like();
 
 try {
     //if id is set and not NULL, get prompt details
     if (isset($_GET['id']) && !empty($_GET['id'])) {
         $prompt_id = $_GET['id'];
-        $prompt = new Promptopolis\Framework\Prompt();
         $prompt->setId($prompt_id);
-        $like = new Promptopolis\Framework\Like();
         $likes = $like->getLikes($prompt_id);
+        if (isset($_SESSION['loggedin'])) {
+            $userDetails = $user->getUserDetails($_SESSION['id']);
+            $profilePicture = $userDetails['profile_picture_url'];
+
+            $prompt_id = $_GET['id'];
+            $prompt->setId($prompt_id);
+
+            if ($prompt->checkLiked($prompt_id, $_SESSION['id'])) {
+                $likeState = "remove";
+            } else {
+                $likeState = "add";
+            }
+
+            if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
+                $state = "remove";
+            } else {
+                $state = "add";
+            }
+        }
+
+        $likes = $prompt->getLikes($prompt_id);
 
         //get prompt details
         $promptDetails = $prompt->getPromptDetails();
@@ -55,13 +71,11 @@ try {
             }
         }
 
-
         if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
             $likeState = "remove";
         } else {
             $likeState = "add";
         }
-
 
         if ($denied == 1 && $authorID != $_SESSION['id']) {
             header("Location: index.php");
@@ -76,13 +90,6 @@ try {
                 $moderator = new Promptopolis\Framework\Moderator();
             }
         }
-
-        if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
-            $state = "remove";
-        } else {
-            $state = "add";
-        }
-
 
         //get author name
         $userDetails = $user->getUserDetails($authorID);
@@ -107,11 +114,11 @@ try {
         if (isset($_POST['approve'])) {
             $moderator->approve($prompt_id);
             //if prompt is appoved, check if user can be verified - if yes, verify user
-            if ($user->checkToVerify()) {
-                $user->verify();
+            if ($user->checkToVerify($id)) {
+                $user->verify($id);
             }
             //redirect to showcase
-            header("Location: showcase.php");
+            header("Location: index.php");
         }
 
         if (isset($_POST['deny'])) {
@@ -120,7 +127,7 @@ try {
             $moderator->deny($prompt_id, $motivation);
 
             //redirect to showcase
-            header("Location: showcase.php");
+            header("Location: index.php");
         }
     }
 } catch (Throwable $e) {
@@ -158,71 +165,67 @@ try {
                         <h1 class="font-bold text-white text-[22px] mb-2">Why your prompt was denied: </h1>
                         <p class="text-white relative top-[5px]"><?php echo htmlspecialchars($motivation) ?></p>
                     </div>
-                <?php else: ?>
-                <div class="text-[#cccccc] text-[14px] lg:text-[16px]">
-                    <div class="flex gap-4">
-                        <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
-                        <i data-fav="<?php echo $state ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $state == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-bookmark fa-xl cursor-pointer relative top-[38px]" name="fav" style="color: #bb86fc;"></i>
-                    </div>
-                    <div class="relative">
-                        <div class="flex justify-between mb-3">
-                            <div class="flex-1">
-                                <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
-                            </div>
-                            <div class="flex-1 justify-end mr-5 md:mr-0">
-                                <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
+                <?php else : ?>
+                    <div class="text-[#cccccc] text-[14px] lg:text-[16px]">
+                        <div class="flex gap-4">
+                            <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
+                            <i data-fav="<?php echo $state ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $state == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-bookmark fa-xl cursor-pointer relative top-[38px]" name="fav" style="color: #bb86fc;"></i>
+                            <div class="flex mb-[4px] ml-4 bg-[#121212]">
+                                <i id="heart" data-liked="<?php echo $likeState ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $likeState == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[36px]" name="like" style="color: #bb86fc;"></i>
+                                <p class="liking text-[#BB86FC] font-bold relative top-[25px] left-[5px]"><?php echo htmlspecialchars($likes) ?></p>
                             </div>
                         </div>
-                        <div class="flex justify-between mb-3">
-                            <div class="flex-1">
-                                <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
+                        <div class="relative">
+                            <div class="flex justify-between mb-3">
+                                <div class="flex-1">
+                                    <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
+                                </div>
+                                <div class="flex-1 justify-end mr-5 md:mr-0">
+                                    <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
+                                </div>
                             </div>
-                            <div class="flex flex-1 gap-4 justify-end mr-5 md:mr-0">
-                                <p>Tags: </p>
-                                <p><?php echo htmlspecialchars($tag1); ?></p>
-                                <?php if (isset($tag2)) : ?>
-                                    <p><?php echo htmlspecialchars($tag2); ?></p>
+                            <div class="flex justify-between mb-3">
+                                <div class="flex-1">
+                                    <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
+                                </div>
+                                <div class="flex flex-1 gap-4 justify-end mr-5 md:mr-0">
+                                    <p>Tags: </p>
+                                    <p><?php echo htmlspecialchars($tag1); ?></p>
+                                    <?php if (isset($tag2)) : ?>
+                                        <p><?php echo htmlspecialchars($tag2); ?></p>
+                                    <?php endif ?>
+                                    <?php if (isset($tag3)) : ?>
+                                        <p><?php echo htmlspecialchars($tag3); ?></p>
+                                    <?php endif ?>
+                                </div>
+                            </div>
+                            <div class="mr-5 mb-5">
+                                <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
+                                <p><?php echo htmlspecialchars($description); ?></p>
+                            </div>
+                        </div>
+                        <?php
+
+                        if (!isset($_SESSION["loggedin"])) {
+
+                            // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
+                            echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
+                        }
+                        ?>
+                        <?php if (isset($_SESSION["loggedin"])) : ?>
+                            <div class="flex mb-3 items-center">
+                                <?php if ($isApproved == 0) : ?>
+                                    <form action="" method="post">
+                                        <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
+                                            <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
+                                    </form>
+                                <?php else : ?>
+                                    <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</a>
+                                    <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price) . "credit(s)"; ?></p>
                                 <?php endif ?>
-                                <?php if (isset($tag3)) : ?>
-                                    <p><?php echo htmlspecialchars($tag3); ?></p>
-                                <?php endif ?>
                             </div>
-                        </div>
-
-                        <div class="flex mb-[4px] ml-4 bg-[#121212]">
-                        <p class="liking text-[#BB86FC] font-bold"><?php echo htmlspecialchars($likes) ?></p>
-                            <i id="heart" data-liked="<?php echo $likeState ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $likeState == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[15px] left-[5px]" name="like" style="color: #bb86fc;"></i>
-                           
-                        </div>
-                        
-
-                        <div class="mr-5 mb-5">
-                            <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
-                            <p><?php echo htmlspecialchars($description); ?></p>
-                        </div>
+                        <?php endif ?>
                     </div>
-                    <?php
-
-                    if (!isset($_SESSION["loggedin"])) {
-
-                        // Als de gebruiker niet is ingelogd, houd de overlay-klasse intact
-                        echo '<a href="login.php"><div class="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-md flex justify-center items-center"><p class="text-[#BB86FC] hover:text-[#A25AFB] font-bold text-[20px]">Login to see details</p></div></a>';
-                    }
-                    ?>
-                    <?php if (isset($_SESSION["loggedin"])) : ?>
-                        <div class="flex mb-3 items-center">
-                            <?php if ($isApproved == 0) : ?>
-                                <form action="" method="post">
-                                    <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
-                                        <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
-                                </form>
-                            <?php else : ?>
-                                <a href="#" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</a>
-                                <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price) . "credit(s)"; ?></p>
-                            <?php endif ?>
-                        </div>
-                    <?php endif ?>
-                </div>
                 <?php endif ?>
             </div>
             <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
@@ -253,6 +256,7 @@ try {
                     <div class="flex gap-5">
                         <button class="close bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Close</button>
                         <button name="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Deny prompt</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -260,25 +264,10 @@ try {
     <?php endif ?>
 
     <script src="js/liking.js"></script>
-
-    <script>
-        const deny = document.getElementById("deny");
-        const overlay = document.querySelector(".hidden");
-        const close = document.querySelector(".close");
-
-        deny.addEventListener("click", (e) => {
-            e.preventDefault();
-            overlay.classList.remove("hidden");
-            overlay.classList.add('flex');
-        });
-
-        close.addEventListener("click", () => {
-            overlay.classList.add("hidden");
-            overlay.classList.add('flex');
-        });
-    </script>
     <script src="js/fav.js"></script>
-
+    <?php if ($is_approved == 0) : ?>
+        <script src="js/deny.js"></script>
+    <?php endif ?>
 </body>
 
 </html>
