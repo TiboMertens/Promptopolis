@@ -1,5 +1,5 @@
 const deny = document.getElementById("deny");
-const overlay = document.querySelector(".hidden");
+const overlay = document.getElementById("denypopup");
 const close = document.querySelector(".close");
 
 deny.addEventListener("click", (e) => {

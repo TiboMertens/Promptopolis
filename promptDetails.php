@@ -121,6 +121,7 @@ try {
             header("Location: index.php");
         }
     }
+    
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
@@ -165,6 +166,7 @@ try {
                                 <i id="heart" data-liked="<?php echo $likeState ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $likeState == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[36px]" name="like" style="color: #bb86fc;"></i>
                                 <p class="liking text-[#BB86FC] font-bold relative top-[25px] left-[5px]"><?php echo htmlspecialchars($likes) ?></p>
                             </div>
+                            <i id="flag" class="fa-regular fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
                         </div>
                         <div class="relative">
                             <div class="flex justify-between mb-3">
@@ -238,7 +240,7 @@ try {
                 </div>
             </div>
         </main>
-        <div class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
+        <div id="denyPopup" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
             <div class="bg-[#2A2A2A] p-8 rounded shadow-md text-center">
                 <form action="" method="post">
                     <h2 class="text-lg font-bold mb-4 text-white">Write your motivation to deny this prompt.</h2>
@@ -251,9 +253,70 @@ try {
                 </form>
             </div>
         </div>
+        <div id="reportPopup" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50">
+            <div class="bg-[#2A2A2A] p-8 rounded shadow-md text-center">
+                <form action="" method="post">
+                    <h2 class="text-lg font-bold mb-4 text-white">Are you sure you want to report this prompt?</h2>
+                    <!-- add close button -->
+                    <div class="flex gap-5">
+                        <button class="close bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Cancel</button>
+                        <button data-id=<?php echo $prompt_id ?> name="report" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Report prompt</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         </div>
     <?php endif ?>
+    <script>
+        // get the button with the name "report"
+        const flagBtn = document.querySelector('button[name="report"]');
+        const flagIcon = document.querySelector('#flag');
+        // add console.log when follow button is clicked
+        flagBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // get the id of the user being followed
+            const id = e.target.dataset.id;
+            
+            
+            let formData = new FormData();
+            //append user id to formdata
+            formData.append("id", id);
+            fetch("ajax/reportPrompt.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(json) {     
+                    flagIcon.classList.remove("fa-regular");
+                    flagIcon.classList.add("fa-solid");
+                });
+        });
+    </script>
+    <script>
+        const flagBtn2 = document.querySelector('button[name="report"]');
+        const flag = document.getElementById("flag");
+        const overlay2 = document.getElementById("reportPopup");
+        const close = document.querySelector(".close");
 
+        flagBtn2.addEventListener("click", (e) => {
+            e.preventDefault();
+            overlay2.classList.add("hidden");
+            overlay2.classList.remove('flex');
+        });
+
+        flag.addEventListener("click", (e) => {
+            e.preventDefault();
+            overlay2.classList.remove("hidden");
+            overlay2.classList.add('flex');
+        });
+
+        close.addEventListener("click", () => {
+            overlay2.classList.add("hidden");
+            overlay2.classList.add('flex');
+        });
+    </script>
     <script src="js/liking.js"></script>
     <script src="js/fav.js"></script>
     <?php if ($is_approved == 0) : ?>
