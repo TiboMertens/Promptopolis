@@ -574,4 +574,14 @@ class User
         $statement->bindValue(":prompt_id", $prompt_id);
         $statement->execute();
     }
+
+    public function hasBought($prompt_id, $user_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM purchases WHERE user_id = :user_id AND prompt_id = :prompt_id");
+        $statement->bindValue(":user_id", $user_id);
+        $statement->bindValue(":prompt_id", $prompt_id);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        return !empty($result);
+    }
 }
