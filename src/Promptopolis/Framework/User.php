@@ -483,7 +483,7 @@ class User
     public function signup($key)
     {
         self::save();
-        $this->sendVerifyEmail($key);
+        self::sendVerifyEmail($key);
         header("Location:index.php");
     }
 
