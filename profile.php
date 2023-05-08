@@ -31,6 +31,10 @@ if (isset($_SESSION['loggedin'])) {
             throw new Exception("User not found");
         }
 
+        if ($userDetails['is_reported'] == 1) {
+            $reportState = "reported";
+        }
+
         //check if logged in user is_admin
         if ($ownUserDetails['is_admin'] === 1) {
             $ownIsAdmin = true;
@@ -132,13 +136,16 @@ if (isset($_SESSION['loggedin'])) {
                     <?php endif ?>
 
                     <?php if ($id != $sessionid) : ?>
+                        <i id="flagUser" data-id="<?php echo $id ?>" data-flag="<?php echo $reportState ?>" name="flagUser" class="<?php echo $userDetails['is_reported'] == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer ml-3" style="color: #bb86fc;"></i>
+
+                    <?php endif ?>
+
+                    <?php if ($id != $sessionid) : ?>
                         <div class="message text-red-500 text-xs italic ml-3">
                             <p class="text-red-500 text-xs italic"></p>
                         </div>
                     <?php endif ?>
-
                 </div>
-
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
                     <p><?php echo htmlspecialchars($bio); ?></p>
                 </div>
@@ -148,7 +155,6 @@ if (isset($_SESSION['loggedin'])) {
                         <a class="text-[#BB86FC] underline font-semibold rounded-lg hover:text-[#A25AFB] flex justify-center items-center" href="changePassword.php">Change Password</a>
                     </div>
                 <?php endif ?>
-
             </div>
     </header>
     <section class="mt-10">
@@ -184,6 +190,47 @@ if (isset($_SESSION['loggedin'])) {
     <?php endif ?>
     <script src="js/follow.js"></script>
     <script src="js/voting.js"></script>
+    <script>
+        // get the button with the name "report"
+        const flag = document.querySelector('#flagUser');
+        console.log('tets');
+        // add console.log when follow button is clicked
+        flag.addEventListener('click', (e) => {
+            console.log("clicked");
+            e.preventDefault();
+            // get the id of the user being followed
+            const id = e.target.dataset.id;
+
+            const state = e.target.dataset.flag;
+            console.log(state);
+
+            let formData = new FormData();
+            //append user id to formdata
+            formData.append("id", id);
+            formData.append("state", state);
+
+            fetch("ajax/reportUser.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(json) {
+                    console.log(json);
+
+                    if (json.state == 'reported') {
+                        flag.classList.remove('fa-regular');
+                        flag.classList.add('fa-solid');
+                    } else {
+                        flag.classList.remove('fa-solid');
+                        flag.classList.add('fa-regular');
+                    }
+
+                    flag.setAttribute("data-flag", json.state);
+                });
+        });
+    </script>
 </body>
 
 </html>
