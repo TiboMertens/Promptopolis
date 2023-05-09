@@ -33,6 +33,12 @@ try {
             } else {
                 $state = "add";
             }
+
+            if (\Promptopolis\Framework\Purchase::checkBought($prompt_id, $_SESSION['id'])) {
+                $boughtState = "bought";
+            } else {
+                $boughtState = "buy";
+            }
         }
 
         $allComments = $comment->getComments($prompt_id);
@@ -235,7 +241,7 @@ try {
                                         <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
                                             <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
                                     </form>
-                                <?php else : ?>
+                                <?php elseif ($boughtState == 'buy') : ?>
                                     <form action="" method="post">
                                         <button name="buy" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</button>
                                     </form>

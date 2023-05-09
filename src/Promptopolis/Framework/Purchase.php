@@ -42,4 +42,19 @@ class Purchase{
         $statement->bindValue(":user_id", $user_id);
         $statement->execute();
     }
+
+    public static function checkBought($prompt_id, $user_id){
+        //check if user has already bought this prompt
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM purchases WHERE prompt_id = :prompt_id AND user_id = :user_id");
+        $statement->bindValue(":prompt_id", $prompt_id);
+        $statement->bindValue(":user_id", $user_id);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
