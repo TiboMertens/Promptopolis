@@ -426,7 +426,7 @@ class User
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("DELETE FROM users WHERE id = :id");
-        $statement->bindValue(":id", $this->id);
+        $statement->bindValue(":id", $_SESSION['id']);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result;
