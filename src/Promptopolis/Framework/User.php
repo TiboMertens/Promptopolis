@@ -466,7 +466,7 @@ class User
         if (password_verify($password, $result['password'])) {
             return true;
         } else {
-            return false;
+            throw new \exception("Incorrect old password.");
         }
     }
     public function changePassword()
