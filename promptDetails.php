@@ -113,7 +113,7 @@ try {
         try {
             if (isset($_POST['buy'])) {
                 $purchase = new Promptopolis\Framework\Purchase();
-                $purchase->purchase($prompt_id, $_SESSION['id']);
+                $purchase->purchase($prompt_id, $_SESSION['id'], $authorID);
             }
         } catch (\Throwable $th) {
             $purchaseError = $th->getMessage();
@@ -134,7 +134,7 @@ try {
         }
 
         if (isset($_POST['approve'])) {
-            $moderator->approve($prompt_id);
+            $moderator->approve($prompt_id, $authorID);
             //if prompt is appoved, check if user can be verified - if yes, verify user
             if ($user->checkToVerify($id)) {
                 $user->verify($id);
