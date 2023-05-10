@@ -152,6 +152,14 @@ try {
             header("Location: index.php");
         }
     }
+    if (isset($_POST['delete'])) {
+        
+            // delete the user's account and redirect to the login page
+            var_dump("hey");
+            $prompt->deletePrompt($prompt_id);
+            header("Location: index.php");
+        
+    }
     
 } catch (Throwable $e) {
     $error = $e->getMessage();
@@ -198,9 +206,14 @@ try {
                                 <p class="liking text-[#BB86FC] font-bold relative top-[25px] left-[5px]"><?php echo htmlspecialchars($likes) ?></p>
                             </div>
                             <i id="flag" class="<?php echo $promptDetails['is_reported'] == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
+                            <?php if($promptDetails["user_id"] == $_SESSION["id"]) : ?>
+                                <form action="" method="post">
+                                    <button name="delete"><i class="fa-regular fa-trash-can fa-xl cursor-pointer relative top-[23px] ml-3" style="color: #bb86fc;"></i></button>
+                                </form>
+                            <?php endif; ?>
                         </div>
                         <div class="relative">
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
                                 </div>
@@ -208,7 +221,7 @@ try {
                                     <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
                                 </div>
                             </div>
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
                                 </div>
@@ -223,7 +236,7 @@ try {
                                     <?php endif ?>
                                 </div>
                             </div>
-                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
+                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
                                 <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                                 <p><?php echo htmlspecialchars($description); ?></p>
                             </div>
@@ -258,9 +271,9 @@ try {
             <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
                 <div class="relative">
                     <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
-                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
-                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
-                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
+                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
 
                     <?php
                     if (isset($_SESSION["loggedin"])) {

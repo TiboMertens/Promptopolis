@@ -600,6 +600,15 @@ class prompt
 
         return $this;
     }
+    public function deletePrompt($prompt_id)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("DELETE FROM prompts WHERE id = :id");
+        $statement->bindValue(":id",$prompt_id);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
 
 
