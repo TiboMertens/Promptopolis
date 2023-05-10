@@ -41,7 +41,7 @@ $newPrompts = Prompt::getNewPrompts();
     <?php include_once("inc/nav.inc.php") ?>
 
     <div class="flex flex-col justify-center items-center h-[420px]">
-        <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Lorem ipsum dolor, sit amet consectetur adipiscing elit!</h1>
+        <h1 class="text-3xl font-bold text-white text-center mb-10 lg:text-5xl">Promptopolis</h1>
         <div class="flex justify-center items-center">
             <a href="showcase.php?filter=All" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-7 mr-5 xl:mr-10 xl:mt-10 rounded text-lg xl:text-xl xl:py-3 xl:px-10">
                 Buy a prompt
