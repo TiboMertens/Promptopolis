@@ -584,4 +584,21 @@ class User
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return !empty($result);
     }
+
+    public static function getCredits($user_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT credits FROM users WHERE id = :id");
+        $statement->bindValue(":id", $user_id);
+        $statement->execute();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        return $result['credits'];
+    }
+
+    public static function updateCredits($authorID, $credits){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET credits = :credits WHERE id = :id");
+        $statement->bindValue(":credits", $credits);
+        $statement->bindValue(":id", $authorID);
+        $statement->execute();
+    }
 }
