@@ -2,13 +2,14 @@
 
 namespace Promptopolis\Framework;
 
-//traits    
+//traits
 
 use Exception;
 use Promptopolis\Framework\Traits\EmailVerificationTrait;
 
 class User
 {
+    use EmailVerificationTrait;
     protected int $id;
     protected string $username;
     protected string $email;
@@ -16,8 +17,6 @@ class User
     protected string $verifyToken;
     protected string $resetToken;
     protected string $bio;
-
-    use EmailVerificationTrait;
 
     /**
      * Get the value of id
@@ -29,7 +28,7 @@ class User
         $statement->bindValue(":username", $username);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-            return $result["id"];
+        return $result["id"];
     }
 
     /**
@@ -69,7 +68,8 @@ class User
         }
     }
 
-    public function checkUsername($username) {
+    public function checkUsername($username)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT username FROM users WHERE username = :username");
         $statement->bindValue(":username", $username);
@@ -370,14 +370,19 @@ class User
         $statement->bindValue(":token", $this->resetToken);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        $result = $result['tstamp'];
-
-        //if result is 1, token is valid, else token is not valid
-        if (time() - $result < 86400) {
-            return true;
-        } else {
+        if ($result == false) {
             return false;
+        } else {
+            $result = $result['tstamp'];
+
+            //if result is 1, token is valid, else token is not valid
+            if (time() - $result < 86400) {
+                return true;
+            } else {
+                return false;
+            }
         }
+
     }
     public function updatePassword()
     {
@@ -539,7 +544,8 @@ class User
         return $result;
     }
 
-    public static function getAllFavourites($id){
+    public static function getAllFavourites($id)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM favourites WHERE user_id = :user_id");
         $statement->bindValue(":user_id", $id);
@@ -548,7 +554,8 @@ class User
         return $result;
     }
 
-    public function checkFavourite($user_id, $prompt_id){
+    public function checkFavourite($user_id, $prompt_id)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM favourites WHERE user_id = :user_id AND prompt_id = :prompt_id");
         $statement->bindValue(":user_id", $user_id);
@@ -558,7 +565,8 @@ class User
         return !empty($result);
     }
 
-    public function addFav($prompt_id){
+    public function addFav($prompt_id)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("INSERT INTO favourites (user_id, prompt_id) VALUES (:user_id, :prompt_id)");
         $statement->bindValue(":user_id", $_SESSION['id']);
@@ -566,7 +574,8 @@ class User
         $statement->execute();
     }
 
-    public function removeFav($prompt_id){
+    public function removeFav($prompt_id)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("DELETE FROM favourites WHERE user_id = :user_id AND prompt_id = :prompt_id");
         $statement->bindValue(":user_id", $_SESSION['id']);
@@ -574,7 +583,8 @@ class User
         $statement->execute();
     }
 
-    public function hasBought($prompt_id, $user_id){
+    public function hasBought($prompt_id, $user_id)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM purchases WHERE user_id = :user_id AND prompt_id = :prompt_id");
         $statement->bindValue(":user_id", $user_id);
@@ -584,7 +594,8 @@ class User
         return !empty($result);
     }
 
-    public static function getCredits($user_id){
+    public static function getCredits($user_id)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT credits FROM users WHERE id = :id");
         $statement->bindValue(":id", $user_id);
@@ -593,7 +604,8 @@ class User
         return $result['credits'];
     }
 
-    public static function updateCredits($authorID, $credits){
+    public static function updateCredits($authorID, $credits)
+    {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET credits = :credits WHERE id = :id");
         $statement->bindValue(":credits", $credits);
