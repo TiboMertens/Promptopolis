@@ -2,23 +2,19 @@
 namespace Promptopolis\Framework;
 
 class Purchase{
-    public function purchase($id, $user_id){
-        $credits =  self::getCredits($user_id);
+    public function purchase($id, $user_id, $author_id){
+        $creditsU =  \Promptopolis\Framework\User::getCredits($user_id);
+        $creditsA = \Promptopolis\Framework\User::getCredits($author_id);
         $price = self::getPrice($id);
-        if($credits >= $price){
+        if($creditsU >= $price){
             self::buy($id, $user_id, $price);
+            $creditsU -= $price;
+            \Promptopolis\Framework\User::updateCredits($user_id, $creditsU);
+            $creditsA += 3;
+            \Promptopolis\Framework\User::updateCredits($author_id, $creditsA);
         }else{
             throw new \Exception("You don't have enough credits to buy this prompt.");
         }
-    }
-
-    public function getCredits($user_id){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT credits FROM users WHERE id = :id");
-        $statement->bindValue(":id", $user_id);
-        $statement->execute();
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        return $result['credits'];
     }
 
     public function getPrice($id){
@@ -30,15 +26,10 @@ class Purchase{
         return $result['price'];
     }
 
-    public function buy($id, $user_id, $price){
+    public function buy($id, $user_id){
         $conn = Db::getInstance();
         $statement = $conn->prepare("INSERT INTO purchases (prompt_id, user_id) VALUES (:prompt_id, :user_id)");
         $statement->bindValue(":prompt_id", $id);
-        $statement->bindValue(":user_id", $user_id);
-        $statement->execute();
-
-        //update the credits of the user
-        $statement = $conn->prepare("UPDATE users SET credits = credits - ($price) WHERE id = :user_id");
         $statement->bindValue(":user_id", $user_id);
         $statement->execute();
     }

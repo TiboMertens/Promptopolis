@@ -4,8 +4,15 @@ namespace Promptopolis\Framework;
 
 class Moderator extends User
 {
-    public function approve($id)
+    public function approve($id, $authorID)
     {
+        self::updateApprove($id);
+        $credits = \Promptopolis\Framework\User::getCredits($authorID);
+        $credits += 2;
+        \Promptopolis\Framework\User::updateCredits($authorID, $credits);     
+    }
+
+    public function updateApprove($id){
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE prompts SET is_approved = 1, is_reported = 0 WHERE id = :id");
         $statement->bindValue(":id", $id);
