@@ -65,18 +65,53 @@ class prompt
         }
 
         // Insert prompt into prompts table
-        $statement = $conn->prepare("INSERT INTO prompts (title, description, price, model, category, tstamp, user_id, cover_url, image_url2, image_url3, image_url4, is_approved) VALUES (:title, :description, :price, :model, :category, :tstamp, :user_id, :cover_url, :image_url2, :image_url3, :image_url4, :is_approved)");
+        $sql = "INSERT INTO prompts (title, description, price, model, category, user_id, cover_url";
+
+        if (!empty($overviewImage)) {
+            $sql .= ", image_url2";
+        }
+
+        if (!empty($image3)) {
+            $sql .= ", image_url3";
+        }
+
+        if (!empty($image4)) {
+            $sql .= ", image_url4";
+        }
+
+        $sql .= ", is_approved) VALUES (:title, :description, :price, :model, :category, :user_id, :cover_url";
+
+        if (!empty($overviewImage)) {
+            $sql .= ", :image_url2";
+        }
+
+        if (!empty($image3)) {
+            $sql .= ", :image_url3";
+        }
+
+        if (!empty($image4)) {
+            $sql .= ", :image_url4";
+        }
+
+        $sql .= ", :is_approved)";
+
+        $statement = $conn->prepare($sql);
         $statement->bindValue(":title", $this->title);
         $statement->bindValue(":description", $this->description);
         $statement->bindValue(":price", $this->price);
         $statement->bindValue(":model", $this->model);
         $statement->bindValue(":category", $this->category);
-        $statement->bindValue(":tstamp", date('Y-m-d'));
         $statement->bindValue(":user_id", $this->user_id);
         $statement->bindValue(":cover_url", $this->mainImage);
-        $statement->bindValue(":image_url2", $this->overviewImage);
-        $statement->bindValue(":image_url3", $this->image3);
-        $statement->bindValue(":image_url4", $this->image4);
+        if (!empty($this->overviewImage)) {
+            $statement->bindValue(":image_url2", $this->overviewImage);
+        }
+        if (!empty($this->image3)) {
+            $statement->bindValue(":image_url3", $this->image3);
+        }
+        if (!empty($this->image4)) {
+            $statement->bindValue(":image_url4", $this->image4);
+        }
         $statement->bindValue(":is_approved", $this->is_approved);
         $statement->execute();
 
@@ -309,7 +344,7 @@ class prompt
     public static function getAllowedCategory($filterCategory)
     {
         // if one of the models is not dall-e or midjourney, return all
-        $categories = ["Nature", "Logo", "Civilisation", "Line_art"];
+        $categories = ["Nature", "Logo", "Civilisation", "Line_art", "Abstract", "Architecture", "Food", "Space", "Animals", "Fantasy", "Sci-fi", "Cyberpunk", "Surreal", "Futuristic",  "Other"];
 
         if (!in_array($filterCategory, $categories)) {
             return 'all';
@@ -332,21 +367,16 @@ class prompt
             $conn = Db::getInstance();
             $sql = "SELECT p.* FROM prompts p
             INNER JOIN prompt_tags pt ON p.id = pt.prompt_id
-            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 ". 
-            ($model != 'all' ? "AND model = :model " : "") . 
-            ($category != 'all' ? "AND category = :category " : "") . 
-            ($approve == 'all' ? "AND is_approved = 1 AND is_reported = 0 " : 
-                ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : 
-                ($approve == 'reported' ? "AND is_reported = 1 " : "")
-                )
-            ) . 
-            ($order == 'new' ? "ORDER BY tstamp DESC " : 
-                ($order == 'old' ? "ORDER BY tstamp ASC " : 
-                ($order == 'high' ? "ORDER BY price DESC " : 
-                    ($order == 'low' ? "ORDER BY price ASC " : "")
-                )
-                )
-            );
+            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 " .
+                ($model != 'all' ? "AND model = :model " : "") .
+                ($category != 'all' ? "AND category = :category " : "") .
+                ($approve == 'all' ? "AND is_approved = 1 AND is_reported = 0 " : ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : ($approve == 'reported' ? "AND is_reported = 1 " : "")
+                    )
+                ) .
+                ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : "")
+                        )
+                    )
+                );
             if ($searchTerm != '') {
                 $sql .= " AND LOWER (p.title) LIKE LOWER (:searchTerm) OR LOWER (t.name) LIKE LOWER (:searchTerm)";
             }
@@ -386,21 +416,16 @@ class prompt
             $conn = Db::getInstance();
             $sql = "SELECT p.* FROM prompts p
             INNER JOIN prompt_tags pt ON p.id = pt.prompt_id
-            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 ". 
-            ($model != 'all' ? "AND model = :model " : "") . 
-            ($category != 'all' ? "AND category = :category " : "") . 
-            ($approve == 'all' ? "AND is_approved = 1 AND is_reported = 0 " : 
-                ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : 
-                ($approve == 'reported' ? "AND is_reported = 1 " : "")
-                )
-            ) . 
-            ($order == 'new' ? "ORDER BY tstamp DESC " : 
-                ($order == 'old' ? "ORDER BY tstamp ASC " : 
-                ($order == 'high' ? "ORDER BY price DESC " : 
-                    ($order == 'low' ? "ORDER BY price ASC " : "")
-                )
-                )
-            );
+            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 " .
+                ($model != 'all' ? "AND model = :model " : "") .
+                ($category != 'all' ? "AND category = :category " : "") .
+                ($approve == 'all' ? "AND is_approved = 1 AND is_reported = 0 " : ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : ($approve == 'reported' ? "AND is_reported = 1 " : "")
+                    )
+                ) .
+                ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : "")
+                        )
+                    )
+                );
             if ($searchTerm != '') {
                 $sql .= " AND LOWER (p.title) LIKE LOWER (:searchTerm) OR LOWER (t.name) LIKE LOWER (:searchTerm)";
             }
@@ -604,12 +629,9 @@ class prompt
     {
         $conn = Db::getInstance();
         $statement = $conn->prepare("DELETE FROM prompts WHERE id = :id");
-        $statement->bindValue(":id",$prompt_id);
+        $statement->bindValue(":id", $prompt_id);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result;
     }
 }
-
-
-
