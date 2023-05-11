@@ -7,7 +7,7 @@ if (!empty($_POST)) {
 
     $mail = $user->checkemail($email);
 
-    if (!$mail) {
+    if ($mail) {
         $status = "error";
         $message = "email already exists";
     } else {
