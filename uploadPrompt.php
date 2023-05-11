@@ -172,7 +172,7 @@ if (isset($_SESSION["loggedin"])) {
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
-                    <label class="block font-bold mb-0.5 text-white" for="price">Price</label>
+                    <label class="block font-bold mb-0.5 text-white" for="price">Price<span class="font-light text-[12px]">(value like 1,2,3 etc.)</span></label>
                     <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="text" name="price" id="price">
                     <?php if (isset($priceError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($priceError); ?></p>
@@ -183,6 +183,7 @@ if (isset($_SESSION["loggedin"])) {
                     <select class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" name="model" class="rounded-md">
                         <option value="Midjourney">Midjourney</option>
                         <option value="Dall-E">Dall-E</option>
+                        <option value="Stable Diffusion">Stable Diffusion</option>
                     </select>
                     <?php if (isset($modelError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($modelError); ?></p>
@@ -202,7 +203,7 @@ if (isset($_SESSION["loggedin"])) {
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
-                    <label class="block font-bold mb-0.5 text-white" for="tag1">tag 1</label>
+                    <label class="block font-bold mb-0.5 text-white" for="tag1">Tag 1</label>
                     <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" type="text" name="tag1" id="tag1">
                     <div id="tag-container"></div>
                     <button class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white px-4 py-2 rounded mt-3" name="tag" id="add-tag-btn">Add another Tag</button>

@@ -273,7 +273,7 @@ class prompt
     public static function getAllowedModels($filterModel)
     {
         // if one of the models is not dall-e or midjourney, return all
-        $models = ['Midjourney', 'Dall-E'];
+        $models = ['Midjourney', 'Dall-E', 'Stable Diffusion'];
 
         if (!in_array($filterModel, $models)) {
             return 'all';
