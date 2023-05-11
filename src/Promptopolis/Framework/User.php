@@ -267,8 +267,7 @@ class User
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        //if result is 1, email is already in use, else email is not in use
-        if ($result) {
+        if (!empty($result)) {
             return true;
         } else {
             return false;
