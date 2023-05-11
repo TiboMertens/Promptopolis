@@ -269,9 +269,9 @@ class User
 
         //if result is 1, email is already in use, else email is not in use
         if ($result) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 
