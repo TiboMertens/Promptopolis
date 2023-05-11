@@ -21,52 +21,55 @@ if (isset($_SESSION["loggedin"])) {
             $images = ["mainImage", "overviewImage", "image3", "image4"];
 
             foreach ($images as $image) {
-                if (!empty($_FILES[$image]["tmp_name"])) {
-                    $target_file = $target_dir . basename($_FILES[$image]["name"]);
-                    $uploadOk = 1;
-                    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-                    $exceptionCaught = false;
+                try {
+                    if (!empty($_FILES[$image]["tmp_name"])) {
+                        $target_file = $target_dir . basename($_FILES[$image]["name"]);
+                        $uploadOk = 1;
+                        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                        $exceptionCaught = false;
+                    } else {
+                        throw new Exception("Please upload an image");
+                    }
 
-                    try {
-                        if (!isset($imageFileType)) {
-                            throw new exception("Please upload an image");
-                        } else {
-                            switch ($image) {
-                                case "mainImage":
-                                    Upload::uploadImage($image, $imageFileType, $target_file);
-                                    $prompt->setMainImage($target_file);
-                                    break;
-                                case "overviewImage":
-                                    Upload::uploadImage($image, $imageFileType, $target_file);
-                                    $prompt->setOverviewImage($target_file);
-                                    break;
-                                case "image3":
-                                    Upload::uploadImage($image, $imageFileType, $target_file);
-                                    $prompt->setImage3($target_file);
-                                    break;
-                                case "image4":
-                                    Upload::uploadImage($image, $imageFileType, $target_file);
-                                    $prompt->setImage4($target_file);
-                                    break;
-                            }
-                        }
-                    } catch (Exception $e) {
+
+                    if (!isset($imageFileType)) {
+                        throw new exception("Please upload an image");
+                    } else {
                         switch ($image) {
                             case "mainImage":
-                                $mainImageError = $e->getMessage();
+                                Upload::uploadImage($image, $imageFileType, $target_file);
+                                $prompt->setMainImage($target_file);
                                 break;
                             case "overviewImage":
-                                $overviewImageError = $e->getMessage();
+                                Upload::uploadImage($image, $imageFileType, $target_file);
+                                $prompt->setOverviewImage($target_file);
                                 break;
                             case "image3":
-                                $image3Error = $e->getMessage();
+                                Upload::uploadImage($image, $imageFileType, $target_file);
+                                $prompt->setImage3($target_file);
                                 break;
                             case "image4":
-                                $image4Error = $e->getMessage();
+                                Upload::uploadImage($image, $imageFileType, $target_file);
+                                $prompt->setImage4($target_file);
                                 break;
                         }
-                        $exceptionCaught = true;
                     }
+                } catch (Exception $e) {
+                    switch ($image) {
+                        case "mainImage":
+                            $mainImageError = $e->getMessage();
+                            break;
+                        case "overviewImage":
+                            $overviewImageError = $e->getMessage();
+                            break;
+                        case "image3":
+                            $image3Error = $e->getMessage();
+                            break;
+                        case "image4":
+                            $image4Error = $e->getMessage();
+                            break;
+                    }
+                    $exceptionCaught = true;
                 }
             }
 
