@@ -108,6 +108,7 @@ try {
                     <option value="all">All</option>
                     <option value="Midjourney">Midjourney</option>
                     <option value="Dall-E">Dall-E</option>
+                    <option value="Stable_diffusion">Stable Diffusion</option>
                 </select>
                 <label class="text-white relative bottom-[2px] ml-[10px]" for="filterCategory">Category</label>
                 <select class="filter-select rounded-md" name="filterCategory" class="rounded-md">

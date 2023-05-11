@@ -183,7 +183,7 @@ if (isset($_SESSION["loggedin"])) {
                     <select class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" name="model" class="rounded-md">
                         <option value="Midjourney">Midjourney</option>
                         <option value="Dall-E">Dall-E</option>
-                        <option value="Stable Diffusion">Stable Diffusion</option>
+                        <option value="Stable_diffusion">Stable Diffusion</option>
                     </select>
                     <?php if (isset($modelError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($modelError); ?></p>
