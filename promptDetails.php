@@ -39,6 +39,29 @@ try {
             } else {
                 $boughtState = "buy";
             }
+
+            if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
+                $likeState = "remove";
+            } else {
+                $likeState = "add";
+            }
+
+            if ($denied == 1 && $authorID != $_SESSION['id']) {
+                header("Location: index.php");
+            }
+
+            //if prompt is not approved, only moderators and the author can see it
+            if ($promptDetails['is_approved'] != 1 && $authorID != $_SESSION['id']) {
+                //if user is not a moderator, redirect to index
+                if (!$isModerator) {
+                    header("Location: index.php");
+                } else {
+                    $moderator = new Promptopolis\Framework\Moderator();
+                }
+            }
+
+            //check if the user has bought this prompt
+            $hasBought = $user->hasBought($prompt_id, $_SESSION['id']);
         }
 
         $allComments = $comment->getComments($prompt_id);
@@ -78,26 +101,6 @@ try {
             }
         }
 
-        if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
-            $likeState = "remove";
-        } else {
-            $likeState = "add";
-        }
-
-        if ($denied == 1 && $authorID != $_SESSION['id']) {
-            header("Location: index.php");
-        }
-
-        //if prompt is not approved, only moderators and the author can see it
-        if ($promptDetails['is_approved'] != 1 && $authorID != $_SESSION['id']) {
-            //if user is not a moderator, redirect to index
-            if (!$isModerator) {
-                header("Location: index.php");
-            } else {
-                $moderator = new Promptopolis\Framework\Moderator();
-            }
-        }
-
         //get author name
         $userDetails = $user->getUserDetails($authorID);
         if ($userDetails == false) {
@@ -115,9 +118,6 @@ try {
         } catch (\Throwable $th) {
             $purchaseError = $th->getMessage();
         }
-
-        //check if the user has bought this prompt
-        $hasBought = $user->hasBought($prompt_id, $_SESSION['id']);
     } else {
         throw new exception('No correct id provided');
     }
