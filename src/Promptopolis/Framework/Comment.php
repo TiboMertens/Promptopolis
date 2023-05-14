@@ -66,6 +66,11 @@ class comment
     $statement->bindValue(':comment_by', $this->getUsername());
     $statement->bindValue(':comment_for', $id);
     $statement->execute();
+
+    $credits = \Promptopolis\Framework\User::getCredits($_SESSION['id']);
+    $credits += 1;
+    \Promptopolis\Framework\User::updateCredits($_SESSION['id'], $credits);
+    return $credits;
    }
 
     public function getComments($id){

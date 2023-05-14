@@ -10,8 +10,8 @@ if (!empty($_POST['comment'])) {
         $id = $_POST['id'];
         $comment->setComment($_POST['comment']);
         $comment->setUsername($_SESSION['username']);
-        $comment->save($id);
-        echo json_encode(array('status' => 'success', 'message' => 'Comment saved'));
+        $newCredits = $comment->save($id);
+        echo json_encode(array('status' => 'success', 'message' => 'Comment saved', 'credits' => $newCredits));
     } catch (\Throwable $th) {
         //throw $th;
     }
