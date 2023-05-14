@@ -14,55 +14,6 @@ try {
         $prompt_id = $_GET['id'];
         $prompt->setId($prompt_id);
         $likes = $like->getLikes($prompt_id);
-        if (isset($_SESSION['loggedin'])) {
-            $userDetails = $user->getUserDetails($_SESSION['id']);
-            $profilePicture = $userDetails['profile_picture_url'];
-            $username = $userDetails['username'];
-
-            $prompt_id = $_GET['id'];
-            $prompt->setId($prompt_id);
-
-            if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
-                $likeState = "remove";
-            } else {
-                $likeState = "add";
-            }
-
-            if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
-                $state = "remove";
-            } else {
-                $state = "add";
-            }
-
-            if (\Promptopolis\Framework\Purchase::checkBought($prompt_id, $_SESSION['id'])) {
-                $boughtState = "bought";
-            } else {
-                $boughtState = "buy";
-            }
-
-            if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
-                $likeState = "remove";
-            } else {
-                $likeState = "add";
-            }
-
-            if ($denied == 1 && $authorID != $_SESSION['id']) {
-                header("Location: index.php");
-            }
-
-            //if prompt is not approved, only moderators and the author can see it
-            if ($promptDetails['is_approved'] != 1 && $authorID != $_SESSION['id']) {
-                //if user is not a moderator, redirect to index
-                if (!$isModerator) {
-                    header("Location: index.php");
-                } else {
-                    $moderator = new Promptopolis\Framework\Moderator();
-                }
-            }
-
-            //check if the user has bought this prompt
-            $hasBought = $user->hasBought($prompt_id, $_SESSION['id']);
-        }
 
         $allComments = $comment->getComments($prompt_id);
 
@@ -117,6 +68,56 @@ try {
             }
         } catch (\Throwable $th) {
             $purchaseError = $th->getMessage();
+        }
+
+        if (isset($_SESSION['loggedin'])) {
+            $userDetails = $user->getUserDetails($_SESSION['id']);
+            $profilePicture = $userDetails['profile_picture_url'];
+            $username = $userDetails['username'];
+
+            $prompt_id = $_GET['id'];
+            $prompt->setId($prompt_id);
+
+            if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
+                $likeState = "remove";
+            } else {
+                $likeState = "add";
+            }
+
+            if ($user->checkFavourite($_SESSION['id'], $prompt_id)) {
+                $state = "remove";
+            } else {
+                $state = "add";
+            }
+
+            if (\Promptopolis\Framework\Purchase::checkBought($prompt_id, $_SESSION['id'])) {
+                $boughtState = "bought";
+            } else {
+                $boughtState = "buy";
+            }
+
+            if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
+                $likeState = "remove";
+            } else {
+                $likeState = "add";
+            }
+
+            if ($denied == 1 && $authorID != $_SESSION['id']) {
+                header("Location: index.php");
+            }
+
+            //if prompt is not approved, only moderators and the author can see it
+            if ($promptDetails['is_approved'] != 1 && $authorID != $_SESSION['id']) {
+                //if user is not a moderator, redirect to index
+                if (!$isModerator) {
+                    header("Location: index.php");
+                } else {
+                    $moderator = new Promptopolis\Framework\Moderator();
+                }
+            }
+
+            //check if the user has bought this prompt
+            $hasBought = $user->hasBought($prompt_id, $_SESSION['id']);
         }
     } else {
         throw new exception('No correct id provided');
