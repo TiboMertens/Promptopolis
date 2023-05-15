@@ -18,7 +18,19 @@ if (isset($_SESSION["loggedin"])) {
             $upload = new Promptopolis\Framework\Upload();
             $prompt->setUser_id($_SESSION['id']);
 
-            $images = ["mainImage", "overviewImage", "image3", "image4"];
+            $images = ["mainImage"];
+
+            if (isset($_FILES["overviewImage"]["tmp_name"])) {
+                $images[] = "overviewImage";
+            }
+
+            if (isset($_FILES["image3"]["tmp_name"])) {
+                $images[] = "image3";
+            }
+
+            if (isset($_FILES["image4"]["tmp_name"])) {
+                $images[] = "image4";
+            }
 
             foreach ($images as $image) {
                 try {
@@ -26,14 +38,12 @@ if (isset($_SESSION["loggedin"])) {
                         $target_file = $target_dir . basename($_FILES[$image]["name"]);
                         $uploadOk = 1;
                         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-                        $exceptionCaught = false;
                     } else {
                         throw new Exception("Please upload an image");
                     }
 
-
                     if (!isset($imageFileType)) {
-                        throw new exception("Please upload an image");
+                        throw new Exception("Please upload an image");
                     } else {
                         switch ($image) {
                             case "mainImage":
@@ -58,18 +68,9 @@ if (isset($_SESSION["loggedin"])) {
                     switch ($image) {
                         case "mainImage":
                             $mainImageError = $e->getMessage();
-                            break;
-                        case "overviewImage":
-                            $overviewImageError = $e->getMessage();
-                            break;
-                        case "image3":
-                            $image3Error = $e->getMessage();
-                            break;
-                        case "image4":
-                            $image4Error = $e->getMessage();
+                            $exceptionCaught = true;
                             break;
                     }
-                    $exceptionCaught = true;
                 }
             }
 
@@ -77,28 +78,24 @@ if (isset($_SESSION["loggedin"])) {
                 $prompt->setTitle($_POST["title"]);
             } catch (Exception $e) {
                 $titleError = $e->getMessage();
-                $exceptionCaught = true;
             }
 
             try {
                 $prompt->setDescription($_POST["description"]);
             } catch (Exception $e) {
                 $descriptionError = $e->getMessage();
-                $exceptionCaught = true;
             }
 
             try {
                 $prompt->setPrice($_POST["price"]);
             } catch (Exception $e) {
                 $priceError = $e->getMessage();
-                $exceptionCaught = true;
             }
 
             try {
                 $prompt->setModel($_POST["model"]);
             } catch (Exception $e) {
                 $modelError = $e->getMessage();
-                $exceptionCaught = true;
             }
 
             $tags = array();
@@ -115,7 +112,6 @@ if (isset($_SESSION["loggedin"])) {
                 $prompt->setTags($tags);
             } catch (Exception $e) {
                 $tagsError = $e->getMessage();
-                $exceptionCaught = true;
             }
 
             $prompt->setCategory($_POST["category"]);
@@ -200,6 +196,15 @@ if (isset($_SESSION["loggedin"])) {
                         <option value="Logo">Logo</option>
                         <option value="Civilisation">Civilisation</option>
                         <option value="Line_art">Line art</option>
+                        <option value="Abstract">Abstract</option>
+                        <option value="Architecture">Architecture</option>
+                        <option value="Space">Space</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Sci-fi">Sci-fi</option>
+                        <option value="Cyberpunk">Cyberpunk</option>
+                        <option value="Surreal">Surreal</option>
+                        <option value="Futuristic">Futuristic</option>
+                        <option value="Other">Other</option>
                     </select>
                     <?php if (isset($modelError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($modelError); ?></p>

@@ -116,7 +116,17 @@ try {
                     <option value="Nature">Nature</option>
                     <option value="Logo">Logo</option>
                     <option value="Civilisation">Civilisation</option>
+                    <option value="Food">Food</option>
                     <option value="Line_art">Line art</option>
+                    <option value="Abstract">Abstract</option>
+                    <option value="Architecture">Architecture</option>
+                    <option value="Space">Space</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Sci-fi">Sci-fi</option>
+                    <option value="Cyberpunk">Cyberpunk</option>
+                    <option value="Surreal">Surreal</option>
+                    <option value="Futuristic">Futuristic</option>
+                    <option value="Other">Other</option>
                 </select>
             </form>
         </div>

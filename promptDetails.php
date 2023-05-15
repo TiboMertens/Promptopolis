@@ -14,6 +14,62 @@ try {
         $prompt_id = $_GET['id'];
         $prompt->setId($prompt_id);
         $likes = $like->getLikes($prompt_id);
+
+        $allComments = $comment->getComments($prompt_id);
+
+        $likes = $like->getLikes($prompt_id);
+
+        //get prompt details
+        $promptDetails = $prompt->getPromptDetails();
+        if ($promptDetails['id'] == null || $promptDetails == false || $promptDetails == null || $promptDetails == "" || $promptDetails == 0) {
+            throw new Exception("Prompt not found");
+        }
+
+        //get data
+        $title = $promptDetails['title'];
+        $motivation = $promptDetails['message'];
+        $denied = $promptDetails['is_denied'];
+        $description = $promptDetails['description'];
+        $cover_url = $promptDetails['cover_url'];
+        $tstamp = $promptDetails['tstamp'];
+        $price = $promptDetails['price'];
+        $tag1 = $promptDetails['tag_names'][0];
+        if (isset($promptDetails['tag_names'][1])) {
+            $tag2 = $promptDetails['tag_names'][1];
+        }
+        if (isset($promptDetails['tag_names'][2])) {
+            $tag3 = $promptDetails['tag_names'][2];
+        }
+        $model = $promptDetails['model'];
+
+        //get author id
+        $authorID = $promptDetails['user_id'];
+        if (isset($_SESSION["loggedin"])) {
+            //check if user is a moderator
+            $isModerator = $user->isModerator($_SESSION['id']);
+            if ($promptDetails['is_approved'] == 0 && !$isModerator) {
+                header("Location: index.php");
+            }
+        }
+
+        //get author name
+        $userDetails = $user->getUserDetails($authorID);
+        if ($userDetails == false) {
+            $authorName = "deleted user";
+            $authorID = "";
+        } else {
+            $authorName = $userDetails['username'];
+        }
+
+        try {
+            if (isset($_POST['buy'])) {
+                $purchase = new Promptopolis\Framework\Purchase();
+                $purchase->purchase($prompt_id, $_SESSION['id'], $authorID);
+            }
+        } catch (\Throwable $th) {
+            $purchaseError = $th->getMessage();
+        }
+
         if (isset($_SESSION['loggedin'])) {
             $userDetails = $user->getUserDetails($_SESSION['id']);
             $profilePicture = $userDetails['profile_picture_url'];
@@ -39,88 +95,30 @@ try {
             } else {
                 $boughtState = "buy";
             }
-        }
 
-        $allComments = $comment->getComments($prompt_id);
-
-        $likes = $like->getLikes($prompt_id);
-
-        //get prompt details
-        $promptDetails = $prompt->getPromptDetails();
-        if ($promptDetails['id'] == null || $promptDetails == false || $promptDetails == null || $promptDetails == "" || $promptDetails == 0) {
-            throw new Exception("Prompt not found");
-        }
-
-        //get data
-        $title = $promptDetails['title'];
-        $motivation = $promptDetails['message'];
-        $denied = $promptDetails['is_denied'];
-        $description = $promptDetails['description'];
-        $cover_url = $promptDetails['cover_url'];
-        $image2 = $promptDetails['image_url2'];
-        $image3 = $promptDetails['image_url3'];
-        $image4 = $promptDetails['image_url4'];
-        $tstamp = $promptDetails['tstamp'];
-        $price = $promptDetails['price'];
-        $tag1 = $promptDetails['tag_names'][0];
-        if (isset($promptDetails['tag_names'][1])) {
-            $tag2 = $promptDetails['tag_names'][1];
-        }
-        if (isset($promptDetails['tag_names'][2])) {
-            $tag3 = $promptDetails['tag_names'][2];
-        }
-        $model = $promptDetails['model'];
-
-        //get author id
-        $authorID = $promptDetails['user_id'];
-        if (isset($_SESSION["loggedin"])) {
-            //check if user is a moderator
-            $isModerator = $user->isModerator($_SESSION['id']);
-            if ($promptDetails['is_approved'] == 0 && !$isModerator) {
-                header("Location: index.php");
-            }
-        }
-
-        if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
-            $likeState = "remove";
-        } else {
-            $likeState = "add";
-        }
-
-        if ($denied == 1 && $authorID != $_SESSION['id']) {
-            header("Location: index.php");
-        }
-
-        //if prompt is not approved, only moderators and the author can see it
-        if ($promptDetails['is_approved'] != 1 && $authorID != $_SESSION['id']) {
-            //if user is not a moderator, redirect to index
-            if (!$isModerator) {
-                header("Location: index.php");
+            if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
+                $likeState = "remove";
             } else {
-                $moderator = new Promptopolis\Framework\Moderator();
+                $likeState = "add";
             }
-        }
 
-        //get author name
-        $userDetails = $user->getUserDetails($authorID);
-        if ($userDetails == false) {
-            $authorName = "deleted user";
-            $authorID = "";
-        } else {
-            $authorName = $userDetails['username'];
-        }
-
-        try {
-            if (isset($_POST['buy'])) {
-                $purchase = new Promptopolis\Framework\Purchase();
-                $purchase->purchase($prompt_id, $_SESSION['id'], $authorID);
+            if ($denied == 1 && $authorID != $_SESSION['id']) {
+                header("Location: index.php");
             }
-        } catch (\Throwable $th) {
-            $purchaseError = $th->getMessage();
-        }
 
-        //check if the user has bought this prompt
-        $hasBought = $user->hasBought($prompt_id, $_SESSION['id']);
+            //if prompt is not approved, only moderators and the author can see it
+            if ($promptDetails['is_approved'] != 1 && $authorID != $_SESSION['id']) {
+                //if user is not a moderator, redirect to index
+                if (!$isModerator) {
+                    header("Location: index.php");
+                } else {
+                    $moderator = new Promptopolis\Framework\Moderator();
+                }
+            }
+
+            //check if the user has bought this prompt
+            $hasBought = $user->hasBought($prompt_id, $_SESSION['id']);
+        }
     } else {
         throw new exception('No correct id provided');
     }
@@ -153,14 +151,12 @@ try {
         }
     }
     if (isset($_POST['delete'])) {
-        
-            // delete the user's account and redirect to the login page
-            var_dump("hey");
-            $prompt->deletePrompt($prompt_id);
-            header("Location: index.php");
-        
+
+        // delete the user's account and redirect to the login page
+        var_dump("hey");
+        $prompt->deletePrompt($prompt_id);
+        header("Location: index.php");
     }
-    
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
@@ -206,14 +202,14 @@ try {
                                 <p class="liking text-[#BB86FC] font-bold relative top-[25px] left-[5px]"><?php echo htmlspecialchars($likes) ?></p>
                             </div>
                             <i id="flag" class="<?php echo $promptDetails['is_reported'] == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
-                            <?php if($promptDetails["user_id"] == $_SESSION["id"]) : ?>
+                            <?php if ($promptDetails["user_id"] == $_SESSION["id"]) : ?>
                                 <form action="" method="post">
                                     <button name="delete"><i class="fa-regular fa-trash-can fa-xl cursor-pointer relative top-[23px] ml-3" style="color: #bb86fc;"></i></button>
                                 </form>
                             <?php endif; ?>
                         </div>
                         <div class="relative">
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
                                 </div>
@@ -221,7 +217,7 @@ try {
                                     <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
                                 </div>
                             </div>
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
                                 </div>
@@ -236,7 +232,7 @@ try {
                                     <?php endif ?>
                                 </div>
                             </div>
-                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
+                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                                 <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                                 <p><?php echo htmlspecialchars($description); ?></p>
                             </div>
@@ -249,7 +245,7 @@ try {
                         ?>
                         <?php if (isset($_SESSION["loggedin"])) : ?>
                             <div class="flex mb-3 items-center">
-                                <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"]==1) : ?>
+                                <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) : ?>
                                     <form action="" method="post">
                                         <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
                                             <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
@@ -269,12 +265,24 @@ try {
                 <?php endif ?>
             </div>
             <div class="flex justify-center md:mt-[60px] lg:mt-5 ml-6 mr-6 pt-[70px]">
-                <div class="relative">
-                    <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
-                    <img src="<?php echo htmlspecialchars($image2); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
-                    <img src="<?php echo htmlspecialchars($image3); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
-                    <img src="<?php echo htmlspecialchars($image4); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id']==$authorID ? '' : 'filter blur' ?>">
+                <div class="flex flex-col">
+                    <h2 class="font-bold text-white text-[22px] mb-2">Extra images</h2>
+                    <?php if (empty($promptDetails['image_url2']) && empty($promptDetails['image_url3']) && empty($promptDetails['image_url3'])) : ?>
+                        <p class="text-white text-[16px] font-bold relative bottom-1 ml-3">No extra images provided</p>
+                    <?php endif ?>
 
+                    <div class="relative">
+                        <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
+                        <?php if (isset($promptDetails['image_url2'])) : ?>
+                            <img src="<?php echo htmlspecialchars($promptDetails['image_url2']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                        <?php endif ?>
+                        <?php if (isset($promptDetails['image_url3'])) : ?>
+                            <img src="<?php echo htmlspecialchars($promptDetails['image_url3']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                        <?php endif ?>
+                        <?php if (isset($promptDetails['image_url3'])) : ?>
+                            <img src="<?php echo htmlspecialchars($promptDetails['image_url4']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                        <?php endif ?>
+                    </div>
                     <?php
                     if (isset($_SESSION["loggedin"])) {
                         // Als de gebruiker is ingelogd, verwijder de overlay-klasse
@@ -315,22 +323,22 @@ try {
         </div>
     <?php endif ?>
 
-    <?php if (isset($_SESSION["loggedin"])): ?>
-    <form data-id="<?php echo $prompt_id ?>" data-user=" <?php echo $_SESSION["username"] ?>" id="comment-form" class="max-w-md mx-auto mb-10">
-        <h2 class="font-bold text-white text-[22px] mb-2">Place your comment</h2>
-        <textarea id="comment" name="comment" class="w-full px-4 py-2 mb-4 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"></textarea>
-        <p id="error" class="text-red-500 text-xs italic"> </p>
-        <button type="submit" class="w-full px-4 py-2 font-bold text-white bg-purple-600 rounded-md hover:bg-purple-700">Send</button>
-    </form>
+    <?php if (isset($_SESSION["loggedin"])) : ?>
+        <form data-id="<?php echo $prompt_id ?>" data-user=" <?php echo $_SESSION["username"] ?>" id="comment-form" class="max-w-md mx-auto mb-10">
+            <h2 class="font-bold text-white text-[22px] mb-2">Place your comment</h2>
+            <textarea id="comment" name="comment" class="w-full px-4 py-2 mb-4 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"></textarea>
+            <p id="error" class="text-red-500 text-xs italic"> </p>
+            <button type="submit" class="w-full px-4 py-2 font-bold text-white bg-purple-600 rounded-md hover:bg-purple-700">Send</button>
+        </form>
     <?php endif ?>
 
     <div class="max-w-md mx-auto mb-10">
-    <h2 class="font-bold text-white text-[22px] mb-2"> All comments</h2>
-    <div id="comments-container"> </div>
-    <?php foreach($allComments as $comment): ?>
-        <p class="text-white"> <?php echo $comment["comment_by"] ?> </p>
-        <p class=" bg-white p-[10px] my-[10px] rounded-[10px] w-full"><?php echo $comment["comment"] ?></p>
-    <?php endforeach ?>
+        <h2 class="font-bold text-white text-[22px] mb-2"> All comments</h2>
+        <div id="comments-container"> </div>
+        <?php foreach ($allComments as $comment) : ?>
+            <p class="text-white"> <?php echo $comment["comment_by"] ?> </p>
+            <p class=" bg-white p-[10px] my-[10px] rounded-[10px] w-full"><?php echo $comment["comment"] ?></p>
+        <?php endforeach ?>
     </div>
 
     <script src="js/commenting.js"></script>
@@ -340,7 +348,8 @@ try {
     <script src="js/fav.js"></script>
     <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) : ?>
         <!-- <script src="js/deny.js"></script> -->
-        <script>const deny = document.getElementById("deny");
+        <script>
+            const deny = document.getElementById("deny");
             const overlay = document.getElementById("denyPopup");
             const close2 = document.querySelector(".close");
 

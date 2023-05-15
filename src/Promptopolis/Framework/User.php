@@ -97,7 +97,7 @@ class User
      */
     public function setEmail($email)
     {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) && self::checkEmail($email)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->email = $email;
             return $this;
         } else {

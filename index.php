@@ -65,7 +65,7 @@ $newPrompts = Prompt::getNewPrompts();
                                 <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">No prompts to approve</p>
                             <?php endif ?>
                             <?php foreach ($promptsToApprove as $promptToApprove) : ?>
-                                <a href="promptDetails.php?id=<?php echo htmlspecialchars($promptToApprove['id']) ?>">
+                                <a href="promptDetails.php?id=<?php echo htmlspecialchars($promptToApprove['id']) ?>&filterApprove=not_approved">
                                     <img src="<?php echo htmlspecialchars($promptToApprove['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                                     <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($promptToApprove['title']) ?></h2>
                                 </a>
@@ -81,7 +81,7 @@ $newPrompts = Prompt::getNewPrompts();
                                 <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">No reported prompts</p>
                             <?php endif ?>
                             <?php foreach ($reportedPrompts as $reportedPrompt) : ?>
-                                <a href="promptDetails.php?id=<?php echo htmlspecialchars($reportedPrompt['id']) ?>">
+                                <a href="promptDetails.php?id=<?php echo htmlspecialchars($reportedPrompt['id']) ?>&filterApprove=reported">
                                     <img src="<?php echo htmlspecialchars($reportedPrompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                                     <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($reportedPrompt['title']) ?></h2>
                                 </a>
@@ -100,7 +100,7 @@ $newPrompts = Prompt::getNewPrompts();
                         <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">No new prompts</p>
                     <?php endif ?>
                     <?php foreach ($newPrompts as $newPrompt) : ?>
-                        <a href="promptDetails.php?id=<?php echo htmlspecialchars($newPrompt['id']) ?>&new">
+                        <a href="promptDetails.php?id=<?php echo htmlspecialchars($newPrompt['id']) ?>&filterOrder=new">
                             <img src="<?php echo htmlspecialchars($newPrompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                             <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($newPrompt['title']) ?></h2>
                         </a>
@@ -117,7 +117,7 @@ $newPrompts = Prompt::getNewPrompts();
                             <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">No prompts from creators you follow</p>
                         <?php endif ?>
                         <?php foreach ($followedPrompts as $followedPrompt) : ?>
-                            <a href="promptDetails.php?id=<?php echo htmlspecialchars($followedPrompt['id']) ?>&new">
+                            <a href="promptDetails.php?id=<?php echo htmlspecialchars($followedPrompt['id']) ?>">
                                 <img src="<?php echo htmlspecialchars($followedPrompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                                 <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($followedPrompt['title']) ?></h2>
                             </a>
