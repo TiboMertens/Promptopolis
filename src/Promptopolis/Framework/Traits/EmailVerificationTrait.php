@@ -11,7 +11,7 @@ trait EmailVerificationTrait {
   
         // send an email to the user 
         $email = new \SendGrid\Mail\Mail(); 
-        $email->setFrom("r0892926@student.thomasmore.be", "Promptopolis"); 
+        $email->setFrom("r0896059@student.thomasmore.be", "Promptopolis"); 
         $email->setSubject("Verification email"); 
         $email->addTo($this->email, $this->username); 
         $email->addContent("text/plain", "Hi $username! Please activate your email. Here is the activation link http://localhost/php/eindwerk/verification.php?token=$token"); 
