@@ -68,9 +68,15 @@ class prompt
         $sql = "INSERT INTO prompts (title, description, price, model, category, user_id, cover_url";
 
         $mainImage = $this->mainImage;
-        $overviewImage = $this->overviewImage;
-        $image3 = $this->image3;
-        $image4 = $this->image4;
+        if (!empty($overviewImage)) {
+            $overviewImage = $this->overviewImage;
+        }
+        if (!empty($image3)) {
+            $image3 = $this->image3;
+        }
+        if (!empty($image4)) {
+            $image4 = $this->image4;
+        }
 
         if (!empty($overviewImage)) {
             $sql .= ", image_url2";
