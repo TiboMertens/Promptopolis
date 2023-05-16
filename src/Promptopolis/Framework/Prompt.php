@@ -67,6 +67,11 @@ class prompt
         // Insert prompt into prompts table
         $sql = "INSERT INTO prompts (title, description, price, model, category, user_id, cover_url";
 
+        $mainImage = $this->mainImage;
+        $overviewImage = $this->overviewImage;
+        $image3 = $this->image3;
+        $image4 = $this->image4;
+
         if (!empty($overviewImage)) {
             $sql .= ", image_url2";
         }
@@ -103,6 +108,7 @@ class prompt
         $statement->bindValue(":category", $this->category);
         $statement->bindValue(":user_id", $this->user_id);
         $statement->bindValue(":cover_url", $this->mainImage);
+
         if (!empty($this->overviewImage)) {
             $statement->bindValue(":image_url2", $this->overviewImage);
         }

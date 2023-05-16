@@ -3,6 +3,19 @@ require_once 'vendor/autoload.php';
 include_once("bootstrap.php");
 
 use Promptopolis\Framework\Upload;
+use Cloudinary\Configuration\Configuration;
+
+$config = parse_ini_file(__DIR__ . "\src\Promptopolis\Framework\config\config.ini");
+
+$name = $config['CLOUDINARY_NAME'];
+$apiKey = $config['CLOUDINARY_API_KEY'];
+$apiSecret = $config['CLOUDINARY_API_SECRET'];
+
+$config = Configuration::instance();
+$config->cloud->cloudName = $name;
+$config->cloud->apiKey = $apiKey;
+$config->cloud->apiSecret = $apiSecret;
+$config->url->secure = true;
 
 if (isset($_SESSION["loggedin"])) {
     $user = new \Promptopolis\Framework\User();
@@ -47,20 +60,24 @@ if (isset($_SESSION["loggedin"])) {
                     } else {
                         switch ($image) {
                             case "mainImage":
-                                Upload::uploadImage($image, $imageFileType, $target_file);
-                                $prompt->setMainImage($target_file);
+                                $url = Upload::uploadImage($image, $imageFileType);
+                                $prompt->setMainImage($url);
+                                $exceptionCaught = false;
                                 break;
                             case "overviewImage":
-                                Upload::uploadImage($image, $imageFileType, $target_file);
-                                $prompt->setOverviewImage($target_file);
+                                $url = Upload::uploadImage($image, $imageFileType);
+                                $prompt->setOverviewImage($url);
+                                $exceptionCaught = false;
                                 break;
                             case "image3":
-                                Upload::uploadImage($image, $imageFileType, $target_file);
-                                $prompt->setImage3($target_file);
+                                $url = Upload::uploadImage($image, $imageFileType);
+                                $prompt->setImage3($url);
+                                $exceptionCaught = false;
                                 break;
                             case "image4":
-                                Upload::uploadImage($image, $imageFileType, $target_file);
-                                $prompt->setImage4($target_file);
+                                $url = Upload::uploadImage($image, $imageFileType);
+                                $prompt->setImage4($url);
+                                $exceptionCaught = false;
                                 break;
                         }
                     }
@@ -115,6 +132,8 @@ if (isset($_SESSION["loggedin"])) {
             }
 
             $prompt->setCategory($_POST["category"]);
+
+            var_dump($prompt->getMainImage(), $prompt->getOverviewImage(), $prompt->getImage3(), $prompt->getImage4());
 
             if (!$exceptionCaught) {
                 if ($isVerified == 1) {

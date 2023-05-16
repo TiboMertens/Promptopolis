@@ -2,14 +2,17 @@
 
 namespace Promptopolis\Framework;
 
+use Cloudinary\Api\Upload\UploadApi;
+
 class Upload
 {
-    public static function uploadImage($image, $imageFileType, $target_file)
+    public static function uploadImage($image, $imageFileType)
     {
         self::checkImage($image);
         self::checkSize($image);
         self::checkImageType($imageFileType);
-        self::move($image, $target_file);
+        $url = self::upload($image);
+        return $url;
     }
 
     public static function checkImage($image)
@@ -37,12 +40,30 @@ class Upload
         }
     }
 
-    public static function move($image, $target_file)
+    public static function upload($image)
     {
-        if (move_uploaded_file($_FILES[$image]["tmp_name"], $target_file)) {
-            //is uploaded
+        $tmpFilePath = $_FILES[$image]['tmp_name'];
+
+        if ($image != "mainImage") {
+            $uploadResult = (new UploadApi())->upload($tmpFilePath, [
+                'transformation' => [
+                    'width' => 500,
+                    'height' => 300,
+                    'crop' => 'fit'
+                ]
+            ]);
         } else {
-            throw new \exception("Sorry, there was an error uploading your file.");
+            $uploadResult = (new UploadApi())->upload($tmpFilePath, [
+                'transformation' => [
+                    'width' => 700,
+                    'height' => 500,
+                    'crop' => 'fit'
+                ]
+            ]);
         }
+
+
+        $url = $uploadResult['secure_url'];
+        return $url;
     }
 }
