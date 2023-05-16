@@ -27,8 +27,16 @@ abstract class Db
             $user = $config['user'];
             $password = $config['password'];
             $host = $config['host'];
+            $ssl_ca = $config['ssl_ca']; // Add this line to retrieve the SSL certificate path
 
-            self::$conn = new \PDO("mysql:host=$host;dbname=" . $database, $user, $password);
+            $dsn = "mysql:host=$host;dbname=$database;charset=utf8mb4";
+
+            // Create the PDO connection with SSL options
+            self::$conn = new \PDO($dsn, $user, $password, [
+                \PDO::MYSQL_ATTR_SSL_CA => $ssl_ca,
+                \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+            ]);
+
             return self::$conn;
         }
     }
