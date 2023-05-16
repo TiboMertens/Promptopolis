@@ -297,7 +297,7 @@ class User
 
         // send an email to the user
         $email = new \SendGrid\Mail\Mail();
-        $email->setFrom("r0892926@student.thomasmore.be", "Promptopolis");
+        $email->setFrom("r0896059@student.thomasmore.be", "Promptopolis");
         $email->setSubject("Reset email");
         $email->addTo($this->email);
         $email->addContent("text/plain", "Hi! Please reset your password. Here is the reset link http://localhost/php/eindwerk/resetPassword.php?token=$token");

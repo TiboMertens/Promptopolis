@@ -2,7 +2,7 @@ const form = document.getElementById('comment-form');
 const commentsContainer = document.getElementById('comments-container');
 // get p with id error
 const errorElement = document.getElementById('error');
-
+const credits = document.getElementById('credits');
 form.addEventListener('submit', function(event) {
   // prevent the default form submission behavior
   event.preventDefault();
@@ -59,6 +59,8 @@ form.addEventListener('submit', function(event) {
           }else{
             errorElement.innerHTML = '';
           }
+          credits.innerHTML =  "Credits " + json.credits;
+          
         });
 
 });
