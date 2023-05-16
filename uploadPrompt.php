@@ -133,8 +133,6 @@ if (isset($_SESSION["loggedin"])) {
 
             $prompt->setCategory($_POST["category"]);
 
-            var_dump($prompt->getMainImage(), $prompt->getOverviewImage(), $prompt->getImage3(), $prompt->getImage4());
-
             if (!$exceptionCaught) {
                 if ($isVerified == 1) {
                     $prompt->setIs_approved(1);
