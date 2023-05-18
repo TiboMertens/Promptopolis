@@ -22,8 +22,8 @@ form.addEventListener('submit', function(event) {
   nameElement.textContent = user;
   
   // append the comment element to the comments container
-  commentsContainer.appendChild(nameElement);
-  commentsContainer.appendChild(commentElement);
+  commentsContainer.insertBefore(commentElement,commentsContainer.firstChild);
+  commentsContainer.insertBefore(nameElement, commentsContainer.firstChild);
   
   // clear the comment textarea
   document.getElementById('comment').value = '';
