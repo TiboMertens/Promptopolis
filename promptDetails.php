@@ -196,12 +196,12 @@ try {
                     <div class="text-[#cccccc] text-[14px] lg:text-[16px]">
                         <div class="flex gap-4">
                             <h1 class="text-[32px] lg:text-[36px] text-white font-bold mt-2 mb-3"><?php echo htmlspecialchars($title); ?></h1>
-                            <i data-fav="<?php echo $state ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $state == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-bookmark fa-xl cursor-pointer relative top-[38px]" name="fav" style="color: #bb86fc;"></i>
+                            <i data-fav="<?php echo htmlspecialchars($state) ?>" data-id=<?php echo htmlspecialchars($prompt_id) ?> class="<?php echo htmlspecialchars($state) == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-bookmark fa-xl cursor-pointer relative top-[38px]" name="fav" style="color: #bb86fc;"></i>
                             <div class="flex mb-[4px] ml-4 bg-[#121212]">
-                                <i id="heart" data-liked="<?php echo $likeState ?>" data-id=<?php echo $prompt_id ?> class="<?php echo $likeState == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[36px]" name="like" style="color: #bb86fc;"></i>
+                                <i id="heart" data-liked="<?php echo htmlspecialchars($likeState) ?>" data-id=<?php echo htmlspecialchars($prompt_id) ?> class="<?php echo htmlspecialchars($likeState) == 'add' ? 'fa-regular' : 'fa-solid' ?> fa-heart fa-xl cursor-pointer relative top-[36px]" name="like" style="color: #bb86fc;"></i>
                                 <p class="liking text-[#BB86FC] font-bold relative top-[25px] left-[5px]"><?php echo htmlspecialchars($likes) ?></p>
                             </div>
-                            <i id="flag" class="<?php echo $promptDetails['is_reported'] == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
+                            <i id="flag" class="<?php echo htmlspecialchars($promptDetails['is_reported']) == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer relative top-[37px] ml-3 " name="flag" style="color: #bb86fc;"></i>
                             <?php if ($promptDetails["user_id"] == $_SESSION["id"]) : ?>
                                 <form action="" method="post">
                                     <button name="delete"><i class="fa-regular fa-trash-can fa-xl cursor-pointer relative top-[23px] ml-3" style="color: #bb86fc;"></i></button>
@@ -209,7 +209,7 @@ try {
                             <?php endif; ?>
                         </div>
                         <div class="relative">
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo htmlspecialchars($hasBought) || htmlspecialchars($promptDetails['is_approved']) == 0 || htmlspecialchars($promptDetails['is_reported']) || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Uploaded on: &nbsp;<?php echo htmlspecialchars($tstamp); ?></p>
                                 </div>
@@ -217,7 +217,7 @@ try {
                                     <p class="text-right">Made by: &nbsp; <a href="profile.php?id=<?php echo htmlspecialchars($authorID) ?>"><span class="underline font-bold text-[#BB86FC] hover:text-[#A25AFB]"><?php echo htmlspecialchars($authorName); ?></span></a></p>
                                 </div>
                             </div>
-                            <div class="flex justify-between mb-3 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                            <div class="flex justify-between mb-3 <?php echo htmlspecialchars($hasBought) || htmlspecialchars($promptDetails['is_approved']) == 0 || htmlspecialchars($promptDetails['is_reported']) || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                                 <div class="flex-1">
                                     <p>Model: &nbsp; <?php echo htmlspecialchars($model); ?></p>
                                 </div>
@@ -232,7 +232,7 @@ try {
                                     <?php endif ?>
                                 </div>
                             </div>
-                            <div class="mr-5 mb-5 <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                            <div class="mr-5 mb-5 <?php echo htmlspecialchars($hasBought) || htmlspecialchars($promptDetails['is_approved']) == 0 || htmlspecialchars($promptDetails['is_reported']) || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                                 <h2 class="font-bold text-white text-[22px] mb-2">Description</h2>
                                 <p><?php echo htmlspecialchars($description); ?></p>
                             </div>
@@ -258,7 +258,7 @@ try {
                                 <?php endif ?>
                             </div>
                             <?php if (isset($purchaseError)) : ?>
-                                <p class="text-red-500 text-xs italic relative"><?php echo $purchaseError ?></p>
+                                <p class="text-red-500 text-xs italic relative"><?php echo htmlspecialchars($purchaseError) ?></p>
                             <?php endif ?>
                         <?php endif ?>
                     </div>
@@ -274,13 +274,13 @@ try {
                     <div class="relative">
                         <!-- <h2 class="font-bold text-white text-[22px] mb-2">Example</h2> -->
                         <?php if (isset($promptDetails['image_url2'])) : ?>
-                            <img src="<?php echo htmlspecialchars($promptDetails['image_url2']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                            <img src="<?php echo htmlspecialchars($promptDetails['image_url2']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover md:h-[200px] md:w-[250px] <?php echo htmlspecialchars($hasBought) || htmlspecialchars($promptDetails['is_approved']) == 0 || htmlspecialchars($promptDetails['is_reported']) || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                         <?php endif ?>
                         <?php if (isset($promptDetails['image_url3'])) : ?>
-                            <img src="<?php echo htmlspecialchars($promptDetails['image_url3']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                            <img src="<?php echo htmlspecialchars($promptDetails['image_url3']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo htmlspecialchars($hasBought) || htmlspecialchars($promptDetails['is_approved']) == 0 || htmlspecialchars($promptDetails['is_reported']) || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                         <?php endif ?>
                         <?php if (isset($promptDetails['image_url3'])) : ?>
-                            <img src="<?php echo htmlspecialchars($promptDetails['image_url4']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo $hasBought || $promptDetails['is_approved'] == 0 || $promptDetails['is_reported'] || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
+                            <img src="<?php echo htmlspecialchars($promptDetails['image_url4']); ?>" alt="prompt example" class=" rounded-md h-[300px] w-[500px] object-cover mt-5 md:h-[200px] md:w-[250px] <?php echo htmlspecialchars($hasBought) || htmlspecialchars($promptDetails['is_approved']) == 0 || htmlspecialchars($promptDetails['is_reported']) || $_SESSION['id'] == $authorID ? '' : 'filter blur' ?>">
                         <?php endif ?>
                     </div>
                     <?php
@@ -312,7 +312,7 @@ try {
                     <!-- add close button -->
                     <div class="flex gap-5">
                         <button class="close bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Cancel</button>
-                        <button data-id=<?php echo $prompt_id ?> name="report" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Report prompt</button>
+                        <button data-id=<?php echo htmlspecialchars($prompt_id) ?> name="report" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 w-full rounded mb-2">Report prompt</button>
                     </div>
                 </form>
             </div>
@@ -321,7 +321,7 @@ try {
     <?php endif ?>
 
     <?php if (isset($_SESSION["loggedin"])) : ?>
-        <form data-id="<?php echo $prompt_id ?>" data-user=" <?php echo $_SESSION["username"] ?>" id="comment-form" class="max-w-md mx-auto mb-10">
+        <form data-id="<?php echo htmlspecialchars($prompt_id) ?>" data-user=" <?php echo $_SESSION["username"] ?>" id="comment-form" class="max-w-md mx-auto mb-10">
             <h2 class="font-bold text-white text-[22px] mb-2">Place your comment</h2>
             <textarea id="comment" name="comment" class="w-full px-4 py-2 mb-4 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"></textarea>
             <p id="error" class="text-red-500 text-xs italic"> </p>
@@ -333,8 +333,8 @@ try {
         <h2 class="font-bold text-white text-[22px] mb-2"> All comments</h2>
         <div id="comments-container"> </div>
         <?php foreach ($allComments as $comment) : ?>
-            <p class="text-white"> <?php echo $comment["comment_by"] ?> </p>
-            <p class=" bg-white p-[10px] my-[10px] rounded-[10px] w-full"><?php echo $comment["comment"] ?></p>
+            <p class="text-white"> <?php echo htmlspecialchars($comment["comment_by"]) ?> </p>
+            <p class=" bg-white p-[10px] my-[10px] rounded-[10px] w-full"><?php echo htmlspecialchars($comment["comment"]) ?></p>
         <?php endforeach ?>
     </div>
 
