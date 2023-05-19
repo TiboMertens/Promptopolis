@@ -26,4 +26,13 @@ class Report
         $statement->bindValue(":id", $id);
         $statement->execute();
     }
+
+    public static function allFlaggedUsers()
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM users WHERE is_reported = 1");
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
