@@ -155,11 +155,12 @@ class User
     public function save()
     {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("INSERT INTO users (username, email, password, verify_token) VALUES (:username, :email, :password, :token)");
+        $statement = $conn->prepare("INSERT INTO users (username, email, password, verify_token, credits) VALUES (:username, :email, :password, :token, :credits)");
         $statement->bindValue(":username", $this->username);
         $statement->bindValue(":email", $this->email);
         $statement->bindValue(":password", $this->password);
         $statement->bindValue(":token", $this->verifyToken);
+        $statement->bindValue(":credits", 10);
         $result = $statement->execute();
 
 
