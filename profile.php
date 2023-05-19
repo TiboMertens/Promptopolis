@@ -73,6 +73,16 @@ if (isset($_SESSION['loggedin'])) {
                 $followingbtn = "Follow";
             }
         }
+        if(isset($_POST['block'])){
+            if ($userDetails['is_blocked'] == 1) {
+                $user->unblockUser($id);
+                //go to index
+                header("Location: index.php");
+            } else {
+                $user->blockUser($id);
+                header("Location: index.php");
+            }
+        }
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
@@ -139,7 +149,11 @@ if (isset($_SESSION['loggedin'])) {
                         <i id="flagUser" data-id="<?php echo $id ?>" data-flag="<?php echo $reportState ?>" name="flagUser" class="<?php echo $userDetails['is_reported'] == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer ml-3" style="color: #bb86fc;"></i>
 
                     <?php endif ?>
-
+                    <?php if ($isAdmin && $ownIsAdmin) : ?>
+                        <form method="post">
+                            <div><button name="block" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-1 px-7 text-lg  rounded flex justify-center ml-3"><?php if($userDetails['is_blocked'] == 1){echo "Unblock";}else{echo "Block";} ?></button></div>
+                        </form>
+                        <?php endif ?>
                     <?php if ($id != $sessionid) : ?>
                         <div class="message text-red-500 text-xs italic ml-3">
                             <p class="text-red-500 text-xs italic"></p>

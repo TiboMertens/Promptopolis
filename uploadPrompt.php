@@ -16,7 +16,6 @@ $config->cloud->cloudName = $name;
 $config->cloud->apiKey = $apiKey;
 $config->cloud->apiSecret = $apiSecret;
 $config->url->secure = true;
-
 if (isset($_SESSION["loggedin"])) {
     $user = new \Promptopolis\Framework\User();
     $prompt = new \Promptopolis\Framework\Prompt();
@@ -25,127 +24,131 @@ if (isset($_SESSION["loggedin"])) {
     $profilePicture = $userDetails['profile_picture_url'];
     $isVerified = $userDetails['is_verified'];
     $target_dir = "uploads/";
-
-    if (!empty($_POST["submit"])) {
-        try {
-            $upload = new Promptopolis\Framework\Upload();
-            $prompt->setUser_id($_SESSION['id']);
-
-            $images = ["mainImage"];
-
-            if (isset($_FILES["overviewImage"]["tmp_name"])) {
-                $images[] = "overviewImage";
-            }
-
-            if (isset($_FILES["image3"]["tmp_name"])) {
-                $images[] = "image3";
-            }
-
-            if (isset($_FILES["image4"]["tmp_name"])) {
-                $images[] = "image4";
-            }
-
-            foreach ($images as $image) {
-                try {
-                    if (!empty($_FILES[$image]["tmp_name"])) {
-                        $target_file = $target_dir . basename($_FILES[$image]["name"]);
-                        $uploadOk = 1;
-                        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-                    } else {
-                        throw new Exception("Please upload an image");
-                    }
-
-                    if (!isset($imageFileType)) {
-                        throw new Exception("Please upload an image");
-                    } else {
+    if($userDetails['is_blocked'] == 0){
+        if (!empty($_POST["submit"])) {
+            try {
+                $upload = new Promptopolis\Framework\Upload();
+                $prompt->setUser_id($_SESSION['id']);
+    
+                $images = ["mainImage"];
+    
+                if (isset($_FILES["overviewImage"]["tmp_name"])) {
+                    $images[] = "overviewImage";
+                }
+    
+                if (isset($_FILES["image3"]["tmp_name"])) {
+                    $images[] = "image3";
+                }
+    
+                if (isset($_FILES["image4"]["tmp_name"])) {
+                    $images[] = "image4";
+                }
+    
+                foreach ($images as $image) {
+                    try {
+                        if (!empty($_FILES[$image]["tmp_name"])) {
+                            $target_file = $target_dir . basename($_FILES[$image]["name"]);
+                            $uploadOk = 1;
+                            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                        } else {
+                            throw new Exception("Please upload an image");
+                        }
+    
+                        if (!isset($imageFileType)) {
+                            throw new Exception("Please upload an image");
+                        } else {
+                            switch ($image) {
+                                case "mainImage":
+                                    $url = Upload::uploadImage($image, $imageFileType);
+                                    $prompt->setMainImage($url);
+                                    $exceptionCaught = false;
+                                    break;
+                                case "overviewImage":
+                                    $url = Upload::uploadImage($image, $imageFileType);
+                                    $prompt->setOverviewImage($url);
+                                    $exceptionCaught = false;
+                                    break;
+                                case "image3":
+                                    $url = Upload::uploadImage($image, $imageFileType);
+                                    $prompt->setImage3($url);
+                                    $exceptionCaught = false;
+                                    break;
+                                case "image4":
+                                    $url = Upload::uploadImage($image, $imageFileType);
+                                    $prompt->setImage4($url);
+                                    $exceptionCaught = false;
+                                    break;
+                            }
+                        }
+                    } catch (Exception $e) {
                         switch ($image) {
                             case "mainImage":
-                                $url = Upload::uploadImage($image, $imageFileType);
-                                $prompt->setMainImage($url);
-                                $exceptionCaught = false;
-                                break;
-                            case "overviewImage":
-                                $url = Upload::uploadImage($image, $imageFileType);
-                                $prompt->setOverviewImage($url);
-                                $exceptionCaught = false;
-                                break;
-                            case "image3":
-                                $url = Upload::uploadImage($image, $imageFileType);
-                                $prompt->setImage3($url);
-                                $exceptionCaught = false;
-                                break;
-                            case "image4":
-                                $url = Upload::uploadImage($image, $imageFileType);
-                                $prompt->setImage4($url);
-                                $exceptionCaught = false;
+                                $mainImageError = $e->getMessage();
+                                $exceptionCaught = true;
                                 break;
                         }
                     }
+                }
+    
+                try {
+                    $prompt->setTitle($_POST["title"]);
                 } catch (Exception $e) {
-                    switch ($image) {
-                        case "mainImage":
-                            $mainImageError = $e->getMessage();
-                            $exceptionCaught = true;
-                            break;
+                    $titleError = $e->getMessage();
+                }
+    
+                try {
+                    $prompt->setDescription($_POST["description"]);
+                } catch (Exception $e) {
+                    $descriptionError = $e->getMessage();
+                }
+    
+                try {
+                    $prompt->setPrice($_POST["price"]);
+                } catch (Exception $e) {
+                    $priceError = $e->getMessage();
+                }
+    
+                try {
+                    $prompt->setModel($_POST["model"]);
+                } catch (Exception $e) {
+                    $modelError = $e->getMessage();
+                }
+    
+                $tags = array();
+                if (!empty($_POST['tag1'])) {
+                    $tags[] = $_POST['tag1'];
+                }
+                if (!empty($_POST['tag2'])) {
+                    $tags[] = $_POST['tag2'];
+                }
+                if (!empty($_POST['tag3'])) {
+                    $tags[] = $_POST['tag3'];
+                }
+                try {
+                    $prompt->setTags($tags);
+                } catch (Exception $e) {
+                    $tagsError = $e->getMessage();
+                }
+    
+                $prompt->setCategory($_POST["category"]);
+    
+                if (!$exceptionCaught) {
+                    if ($isVerified == 1) {
+                        $prompt->setIs_approved(1);
+                    } else {
+                        $prompt->setIs_approved(0);
                     }
+                    $prompt->savePrompt();
+                    header("Location: profile.php");
                 }
-            }
-
-            try {
-                $prompt->setTitle($_POST["title"]);
             } catch (Exception $e) {
-                $titleError = $e->getMessage();
+                $error = $e->getMessage();
             }
-
-            try {
-                $prompt->setDescription($_POST["description"]);
-            } catch (Exception $e) {
-                $descriptionError = $e->getMessage();
-            }
-
-            try {
-                $prompt->setPrice($_POST["price"]);
-            } catch (Exception $e) {
-                $priceError = $e->getMessage();
-            }
-
-            try {
-                $prompt->setModel($_POST["model"]);
-            } catch (Exception $e) {
-                $modelError = $e->getMessage();
-            }
-
-            $tags = array();
-            if (!empty($_POST['tag1'])) {
-                $tags[] = $_POST['tag1'];
-            }
-            if (!empty($_POST['tag2'])) {
-                $tags[] = $_POST['tag2'];
-            }
-            if (!empty($_POST['tag3'])) {
-                $tags[] = $_POST['tag3'];
-            }
-            try {
-                $prompt->setTags($tags);
-            } catch (Exception $e) {
-                $tagsError = $e->getMessage();
-            }
-
-            $prompt->setCategory($_POST["category"]);
-
-            if (!$exceptionCaught) {
-                if ($isVerified == 1) {
-                    $prompt->setIs_approved(1);
-                } else {
-                    $prompt->setIs_approved(0);
-                }
-                $prompt->savePrompt();
-                header("Location: profile.php");
-            }
-        } catch (Exception $e) {
-            $error = $e->getMessage();
         }
+    }else{
+        header("Location: index.php");
     }
+    
 } else {
     header("Location: login.php");
 }

@@ -532,6 +532,21 @@ class User
         return !empty($result);
     }
 
+    public function blockUser($blockedId)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET is_blocked = 1 WHERE id = :id");
+        $statement->bindValue(":id", $blockedId);
+        $statement->execute();
+        
+    }
+    public function unblockUser($blockedId)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET is_blocked = 0 WHERE id = :id");
+        $statement->bindValue(":id", $blockedId);
+        $statement->execute();
+    }
     public static function getFavourites($id, $limit, $offset)
     {
         $conn = Db::getInstance();
