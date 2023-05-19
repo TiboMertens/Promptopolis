@@ -50,11 +50,6 @@ if (isset($_SESSION['loggedin'])) {
         } else {
             $ownIsAdmin = false;
         }
-        //get username form userdetails
-        $username = $userDetails['username'];
-        //get bio from userdetails
-        $bio = $userDetails['bio'];
-        $accountProfilePicture = $userDetails['profile_picture_url'];
         $profilePicture = $ownUserDetails['profile_picture_url'];
 
         //get user's prompts
@@ -106,10 +101,10 @@ if (isset($_SESSION['loggedin'])) {
 
     <header class="mt-[50px] md:mt-[100px]">
         <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
-            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="<?php echo htmlspecialchars($accountProfilePicture); ?>" alt="profile picture"></div>
+            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="<?php echo htmlspecialchars($userDetails['profile_picture_url']); ?>" alt="profile picture"></div>
             <div class="mr-5 ml-5 mb-10  ">
                 <div class="flex justify-center items-center md:mt-15 md:flex md:justify-start">
-                    <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($username); ?></h1>
+                    <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($userDetails['username']); ?></h1>
                     <?php if ($userDetails['is_verified'] === 1) : ?>
                         <div class="ml-2 mb-1"><i class="fa-solid fa-circle-check text-[#BB86FC]" title="verified user"></i></div>
                     <?php endif ?>
@@ -147,7 +142,7 @@ if (isset($_SESSION['loggedin'])) {
                     <?php endif ?>
                 </div>
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
-                    <p><?php echo htmlspecialchars($bio); ?></p>
+                    <p><?php echo htmlspecialchars($userDetails['bio']); ?></p>
                 </div>
                 <?php if ($id == $sessionid) : ?>
                     <!-- a button that redirects to the change password page -->
