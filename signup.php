@@ -34,7 +34,9 @@ if (!empty($_POST)) {
 
         //$user->signup ---> daarin functie save & mail aanroepen.
         // save the user to the database
-        $user->signup($key);
+        if ($user->checkEmail($user->getEmail()) && $user->checkUsername($user->getUsername())) {
+            $user->signup($key);
+        }
     } catch (Throwable $e) {
         $error = $e->getMessage();
     }
