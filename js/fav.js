@@ -17,7 +17,7 @@ fav.addEventListener('click', () => {
     formData.append('id', id);
 
     //send ajax request
-    fetch('ajax/fav.php', {
+    fetch('ajax/favPrompts.php', {
             method: 'POST',
             body: formData
         })
