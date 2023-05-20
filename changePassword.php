@@ -12,7 +12,7 @@ if (isset($_SESSION["loggedin"])) {
             //create a new user object
             $user = new \Promptopolis\Framework\User();
             $user->setId($id);
-           
+
 
             try {
                 $user->canChangePassword($password);
@@ -20,19 +20,14 @@ if (isset($_SESSION["loggedin"])) {
                 $oldPasswordError = $th->getMessage();
             }
 
-                try {
-                    $user->setPassword($newPassword);
-                                    
+            try {
+                $user->setPassword($newPassword);
+
                 $result = $user->changePassword();
-                } catch (\Throwable $th) {
-                    $newPasswordError = $th->getMessage();
-                }
-
-                if (!empty($result)) {
-                    header("Location: profile.php");
-                    }
-
-            
+                header("Location: profile.php");
+            } catch (\Throwable $th) {
+                $newPasswordError = $th->getMessage();
+            }
         } catch (Throwable $e) {
             $error = $e->getMessage();
         }
@@ -43,13 +38,12 @@ if (isset($_SESSION["loggedin"])) {
         } else {
             $border = "border-white";
         }
-        
+
         if (isset($newPasswordError)) {
             $newborder = "border-red-500";
         } else {
             $newborder = "border-white";
         }
-        
     }
 } else {
     header("Location: login.php");
@@ -85,7 +79,7 @@ if (isset($_SESSION["loggedin"])) {
                         <div class="mb-4">
                             <label class="block font-bold mb-0.5 text-white" for="password">New password</label>
                             <div class="flex flex-col items-end">
-                            <input class="w-full lg:w-50 px-3 py-2 border-[3px] <?php echo isset($newPasswordError) ? 'border-red-500' : 'border-white'; ?> rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="password" name="newPassword">
+                                <input class="w-full lg:w-50 px-3 py-2 border-[3px] <?php echo isset($newPasswordError) ? 'border-red-500' : 'border-white'; ?> rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="password" name="newPassword">
                             </div>
                         </div>
                         <!-- If there is an error, show it -->
