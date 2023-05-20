@@ -78,6 +78,11 @@ try {
             $prompt_id = $_GET['id'];
             $prompt->setId($prompt_id);
 
+            if (isset($_POST['delete'])) {
+                $prompt->deletePrompt($prompt_id);
+                header("Location: index.php");
+            }
+
             if ($like->checkLiked($prompt_id, $_SESSION['id'])) {
                 $likeState = "remove";
             } else {
@@ -149,13 +154,6 @@ try {
             //redirect to showcase
             header("Location: index.php");
         }
-    }
-    if (isset($_POST['delete'])) {
-
-        // delete the user's account and redirect to the login page
-        var_dump("hey");
-        $prompt->deletePrompt($prompt_id);
-        header("Location: index.php");
     }
 } catch (Throwable $e) {
     $error = $e->getMessage();
