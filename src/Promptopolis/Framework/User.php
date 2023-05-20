@@ -60,7 +60,7 @@ class User
      */
     public function setUsername($username)
     {
-        if (!empty($username) && self::checkUsername($username)) {
+        if (!empty($username)) {
             $this->username = $username;
             return $this;
         } else {
@@ -162,8 +162,6 @@ class User
         $statement->bindValue(":token", $this->verifyToken);
         $statement->bindValue(":credits", 10);
         $result = $statement->execute();
-
-
         return $result;
     }
 
