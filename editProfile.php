@@ -77,10 +77,7 @@ if (isset($_SESSION['loggedin'])) {
                     $user->setProfile_picture_url($profilePicture);
                 }
 
-
-
                 //get data from form
-
                 $newUsername = $_POST['username'];
                 $newBio = $_POST['bio'];
 
