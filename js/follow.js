@@ -1,6 +1,5 @@
 // get the follow button
 const followBtn = document.querySelector('button[name="follow"]')
-// add console.log when follow button is clicked
 followBtn.addEventListener('click', (e) => {
     e.preventDefault();
     // get the id of the user being followed

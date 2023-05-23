@@ -1,15 +1,11 @@
 // get the button with the name "report"
 const flag = document.querySelector("#flagUser");
-console.log("tets");
-// add console.log when follow button is clicked
 flag.addEventListener("click", (e) => {
-  console.log("clicked");
   e.preventDefault();
   // get the id of the user being followed
   const id = e.target.dataset.id;
 
   const state = e.target.dataset.flag;
-  console.log(state);
 
   let formData = new FormData();
   //append user id to formdata
@@ -24,8 +20,6 @@ flag.addEventListener("click", (e) => {
       return response.json();
     })
     .then(function (json) {
-      console.log(json);
-
       if (json.state == "reported") {
         flag.classList.remove("fa-regular");
         flag.classList.add("fa-solid");

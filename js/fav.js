@@ -2,8 +2,6 @@
 const fav = document.querySelector('[name="fav"]');
 
 fav.addEventListener('click', () => {
-    console.log('clicked');
-
     //get the data-fav attribute
     const state = fav.getAttribute('data-fav');
     //get the data-id attribute
