@@ -65,9 +65,6 @@ if (isset($_SESSION['loggedin'])) {
                         // if everything is ok, try to upload file
                     } else {
                         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-
-                            //var_dump the file that was uploaded
-
                             $user->setProfile_picture_url($target_file);
                         } else {
                             throw new Exception("Sorry, there was an error uploading your file.");

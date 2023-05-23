@@ -1,7 +1,6 @@
 // get the button with the name "report"
 const flagBtn = document.querySelector('button[name="report"]');
 const flagIcon = document.querySelector('#flag');
-// add console.log when follow button is clicked
 flagBtn.addEventListener('click', (e) => {
     e.preventDefault();
     // get the id of the user being followed
