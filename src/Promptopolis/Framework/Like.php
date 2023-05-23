@@ -18,28 +18,46 @@ class like
     }
     public function updateLikes($id, $loggedInUser_id)
     {
-        $conn = Db::getInstance();
+        $result = self::check($id, $loggedInUser_id);
+        if (!$result) {
+            $result = self::addLike($id, $loggedInUser_id);
+        } else {
+            $result = self::removeLike($id, $loggedInUser_id);
+        }
+        return $result;
+    }
+
+    public function check($id, $loggedInUser_id)
+    {
         //if the current user has already voted for the user, he cannot vote again
+        $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM user_like WHERE liked_for = :liked_for AND liked_by = :liked_by");
         $statement->bindValue(":liked_for", $id);
         $statement->bindValue(":liked_by", $loggedInUser_id);
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        //if the user has not voted for the user yet, insert the vote into the database
-        if (!$result) {
-            $statement = $conn->prepare("INSERT INTO user_like (liked_for, liked_by) VALUES (:liked_for, :liked_by)");
-            $statement->bindValue(":liked_for", $id);
-            $statement->bindValue(":liked_by", $loggedInUser_id);
-            $statement->execute();
-            return true;
-        } else {
-            //if the user has already liked for the user, delete the like from the database
-            $statement = $conn->prepare("DELETE FROM user_like WHERE liked_for = :liked_for AND liked_by = :liked_by");
-            $statement->bindValue(":liked_for", $id);
-            $statement->bindValue(":liked_by", $loggedInUser_id);
-            $statement->execute();
-            return false;
-        }
+        return $result;
+    }
+
+    public function addLike($id, $loggedInUser_id)
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("INSERT INTO user_like (liked_for, liked_by) VALUES (:liked_for, :liked_by)");
+        $statement->bindValue(":liked_for", $id);
+        $statement->bindValue(":liked_by", $loggedInUser_id);
+        $statement->execute();
+        return true;
+    }
+
+    public function removeLike($id, $loggedInUser_id)
+    {
+        $conn = Db::getInstance();
+        //if the user has already liked for the user, delete the like from the database
+        $statement = $conn->prepare("DELETE FROM user_like WHERE liked_for = :liked_for AND liked_by = :liked_by");
+        $statement->bindValue(":liked_for", $id);
+        $statement->bindValue(":liked_by", $loggedInUser_id);
+        $statement->execute();
+        return false;
     }
 
     public function checkLiked($id, $loggedInUser_id)
