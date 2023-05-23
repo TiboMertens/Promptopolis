@@ -487,7 +487,6 @@ class User
     {
         self::save();
         self::sendVerifyEmail($key);
-        header("Location:index.php");
     }
 
     public function getVotes($id)
