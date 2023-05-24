@@ -28,7 +28,7 @@ liked.addEventListener("click", (e) => {
     })
 
     .then(function (json) {
-      liking.innerHTML = json.likes;
+      liking.textContent = json.likes;
       if (state == "add") {
         liked.setAttribute("data-liked", "remove");
         liked.classList.remove("fa-regular");
