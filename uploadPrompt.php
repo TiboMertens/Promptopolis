@@ -144,7 +144,6 @@ if (isset($_SESSION["loggedin"])) {
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }
-        }
     }else{
         header("Location: index.php");
     }
@@ -192,7 +191,7 @@ if (isset($_SESSION["loggedin"])) {
                 </div>
                 <div class="mb-4">
                     <label class="block font-bold mb-0.5 text-white" for="price">Price<span class="font-light text-[12px]">(value like 1,2,3 etc.)</span></label>
-                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="text" name="price" id="price">
+                    <input class="w-full px-3 py-2 border-[3px] rounded hover:border-[#A25AFB] active:border-[#A25AFB]" style="height: 35px; font-size:1rem;" type="number" name="price" id="price">
                     <?php if (isset($priceError)) : ?>
                         <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($priceError); ?></p>
                     <?php endif; ?>
@@ -256,7 +255,7 @@ if (isset($_SESSION["loggedin"])) {
                     <?php endif; ?>
                 </div>
                 <div class="mb-4">
-                    <label class="block font-bold mb-0.5 text-white" for="overviewImage">Upload 3 images</label>
+                    <label class="block font-bold mb-0.5 text-white" for="overviewImage">Upload 3 images<span class="font-light text-[12px]">(optional)</span></label>
                     <div class="mb-8 mt-5 "><img class="w-[100px] h-[100px] " src="https://placehold.co/100?text=example&font=roboto" alt="overview image" id="previewOverview"></div>
                     <input class="block w-full text-white
                         file:py-2 file:px-3

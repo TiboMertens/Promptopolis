@@ -65,9 +65,6 @@ if (isset($_SESSION['loggedin'])) {
                         // if everything is ok, try to upload file
                     } else {
                         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-
-                            //var_dump the file that was uploaded
-
                             $user->setProfile_picture_url($target_file);
                         } else {
                             throw new Exception("Sorry, there was an error uploading your file.");
@@ -77,10 +74,7 @@ if (isset($_SESSION['loggedin'])) {
                     $user->setProfile_picture_url($profilePicture);
                 }
 
-
-
                 //get data from form
-
                 $newUsername = $_POST['username'];
                 $newBio = $_POST['bio'];
 
@@ -137,14 +131,10 @@ if (isset($_SESSION['loggedin'])) {
 
 <body class="bg-[#121212]">
     <?php include_once("inc/nav.inc.php") ?>
-
-
-
-
     <div class="flex justify-center items-center pt-10 mb-5">
         <div class="bg-[#2A2A2A] rounded-lg p-8 max-w-md">
             <div class="text-white">
-                <a href="profile.php?id=<?php echo $id ?>"><i class="fa-solid fa-arrow-left"></i></a>
+                <a href="profile.php?id=<?php echo htmlspecialchars($id) ?>"><i class="fa-solid fa-arrow-left"></i></a>
             </div>
             <h1 class="text-2xl font-bold mb-4 text-white">Edit Your Profile</h1>
             <form action="" method="post" enctype="multipart/form-data">

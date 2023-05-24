@@ -50,11 +50,6 @@ if (isset($_SESSION['loggedin'])) {
         } else {
             $ownIsAdmin = false;
         }
-        //get username form userdetails
-        $username = $userDetails['username'];
-        //get bio from userdetails
-        $bio = $userDetails['bio'];
-        $accountProfilePicture = $userDetails['profile_picture_url'];
         $profilePicture = $ownUserDetails['profile_picture_url'];
 
         //get user's prompts
@@ -109,17 +104,17 @@ if (isset($_SESSION['loggedin'])) {
     <?php include_once("inc/nav.inc.php") ?>
     <?php if (isset($error)) : ?>
         <div class="flex flex-col items-center justify-center h-screen">
-            <h1 class="text-center text-[26px] font-bold text-white"><?php echo $error ?></h1>
+            <h1 class="text-center text-[26px] font-bold text-white"><?php echo htmlspecialchars($error) ?></h1>
             <a class="mt-4 text-[#BB86FC] hover:text-[#A25AFB]" href="index.php">Go to homepage</a>
         </div>
     <?php endif ?>
 
     <header class="mt-[50px] md:mt-[100px]">
         <div class="flex flex-col items-center md:flex-row md:justify-center lg:ml-[75px]">
-            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="<?php echo htmlspecialchars($accountProfilePicture); ?>" alt="profile picture"></div>
+            <div class="mb-8 mt-10 md:mt-2"><img class="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] rounded-full" src="<?php echo htmlspecialchars($userDetails['profile_picture_url']); ?>" alt="profile picture"></div>
             <div class="mr-5 ml-5 mb-10  ">
                 <div class="flex justify-center items-center md:mt-15 md:flex md:justify-start">
-                    <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($username); ?></h1>
+                    <h1 class="font-bold text-[26px] lg:text-[32px] mb-2 text-white"><?php echo htmlspecialchars($userDetails['username']); ?></h1>
                     <?php if ($userDetails['is_verified'] === 1) : ?>
                         <div class="ml-2 mb-1"><i class="fa-solid fa-circle-check text-[#BB86FC]" title="verified user"></i></div>
                     <?php endif ?>
@@ -142,11 +137,11 @@ if (isset($_SESSION['loggedin'])) {
                     <?php endif ?>
 
                     <?php if ($id != $sessionid) : ?>
-                        <div><button data-id="<?php echo $id ?>" data-state="<?php echo $followingbtn ?>" name="follow" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-1 px-7 text-lg  rounded flex justify-center ml-3"><?php echo $followingbtn ?></button></div>
+                        <div><button data-id="<?php echo htmlspecialchars($id) ?>" data-state="<?php echo htmlspecialchars($followingbtn) ?>" name="follow" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-1 px-7 text-lg  rounded flex justify-center ml-3"><?php echo htmlspecialchars($followingbtn) ?></button></div>
                     <?php endif ?>
 
                     <?php if ($id != $sessionid) : ?>
-                        <i id="flagUser" data-id="<?php echo $id ?>" data-flag="<?php echo $reportState ?>" name="flagUser" class="<?php echo $userDetails['is_reported'] == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer ml-3" style="color: #bb86fc;"></i>
+                        <i id="flagUser" data-id="<?php echo htmlspecialchars($id) ?>" data-flag="<?php echo htmlspecialchars($reportState) ?>" name="flagUser" class="<?php echo htmlspecialchars($userDetails['is_reported']) == 1 ? 'fa-solid' : 'fa-regular' ?> fa-flag fa-xl cursor-pointer ml-3" style="color: #bb86fc;"></i>
 
                     <?php endif ?>
                     <?php if ($isAdmin && $ownIsAdmin) : ?>
@@ -161,7 +156,7 @@ if (isset($_SESSION['loggedin'])) {
                     <?php endif ?>
                 </div>
                 <div class="text-center w-[400px] sm:w-[500px] md:text-left md:w-[500px] lg:w-[700px] text-[16px] lg:text-[18px] text-white">
-                    <p><?php echo htmlspecialchars($bio); ?></p>
+                    <p><?php echo htmlspecialchars($userDetails['bio']); ?></p>
                 </div>
                 <?php if ($id == $sessionid) : ?>
                     <!-- a button that redirects to the change password page -->
@@ -179,7 +174,7 @@ if (isset($_SESSION['loggedin'])) {
                     <p class="text-[#BB86FC] text-[20px] font-bold relative bottom-1">User has no prompts</p>
                 <?php endif ?>
                 <?php foreach ($prompts as $prompt) : ?>
-                    <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>">
+                    <a href="promptDetails.php?id=<?php echo htmlspecialchars($prompt['id']) ?>">
                         <img src="<?php echo htmlspecialchars($prompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                         <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($prompt['title']) ?></h2>
                     </a>
@@ -193,7 +188,7 @@ if (isset($_SESSION['loggedin'])) {
             <div class="flex overflow-x-auto bg-[#2A2A2A] m-5 pt-7 px-7 pb-4 rounded-lg">
                 <div class="flex flex-shrink-0 gap-5">
                     <?php foreach ($deniedPrompts as $prompt) : ?>
-                        <a href="promptDetails.php?id=<?php echo $prompt['id'] ?>">
+                        <a href="promptDetails.php?id=<?php echo htmlspecialchars($prompt['id']) ?>">
                             <img src="<?php echo htmlspecialchars($prompt['cover_url']); ?>" alt="prompt" class="w-[270px] h-[150px] object-cover object-center rounded-lg">
                             <h2 class="text-white font-bold text-[18px] mt-2"><?php echo htmlspecialchars($prompt['title']) ?></h2>
                         </a>

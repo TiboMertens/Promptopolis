@@ -4,6 +4,8 @@ namespace Promptopolis\Framework;
 
 class Moderator extends User
 {
+    private int $voted_user_id;
+    
     public function approve($id, $authorID)
     {
         self::updateApprove($id);
@@ -96,6 +98,28 @@ class Moderator extends User
             $statement = $conn->prepare("DELETE FROM user_vote WHERE voted_for = :user_id");
             $statement->bindValue(":user_id", $id);
             $statement->execute();
+        }
+    }
+
+    /**
+     * Get the value of voted_user_id
+     */ 
+    public function getVoted_user_id()
+    {
+        return $this->voted_user_id;
+    }
+
+    /**
+     * Set the value of voted_user_id
+     *
+     * @return  self
+     */ 
+    public function setVoted_user_id($voted_user_id)
+    {
+        if (filter_var($voted_user_id, FILTER_VALIDATE_INT) && !empty($voted_user_id)) {
+            $this->voted_user_id = $voted_user_id;
+        } else {
+            throw new \Exception("ID is not valid");
         }
     }
 }
