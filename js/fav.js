@@ -2,8 +2,6 @@
 const fav = document.querySelector('[name="fav"]');
 
 fav.addEventListener('click', () => {
-    console.log('clicked');
-
     //get the data-fav attribute
     const state = fav.getAttribute('data-fav');
     //get the data-id attribute
@@ -17,7 +15,7 @@ fav.addEventListener('click', () => {
     formData.append('id', id);
 
     //send ajax request
-    fetch('ajax/fav.php', {
+    fetch('ajax/favPrompts.php', {
             method: 'POST',
             body: formData
         })

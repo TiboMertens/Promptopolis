@@ -59,7 +59,7 @@ if (!empty($_POST)) {
                         </div>
                         <!-- If there is an error, show it -->
                         <?php if (isset($error)) : ?>
-                            <p class="text-red-500 text-xs italic"><?php echo $error; ?></p>
+                            <p class="text-red-500 text-xs italic"><?php echo htmlspecialchars($error); ?></p>
                         <?php endif; ?>
                         <div class="flex flex-col items-center mb-10">
                             <button class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2" style="padding-left: 5rem; padding-right: 5rem;">Log in</button>

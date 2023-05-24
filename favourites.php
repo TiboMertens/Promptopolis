@@ -44,7 +44,7 @@ if (isset($_SESSION['loggedin'])) {
 <?php include_once("inc/nav.inc.php"); ?>
     <?php if (isset($error)) : ?>
         <div class="error">
-            <p><?php echo $error ?></p>
+            <p><?php echo htmlspecialchars($error) ?></p>
         </div>
     <?php endif; ?>
 
@@ -69,15 +69,15 @@ if (isset($_SESSION['loggedin'])) {
         <?php if ($totalPages > 1) : ?>
             <div class="pagination text-white">
                 <?php if ($page > 1) : ?>
-                    <a href="favourites.php?page=<?php echo $page - 1 ?>">Previous</a>
+                    <a href="favourites.php?page=<?php echo htmlspecialchars($page) - 1 ?>">Previous</a>
                 <?php endif; ?>
 
                 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                    <a href="favourites.php?page=<?php echo $i?>" <?php if ($i === $page) echo 'class="active"'; ?>><?php echo $i ?></a>
+                    <a href="favourites.php?page=<?php echo htmlspecialchars($i)?>" <?php if ($i === $page) echo 'class="active"'; ?>><?php echo htmlspecialchars($i) ?></a>
                 <?php endfor; ?>
 
                 <?php if ($page < $totalPages) : ?>
-                    <a href="favourites.php?page=<?php echo $page + 1 ?>">Next</a>
+                    <a href="favourites.php?page=<?php echo htmlspecialchars($page) + 1 ?>">Next</a>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
