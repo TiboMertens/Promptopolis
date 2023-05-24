@@ -17,6 +17,7 @@ class User
     protected string $verifyToken;
     protected string $resetToken;
     protected string $bio;
+    protected string $prompt_id;
 
     /**
      * Get the value of id
@@ -609,5 +610,27 @@ class User
         $statement->bindValue(":credits", $credits);
         $statement->bindValue(":id", $authorID);
         $statement->execute();
+    }
+
+    /**
+     * Get the value of prompt_id
+     */ 
+    public function getPrompt_id()
+    {
+        return $this->prompt_id;
+    }
+
+    /**
+     * Set the value of prompt_id
+     *
+     * @return  self
+     */ 
+    public function setPrompt_id($prompt_id)
+    {
+        if (filter_var($prompt_id, FILTER_VALIDATE_INT) && !empty($prompt_id)) {
+            $this->prompt_id = $prompt_id;
+        } else {
+            throw new \Exception("Prompt ID is not valid");
+        }
     }
 }
