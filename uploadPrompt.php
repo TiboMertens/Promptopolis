@@ -24,26 +24,26 @@ if (isset($_SESSION["loggedin"])) {
     $profilePicture = $userDetails['profile_picture_url'];
     $isVerified = $userDetails['is_verified'];
     $target_dir = "uploads/";
-    if($userDetails['is_blocked'] == 0){
+    if ($userDetails['is_blocked'] == 0) {
         if (!empty($_POST["submit"])) {
             try {
                 $upload = new Promptopolis\Framework\Upload();
                 $prompt->setUser_id($_SESSION['id']);
-    
+
                 $images = ["mainImage"];
-    
+
                 if (isset($_FILES["overviewImage"]["tmp_name"])) {
                     $images[] = "overviewImage";
                 }
-    
+
                 if (isset($_FILES["image3"]["tmp_name"])) {
                     $images[] = "image3";
                 }
-    
+
                 if (isset($_FILES["image4"]["tmp_name"])) {
                     $images[] = "image4";
                 }
-    
+
                 foreach ($images as $image) {
                     try {
                         if (!empty($_FILES[$image]["tmp_name"])) {
@@ -53,7 +53,7 @@ if (isset($_SESSION["loggedin"])) {
                         } else {
                             throw new Exception("Please upload an image");
                         }
-    
+
                         if (!isset($imageFileType)) {
                             throw new Exception("Please upload an image");
                         } else {
@@ -89,31 +89,31 @@ if (isset($_SESSION["loggedin"])) {
                         }
                     }
                 }
-    
+
                 try {
                     $prompt->setTitle($_POST["title"]);
                 } catch (Exception $e) {
                     $titleError = $e->getMessage();
                 }
-    
+
                 try {
                     $prompt->setDescription($_POST["description"]);
                 } catch (Exception $e) {
                     $descriptionError = $e->getMessage();
                 }
-    
+
                 try {
                     $prompt->setPrice($_POST["price"]);
                 } catch (Exception $e) {
                     $priceError = $e->getMessage();
                 }
-    
+
                 try {
                     $prompt->setModel($_POST["model"]);
                 } catch (Exception $e) {
                     $modelError = $e->getMessage();
                 }
-    
+
                 $tags = array();
                 if (!empty($_POST['tag1'])) {
                     $tags[] = $_POST['tag1'];
@@ -129,9 +129,9 @@ if (isset($_SESSION["loggedin"])) {
                 } catch (Exception $e) {
                     $tagsError = $e->getMessage();
                 }
-    
+
                 $prompt->setCategory($_POST["category"]);
-    
+
                 if (!$exceptionCaught) {
                     if ($isVerified == 1) {
                         $prompt->setIs_approved(1);
@@ -144,10 +144,10 @@ if (isset($_SESSION["loggedin"])) {
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }
-    }else{
+        }
+    } else {
         header("Location: index.php");
     }
-    
 } else {
     header("Location: login.php");
 }
