@@ -34,8 +34,10 @@ if (!empty($_POST)) {
 
         //$user->signup ---> daarin functie save & mail aanroepen.
         // save the user to the database
-        if ($user->checkEmail($user->getEmail()) && $user->checkUsername($user->getUsername())) {
+        if ($user->checkEmail($user->getEmail()) != true && $user->checkUsername($user->getUsername())) {
+            session_destroy();
             $user->signup($key);
+            header('Location: login.php');
         }
     } catch (Throwable $e) {
         $error = $e->getMessage();
