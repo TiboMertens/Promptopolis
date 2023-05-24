@@ -25,9 +25,9 @@ if (!empty($_POST)) {
  
     $result = [
         "status" => "success",
-        "message" => $message,
-        "likes" => $likes,
-        "state" => $likeState,
+        "message" => htmlspecialchars($message),
+        "likes" => htmlspecialchars($likes),
+        "state" => htmlspecialchars($likeState),
     ];
 
     echo json_encode($result);

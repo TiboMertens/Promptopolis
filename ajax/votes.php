@@ -27,9 +27,9 @@ if (!empty($_POST)) {
     }
 
     $result = [
-        "status" => $status,
-        "message" => $message,
-        "votes" => $votes
+        "status" => htmlspecialchars($status),
+        "message" => htmlspecialchars($message),
+        "votes" => htmlspecialchars($votes)
     ];
 
     echo json_encode($result);

@@ -11,7 +11,7 @@ if (!empty($_POST['comment'])) {
         $comment->setComment($_POST['comment']);
         $comment->setUsername($_SESSION['username']);
         $newCredits = $comment->save($id);
-        echo json_encode(array('status' => 'success', 'message' => 'Comment saved', 'credits' => $newCredits));
+        echo json_encode(array('status' => 'success', 'message' => 'Comment saved', 'credits' => htmlspecialchars($newCredits)));
     } catch (\Throwable $th) {
         //throw $th;
     }

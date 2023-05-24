@@ -148,15 +148,15 @@ try {
         <?php if ($totalPages > 1) : ?>
             <div class="pagination text-white">
                 <?php if ($page > 1) : ?>
-                    <a href="?filterApprove=<?php echo $filterApprove . "&filterOrder=" . $filterOrder . "&filterModel=" . $filterModel ?>&page=<?php echo $page - 1 ?>">Previous</a>
+                    <a href="?filterApprove=<?php echo htmlspecialchars($filterApprove) . "&filterOrder=" . htmlspecialchars($filterOrder) . "&filterModel=" . htmlspecialchars($filterModel) ?>&page=<?php echo htmlspecialchars($page) - 1 ?>">Previous</a>
                 <?php endif; ?>
 
                 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                    <a href="?filterApprove=<?php echo $filterApprove . "&filterOrder=" . $filterOrder . "&filterModel=" . $filterModel ?>&page=<?php echo $i ?>" <?php if ($i === $page) echo 'class="active"'; ?>><?php echo $i ?></a>
+                    <a href="?filterApprove=<?php echo htmlspecialchars($filterApprove) . "&filterOrder=" . htmlspecialchars($filterOrder) . "&filterModel=" . htmlspecialchars($filterModel) ?>&page=<?php echo htmlspecialchars($i) ?>" <?php if (htmlspecialchars($i) === htmlspecialchars($page)) echo 'class="active"'; ?>><?php echo htmlspecialchars($i) ?></a>
                 <?php endfor; ?>
 
                 <?php if ($page < $totalPages) : ?>
-                    <a href="?filterApprove=<?php echo $filterApprove . "&filterOrder=" . $filterOrder . "&filterModel=" . $filterModel ?>&page=<?php echo $page + 1 ?>">Next</a>
+                    <a href="?filterApprove=<?php echo htmlspecialchars($filterApprove) . "&filterOrder=" . htmlspecialchars($filterOrder) . "&filterModel=" . htmlspecialchars($filterModel) ?>&page=<?php echo htmlspecialchars($page) + 1 ?>">Next</a>
                 <?php endif; ?>
             </div>
         <?php endif; ?>

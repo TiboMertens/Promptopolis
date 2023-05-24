@@ -17,7 +17,7 @@ if (!empty($_POST)) {
 
     $result = [
         "status" => "success",
-        "message" => $message
+        "message" => htmlspecialchars($message)
     ];
 
     echo json_encode($result);
