@@ -8,8 +8,6 @@ const liking = document.querySelector(".liking");
 liked.addEventListener("click", (e) => {
     e.preventDefault();
 
-    console.log("clicked");
-
     let prompt_id = liked.getAttribute("data-id");
     const state = liked.getAttribute('data-liked');
 
@@ -40,9 +38,5 @@ liked.addEventListener("click", (e) => {
                 liked.classList.remove("fa-solid");
                 liked.classList.add("fa-regular");
             }
-        })
-
-        .catch(function(error) {
-            console.log(error);
         });
 });

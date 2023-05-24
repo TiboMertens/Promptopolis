@@ -17,7 +17,7 @@
         <div class="mt-1">
             <div class="mt-2 mr-5 ml-2 relative bottom-[2px] flex flex-row-reverse">
                 <!-- If the user is logged in, show the logout button, else show the login button -->
-                <?php if (isset($_SESSION['loggedin'])) : ?>
+                <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] ==  true) : ?>
                     <a href="logout.php" class="fa-solid fa-arrow-right-from-bracket text-xl text-white"></a>
                     <div class=""> <a href="profile.php?id=<?php echo $_SESSION['id'] ?>"><img src="<?php echo htmlspecialchars($profilePicture) ?>" alt="profile picture" class="w-9 h-9 rounded-full mr-[20px] border-[1px] border-white relative bottom-1"></a></div>
 
