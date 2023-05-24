@@ -24,11 +24,11 @@ username.addEventListener("change", function () {
       if (result.status == "error") {
         //add error class
         username.classList.add("border-red-500");
-        errUsername.innerHTML = result.message;
+        errUsername.textContent = result.message;
       } else {
         //remove error class
         username.classList.remove("border-red-500");
-        errUsername.innerHTML = "";
+        errUsername.textContent = "";
       }
     });
 });

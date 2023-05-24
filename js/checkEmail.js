@@ -24,11 +24,11 @@ email.addEventListener("change", function () {
       if (result.status == "error") {
         //add error class
         email.classList.add("border-red-500");
-        errEmail.innerHTML = result.message;
+        errEmail.textContent = result.message;
       } else {
         //remove error class
         email.classList.remove("border-red-500");
-        errEmail.innerHTML = "";
+        errEmail.textContent = "";
       }
     });
 });

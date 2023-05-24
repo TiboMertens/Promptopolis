@@ -56,10 +56,10 @@ form.addEventListener("submit", function (event) {
     })
     .then(function (json) {
       if (json.status == "error") {
-        errorElement.innerHTML = json.message;
+        errorElement.textContent = json.message;
       } else {
-        errorElement.innerHTML = "";
+        errorElement.textContent = "";
       }
-      credits.innerHTML = "Credits " + json.credits;
+      credits.textContent = "Credits " + json.credits;
     });
 });

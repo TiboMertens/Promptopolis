@@ -26,7 +26,7 @@ voted.addEventListener("click", function (e) {
       return response.json();
     })
     .then(function (json) {
-      voting.innerHTML = "Votes: " + json.votes + "/2";
-      message.innerHTML = json.message;
+      voting.textContent = "Votes: " + json.votes + "/2";
+      message.textContent = json.message;
     });
 });
