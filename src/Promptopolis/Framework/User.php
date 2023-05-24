@@ -17,7 +17,7 @@ class User
     protected string $verifyToken;
     protected string $resetToken;
     protected string $bio;
-    protected string $prompt_id;
+    protected int $prompt_id;
 
     /**
      * Get the value of id
