@@ -18,10 +18,7 @@ followBtn.addEventListener('click', (e) => {
             return response.json();
         })
         .then(function(json) {
-            followBtn.innerHTML = json.message;
-
+            followBtn.textContent = json.message;
             followBtn.setAttribute("data-state", json.message);
-
-
         });
 });
