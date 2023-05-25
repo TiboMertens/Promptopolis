@@ -273,7 +273,7 @@ class prompt
             $this->tags = $tags;
             return $this;
         } else {
-            throw new \exception("Tags cannot be empty");
+            throw new \exception("Must add atleast one tag");
         }
     }
 

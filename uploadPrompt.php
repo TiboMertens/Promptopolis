@@ -94,24 +94,28 @@ if (isset($_SESSION["loggedin"])) {
                     $prompt->setTitle($_POST["title"]);
                 } catch (Exception $e) {
                     $titleError = $e->getMessage();
+                    $exceptionCaught = true;
                 }
 
                 try {
                     $prompt->setDescription($_POST["description"]);
                 } catch (Exception $e) {
                     $descriptionError = $e->getMessage();
+                    $exceptionCaught = true;
                 }
 
                 try {
                     $prompt->setPrice($_POST["price"]);
                 } catch (Exception $e) {
                     $priceError = $e->getMessage();
+                    $exceptionCaught = true;
                 }
 
                 try {
                     $prompt->setModel($_POST["model"]);
                 } catch (Exception $e) {
                     $modelError = $e->getMessage();
+                    $exceptionCaught = true;
                 }
 
                 $tags = array();
@@ -128,6 +132,7 @@ if (isset($_SESSION["loggedin"])) {
                     $prompt->setTags($tags);
                 } catch (Exception $e) {
                     $tagsError = $e->getMessage();
+                    $exceptionCaught = true;
                 }
 
                 $prompt->setCategory($_POST["category"]);
