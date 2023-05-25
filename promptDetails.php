@@ -242,21 +242,23 @@ try {
                         }
                         ?>
                         <?php if (isset($_SESSION["loggedin"])) : ?>
-                            <div class="flex mb-3 items-center">
-                                <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) : ?>
-                                    <form action="" method="post">
-                                        <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
-                                            <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
-                                    </form>
-                                <?php elseif ($boughtState == 'buy') : ?>
-                                    <form action="" method="post">
-                                        <button name="buy" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</button>
-                                    </form>
-                                    <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price) . "credit(s)"; ?></p>
+                            <?php if ($_SESSION['id'] != $authorID) : ?>
+                                <div class="flex mb-3 items-center">
+                                    <?php if ($promptDetails["is_approved"] == 0 || $promptDetails["is_reported"] == 1) : ?>
+                                        <form action="" method="post">
+                                            <button type=submit name="approve" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 w-[170px] rounded mb-2">Approve prompt</a>
+                                                <button type=submit id="deny" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold ml-5 py-2 px-4 w-[170px] rounded mb-2">Deny prompt</a>
+                                        </form>
+                                    <?php elseif ($boughtState == 'buy') : ?>
+                                        <form action="" method="post">
+                                            <button name="buy" class="bg-[#BB86FC] hover:bg-[#A25AFB] text-white font-bold py-2 px-4 rounded mb-2">Buy prompt</button>
+                                        </form>
+                                        <p class="text-white text-[16px] font-bold relative bottom-1 ml-3"><?php echo htmlspecialchars($price) . "credit(s)"; ?></p>
+                                    <?php endif ?>
+                                </div>
+                                <?php if (isset($purchaseError)) : ?>
+                                    <p class="text-red-500 text-xs italic relative"><?php echo htmlspecialchars($purchaseError) ?></p>
                                 <?php endif ?>
-                            </div>
-                            <?php if (isset($purchaseError)) : ?>
-                                <p class="text-red-500 text-xs italic relative"><?php echo htmlspecialchars($purchaseError) ?></p>
                             <?php endif ?>
                         <?php endif ?>
                     </div>
