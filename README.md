@@ -35,7 +35,10 @@ Contributions to this repository are not allowed at the moment.
 
 ## Contact
 
-For any inquiries or questions, you can reach out to me at <tibomertens25@gmail.com>.
+For any inquiries or questions, you can reach out to us via mail:
+Lead back-end developer: <tibomertens25@gmail.com>.
+lead front-end developer: <quintt.adam@hotmail.com>.
+project manager: <Britt.adam@hotmail.com>
 
 ## Acknowledgements
 
