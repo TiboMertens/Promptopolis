@@ -8,7 +8,6 @@ School Project for [2IMD](https://www.thomasmore.be/en/ba-xd)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 - [Acknowledgements](#acknowledgements)
 
