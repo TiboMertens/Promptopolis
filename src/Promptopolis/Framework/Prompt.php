@@ -377,22 +377,30 @@ class prompt
             // sql injectie voor deze filter
 
             $conn = Db::getInstance();
-            $sql = "SELECT p.* FROM prompts p
-            INNER JOIN prompt_tags pt ON p.id = pt.prompt_id
-            INNER JOIN tags t ON pt.tag_id = t.id WHERE 1=1 " .
+            $sql = "SELECT p.* FROM prompts p ";
+
+            if ($searchTerm != '') {
+                $sql .= "INNER JOIN prompt_tags pt ON p.id = pt.prompt_id
+            INNER JOIN tags t ON pt.tag_id = t.id ";
+            }
+
+            $sql .= "WHERE 1=1 " .
                 ($model != 'all' ? "AND model = :model " : "") .
                 ($category != 'all' ? "AND category = :category " : "") .
                 ($approve == 'all' ? "AND is_approved = 1 AND is_reported = 0 " : ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : ($approve == 'reported' ? "AND is_reported = 1 " : "")
-                    )
+                )
                 ) .
                 ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : "")
-                        )
-                    )
+                )
+                )
                 );
+
             if ($searchTerm != '') {
-                $sql .= " AND LOWER (p.title) LIKE LOWER (:searchTerm) OR LOWER (t.name) LIKE LOWER (:searchTerm)";
+                $sql .= " AND (LOWER(p.title) LIKE LOWER(:searchTerm) OR LOWER(t.name) LIKE LOWER(:searchTerm))";
             }
+
             $sql .= " LIMIT $limit OFFSET $offset";
+
 
 
             $statement = $conn->prepare($sql);
@@ -432,11 +440,11 @@ class prompt
                 ($model != 'all' ? "AND model = :model " : "") .
                 ($category != 'all' ? "AND category = :category " : "") .
                 ($approve == 'all' ? "AND is_approved = 1 AND is_reported = 0 " : ($approve == 'not_approved' ? "AND is_approved = 0 AND is_denied = 0 " : ($approve == 'reported' ? "AND is_reported = 1 " : "")
-                    )
+                )
                 ) .
                 ($order == 'new' ? "ORDER BY tstamp DESC " : ($order == 'old' ? "ORDER BY tstamp ASC " : ($order == 'high' ? "ORDER BY price DESC " : ($order == 'low' ? "ORDER BY price ASC " : "")
-                        )
-                    )
+                )
+                )
                 );
             if ($searchTerm != '') {
                 $sql .= " AND LOWER (p.title) LIKE LOWER (:searchTerm) OR LOWER (t.name) LIKE LOWER (:searchTerm)";
